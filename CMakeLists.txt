@@ -82,15 +82,6 @@ else()
     endif()
 endif()
 
-# Include Boost
-if (NOT TARGET boost)
-    if (NOT Boost_INCLUDE_DIRS)
-        find_package(Boost 1.57.0 REQUIRED)
-    endif()
-    add_library(boost INTERFACE)
-    target_include_directories(boost SYSTEM INTERFACE ${Boost_INCLUDE_DIRS})
-endif()
-
 # Enable unit-testing.
 enable_testing(true)
 

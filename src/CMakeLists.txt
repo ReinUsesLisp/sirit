@@ -1,6 +1,15 @@
 add_library(sirit
+    ../include/sirit/sirit.h
     sirit.cpp
+	ref.cpp
+	ref.h
+    stream.cpp
+    stream.h
+    operand.cpp
+    operand.h
+	common_types.h
 )
 target_include_directories(sirit
-                           PUBLIC ../include ${SPIRV-Headers_SOURCE_DIR}/include}
-                           PRIVATE .)
+                           PUBLIC ../include
+                           PRIVATE . ${SPIRV-Headers_SOURCE_DIR}/include
+                           INTERFACE ${SPIRV-Headers_SOURCE_DIR}/include)

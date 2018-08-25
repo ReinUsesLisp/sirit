@@ -5,7 +5,39 @@
  */
 
 #include <sirit/sirit.h>
+#include <cstdio>
+#include <cstdlib>
 
-int main(int argc, char **argv) {
+class MyModule : public Sirit::Module {
+public:
+    MyModule() {}
+    ~MyModule() = default;
+
+    void Generate() {
+        AddCapability(spv::Capability::Shader);
+        SetMemoryModel(spv::AddressingModel::Logical, spv::MemoryModel::GLSL450);
+        
+        auto main_type{TypeFunction(TypeVoid())};
+        auto main_func{EmitFunction(TypeVoid(), spv::FunctionControlMask::MaskNone, main_type)};
+        Add(main_func);
+        Add(EmitLabel());
+        Add(EmitReturn());
+        Add(EmitFunctionEnd());
+
+        AddEntryPoint(spv::ExecutionModel::Vertex, main_func, "main");
+    }
+};
+
+int main(int argc, char** argv) {
+    MyModule module;
+    module.Generate();
+
+    module.Optimize(2);
+    std::vector<std::uint8_t> code{module.Assembly()};
+
+    FILE* file = fopen("sirit.spv", "wb");
+    fwrite(code.data(), 1, code.size(), file);
+    fclose(file);
+
     return 0;
 }
