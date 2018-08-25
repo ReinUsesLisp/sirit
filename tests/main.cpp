@@ -18,11 +18,10 @@ public:
         SetMemoryModel(spv::AddressingModel::Logical, spv::MemoryModel::GLSL450);
         
         auto main_type{TypeFunction(TypeVoid())};
-        auto main_func{EmitFunction(TypeVoid(), spv::FunctionControlMask::MaskNone, main_type)};
-        Add(main_func);
-        Add(EmitLabel());
-        Add(EmitReturn());
-        Add(EmitFunctionEnd());
+        auto main_func{Emit(Function(TypeVoid(), spv::FunctionControlMask::MaskNone, main_type))};
+        Emit(Label());
+        Emit(Return());
+        Emit(FunctionEnd());
 
         AddEntryPoint(spv::ExecutionModel::Vertex, main_func, "main");
     }

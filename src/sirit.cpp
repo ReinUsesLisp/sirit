@@ -8,16 +8,16 @@
 #include <cassert>
 #include "sirit/sirit.h"
 #include "common_types.h"
-#include "ref.h"
+#include "op.h"
 #include "stream.h"
 
 namespace Sirit {
 
 template<typename T>
-static void WriteEnum(Stream& stream, spv::Op op, T value) {
-    Ref ref{op};
-    ref.Add(static_cast<u32>(value));
-    ref.Write(stream);
+static void WriteEnum(Stream& stream, spv::Op opcode, T value) {
+    Op op{opcode};
+    op.Add(static_cast<u32>(value));
+    op.Write(stream);
 }
 
 Module::Module() {}
@@ -42,7 +42,7 @@ std::vector<u8> Module::Assembly() const {
 
     // TODO write ext inst imports
 
-    Ref memory_model_ref{spv::Op::OpMemoryModel};
+    Op memory_model_ref{spv::Op::OpMemoryModel};
     memory_model_ref.Add(static_cast<u32>(addressing_model));
     memory_model_ref.Add(static_cast<u32>(memory_model));
     memory_model_ref.Write(stream);
@@ -79,74 +79,75 @@ void Module::SetMemoryModel(spv::AddressingModel addressing_model, spv::MemoryMo
     this->memory_model = memory_model;
 }
 
-void Module::AddEntryPoint(spv::ExecutionModel execution_model, const Ref* entry_point,
-                           const std::string& name, const std::vector<const Ref*>& interfaces) {
-    Ref* op{new Ref(spv::Op::OpEntryPoint)};
+void Module::AddEntryPoint(spv::ExecutionModel execution_model, const Op* entry_point,
+                           const std::string& name, const std::vector<const Op*>& interfaces) {
+    Op* op{new Op(spv::Op::OpEntryPoint)};
     op->Add(static_cast<u32>(execution_model));
     op->Add(entry_point);
     op->Add(name);
     op->Add(interfaces);
-    entry_points.push_back(std::unique_ptr<Ref>(op));
+    entry_points.push_back(std::unique_ptr<Op>(op));
 }
 
-const Ref* Module::TypeVoid() {
-    return AddDeclaration(new Ref(spv::Op::OpTypeVoid, bound));
+const Op* Module::TypeVoid() {
+    return AddDeclaration(new Op(spv::Op::OpTypeVoid, bound));
 }
 
-const Ref* Module::TypeFunction(const Ref* return_type, const std::vector<const Ref*>& arguments) {
-    Ref* type_func{new Ref(spv::Op::OpTypeFunction, bound)};
+const Op* Module::TypeFunction(const Op* return_type, const std::vector<const Op*>& arguments) {
+    Op* type_func{new Op(spv::Op::OpTypeFunction, bound)};
     type_func->Add(return_type);
-    for (const Ref* arg : arguments) {
+    for (const Op* arg : arguments) {
         type_func->Add(arg);
     }
     return AddDeclaration(type_func);
 }
 
-void Module::Add(const Ref* ref) {
-    assert(ref);
-    code.push_back(ref);
+const Op* Module::Emit(const Op* op) {
+    assert(op);
+    code.push_back(op);
+    return op;
 }
 
-const Ref* Module::EmitFunction(const Ref* result_type, spv::FunctionControlMask function_control,
-                                const Ref* function_type) {
-    Ref* op{new Ref{spv::Op::OpFunction, bound++, result_type}};
+const Op* Module::Function(const Op* result_type, spv::FunctionControlMask function_control,
+                            const Op* function_type) {
+    Op* op{new Op{spv::Op::OpFunction, bound++, result_type}};
     op->Add(static_cast<u32>(function_control));
     op->Add(function_type);
     return AddCode(op);
 }
 
-const Ref* Module::EmitLabel() {
+const Op* Module::Label() {
     return AddCode(spv::Op::OpLabel, bound++);
 }
 
-const Ref* Module::EmitReturn() {
+const Op* Module::Return() {
     return AddCode(spv::Op::OpReturn);
 }
 
-const Ref* Module::EmitFunctionEnd() {
+const Op* Module::FunctionEnd() {
     return AddCode(spv::Op::OpFunctionEnd);
 }
 
-const Ref* Module::AddCode(Ref* ref) {
-    code_store.push_back(std::unique_ptr<Ref>(ref));
-    return ref;
+const Op* Module::AddCode(Op* op) {
+    code_store.push_back(std::unique_ptr<Op>(op));
+    return op;
 }
 
-const Ref* Module::AddCode(spv::Op opcode, u32 id) {
-    return AddCode(new Ref{opcode, id});
+const Op* Module::AddCode(spv::Op opcode, u32 id) {
+    return AddCode(new Op{opcode, id});
 }
 
-const Ref* Module::AddDeclaration(Ref* ref) {
+const Op* Module::AddDeclaration(Op* op) {
     const auto& found{std::find_if(declarations.begin(), declarations.end(), [=](const auto& other) {
-        return *other == *ref;
+        return *other == *op;
     })};
     if (found != declarations.end()) {
-        delete ref;
+        delete op;
         return found->get();
     } else {
-        declarations.push_back(std::unique_ptr<Ref>(ref));
+        declarations.push_back(std::unique_ptr<Op>(op));
         bound++;
-        return ref;
+        return op;
     }
 }
 

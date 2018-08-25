@@ -1,8 +1,8 @@
 add_library(sirit
     ../include/sirit/sirit.h
     sirit.cpp
-	ref.cpp
-	ref.h
+	op.cpp
+	op.h
     stream.cpp
     stream.h
     operand.cpp

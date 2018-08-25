@@ -13,10 +13,10 @@
 
 namespace Sirit {
 
-class Ref : public Operand {
+class Op : public Operand {
 public:
-    explicit Ref(spv::Op opcode, u32 id = UINT32_MAX, const Ref* result_type = nullptr);
-    ~Ref();
+    explicit Op(spv::Op opcode, u32 id = UINT32_MAX, const Op* result_type = nullptr);
+    ~Op();
 
     virtual void Fetch(Stream& stream) const;
     virtual u16 GetWordCount() const;
@@ -33,14 +33,14 @@ public:
 
     void Add(const std::string& string);
 
-    void Add(const std::vector<const Ref*>& ids);
+    void Add(const std::vector<const Op*>& ids);
 
 private:
     u16 WordCount() const;
 
     spv::Op opcode;
 
-    const Ref* result_type;
+    const Op* result_type;
 
     u32 id;
 

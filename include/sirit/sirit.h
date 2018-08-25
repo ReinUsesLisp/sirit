@@ -16,7 +16,7 @@ namespace Sirit {
 
 static const std::uint32_t GeneratorMagicNumber = 0;
 
-class Ref;
+class Op;
 
 class Module {
 public:
@@ -44,37 +44,37 @@ public:
     void SetMemoryModel(spv::AddressingModel addressing_model, spv::MemoryModel memory_model);
 
     /// Adds an entry point.
-    void AddEntryPoint(spv::ExecutionModel execution_model, const Ref* entry_point,
-                       const std::string& name, const std::vector<const Ref*>& interfaces = {});
+    void AddEntryPoint(spv::ExecutionModel execution_model, const Op* entry_point,
+                       const std::string& name, const std::vector<const Op*>& interfaces = {});
 
     /// Returns type void.
-    const Ref* TypeVoid();
+    const Op* TypeVoid();
 
     /// Returns a function type.
-    const Ref* TypeFunction(const Ref* return_type, const std::vector<const Ref*>& arguments = {});
+    const Op* TypeFunction(const Op* return_type, const std::vector<const Op*>& arguments = {});
 
-    /// Adds a reference to code block
-    void Add(const Ref* ref);
+    /// Adds an instruction to module's code block
+    const Op* Emit(const Op* op);
 
     /// Emits a function.
-    const Ref* EmitFunction(const Ref* result_type, spv::FunctionControlMask function_control,
-                            const Ref* function_type);
+    const Op* Function(const Op* result_type, spv::FunctionControlMask function_control,
+                        const Op* function_type);
 
     /// Emits a label. It starts a block.
-    const Ref* EmitLabel();
+    const Op* Label();
 
     /// Emits a return. It ends a block.
-    const Ref* EmitReturn();
+    const Op* Return();
 
     /// Emits a function end.
-    const Ref* EmitFunctionEnd();
+    const Op* FunctionEnd();
 
 private:
-    const Ref* AddCode(Ref* ref);
+    const Op* AddCode(Op* op);
 
-    const Ref* AddCode(spv::Op opcode, std::uint32_t id = UINT32_MAX);
+    const Op* AddCode(spv::Op opcode, std::uint32_t id = UINT32_MAX);
 
-    const Ref* AddDeclaration(Ref* ref);
+    const Op* AddDeclaration(Op* op);
 
     std::uint32_t bound{1};
 
@@ -82,24 +82,24 @@ private:
 
     std::set<std::string> extensions;
 
-    std::set<std::unique_ptr<Ref>> ext_inst_import;
+    std::set<std::unique_ptr<Op>> ext_inst_import;
 
     spv::AddressingModel addressing_model{spv::AddressingModel::Logical};
     spv::MemoryModel memory_model{spv::MemoryModel::GLSL450};
 
-    std::vector<std::unique_ptr<Ref>> entry_points;
+    std::vector<std::unique_ptr<Op>> entry_points;
 
-    std::vector<std::unique_ptr<Ref>> execution_mode;
+    std::vector<std::unique_ptr<Op>> execution_mode;
 
-    std::vector<std::unique_ptr<Ref>> debug;
+    std::vector<std::unique_ptr<Op>> debug;
 
-    std::vector<std::unique_ptr<Ref>> annotations;
+    std::vector<std::unique_ptr<Op>> annotations;
 
-    std::vector<std::unique_ptr<Ref>> declarations;
+    std::vector<std::unique_ptr<Op>> declarations;
 
-    std::vector<const Ref*> code;
+    std::vector<const Op*> code;
 
-    std::vector<std::unique_ptr<Ref>> code_store;
+    std::vector<std::unique_ptr<Op>> code_store;
 };
 
 } // namespace Sirit
