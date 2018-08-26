@@ -10,15 +10,9 @@
 #include "common_types.h"
 #include "op.h"
 #include "stream.h"
+#include "opcodes.h"
 
 namespace Sirit {
-
-template<typename T>
-static void WriteEnum(Stream& stream, spv::Op opcode, T value) {
-    Op op{opcode};
-    op.Add(static_cast<u32>(value));
-    op.Write(stream);
-}
 
 Module::Module() {}
 
@@ -87,19 +81,6 @@ void Module::AddEntryPoint(spv::ExecutionModel execution_model, const Op* entry_
     op->Add(name);
     op->Add(interfaces);
     entry_points.push_back(std::unique_ptr<Op>(op));
-}
-
-const Op* Module::TypeVoid() {
-    return AddDeclaration(new Op(spv::Op::OpTypeVoid, bound));
-}
-
-const Op* Module::TypeFunction(const Op* return_type, const std::vector<const Op*>& arguments) {
-    Op* type_func{new Op(spv::Op::OpTypeFunction, bound)};
-    type_func->Add(return_type);
-    for (const Op* arg : arguments) {
-        type_func->Add(arg);
-    }
-    return AddDeclaration(type_func);
 }
 
 const Op* Module::Emit(const Op* op) {

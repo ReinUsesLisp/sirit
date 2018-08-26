@@ -8,6 +8,8 @@ add_library(sirit
     operand.cpp
     operand.h
 	common_types.h
+    opcodes.h
+    opcodes_type.cpp
 )
 target_include_directories(sirit
                            PUBLIC ../include
