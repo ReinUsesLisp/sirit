@@ -16,6 +16,8 @@ namespace Sirit {
 
 static const std::uint32_t GeneratorMagicNumber = 0;
 
+static const std::uint32_t Undefined = UINT32_MAX;
+
 class Op;
 
 class Module {
@@ -49,7 +51,7 @@ public:
 
     /**
      * Adds an instruction to module's code
-     * @param op Instruction to insert into code. Types must not be emitted
+     * @param op Instruction to insert into code. Types and constants must not be emitted.
      * @return Returns op.
      */
     const Op* Emit(const Op* op);
@@ -58,6 +60,32 @@ public:
 
     /// Returns type void.
     const Op* TypeVoid();
+
+    /// Returns type bool.
+    const Op* TypeBool();
+
+    /// Returns type integer.
+    const Op* TypeInt(int width, bool is_signed);
+
+    /// Returns type float.
+    const Op* TypeFloat(int width);
+
+    /// Returns type vector.
+    const Op* TypeVector(const Op* component_type, int component_count);
+
+    /// Returns type matrix.
+    const Op* TypeMatrix(const Op* column_type, int column_count);
+
+    /// Returns type image.
+    const Op* TypeImage(const Op* sampled_type, spv::Dim dim, int depth, bool arrayed, bool ms,
+                        int sampled, spv::ImageFormat image_format,
+                        spv::AccessQualifier access_qualifier = static_cast<spv::AccessQualifier>(Undefined));
+
+    /// Returns type sampler.
+    const Op* TypeSampler();
+
+    /// Returns type sampled image.
+    const Op* TypeSampledImage(const Op* image_type);
 
     /// Returns a function type.
     const Op* TypeFunction(const Op* return_type, const std::vector<const Op*>& arguments = {});
