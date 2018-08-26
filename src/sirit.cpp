@@ -89,26 +89,6 @@ const Op* Module::Emit(const Op* op) {
     return op;
 }
 
-const Op* Module::Function(const Op* result_type, spv::FunctionControlMask function_control,
-                            const Op* function_type) {
-    Op* op{new Op{spv::Op::OpFunction, bound++, result_type}};
-    op->Add(static_cast<u32>(function_control));
-    op->Add(function_type);
-    return AddCode(op);
-}
-
-const Op* Module::Label() {
-    return AddCode(spv::Op::OpLabel, bound++);
-}
-
-const Op* Module::Return() {
-    return AddCode(spv::Op::OpReturn);
-}
-
-const Op* Module::FunctionEnd() {
-    return AddCode(spv::Op::OpFunctionEnd);
-}
-
 const Op* Module::AddCode(Op* op) {
     code_store.push_back(std::unique_ptr<Op>(op));
     return op;

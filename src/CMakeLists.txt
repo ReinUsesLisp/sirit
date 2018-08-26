@@ -9,7 +9,9 @@ add_library(sirit
     operand.h
 	common_types.h
     opcodes.h
-    opcodes_type.cpp
+    opcodes/type.cpp
+    opcodes/function.cpp
+    opcodes/flow.cpp
 )
 target_include_directories(sirit
                            PUBLIC ../include

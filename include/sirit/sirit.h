@@ -47,27 +47,37 @@ public:
     void AddEntryPoint(spv::ExecutionModel execution_model, const Op* entry_point,
                        const std::string& name, const std::vector<const Op*>& interfaces = {});
 
+    /**
+     * Adds an instruction to module's code
+     * @param op Instruction to insert into code. Types must not be emitted
+     * @return Returns op.
+     */
+    const Op* Emit(const Op* op);
+
+    // Types
+
     /// Returns type void.
     const Op* TypeVoid();
 
     /// Returns a function type.
     const Op* TypeFunction(const Op* return_type, const std::vector<const Op*>& arguments = {});
 
-    /// Adds an instruction to module's code block
-    const Op* Emit(const Op* op);
+    // Function
 
     /// Emits a function.
     const Op* Function(const Op* result_type, spv::FunctionControlMask function_control,
-                        const Op* function_type);
+                       const Op* function_type);
+
+    /// Emits a function end.
+    const Op* FunctionEnd();
+
+    // Flow
 
     /// Emits a label. It starts a block.
     const Op* Label();
 
     /// Emits a return. It ends a block.
     const Op* Return();
-
-    /// Emits a function end.
-    const Op* FunctionEnd();
 
 private:
     const Op* AddCode(Op* op);
