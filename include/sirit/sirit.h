@@ -87,7 +87,22 @@ public:
     /// Returns type sampled image.
     const Op* TypeSampledImage(const Op* image_type);
 
-    /// Returns a function type.
+    /// Returns type array.
+    const Op* TypeArray(const Op* element_type, const Op* length);
+
+    /// Returns type runtime array.
+    const Op* TypeRuntimeArray(const Op* element_type);
+
+    /// Returns type struct.
+    const Op* TypeStruct(const std::vector<const Op*>& members = {});
+
+    /// Returns type opaque.
+    const Op* TypeOpaque(const std::string& name);
+
+    /// Returns type pointer.
+    const Op* TypePointer(spv::StorageClass storage_class, const Op* type);
+
+    /// Returns type function.
     const Op* TypeFunction(const Op* return_type, const std::vector<const Op*>& arguments = {});
 
     // Function

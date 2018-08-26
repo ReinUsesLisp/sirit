@@ -148,6 +148,55 @@ const Op* Module::TypeSampledImage(const Op* image_type) {
     return AddDeclaration(op);
 }
 
+const Op* Module::TypeArray(const Op* element_type, const Op* length) {
+    Op* op{new Op(spv::Op::OpTypeArray, bound)};
+    op->Add(element_type);
+    op->Add(length);
+    return AddDeclaration(op);
+}
+
+const Op* Module::TypeRuntimeArray(const Op* element_type) {
+    AddCapability(spv::Capability::Shader);
+    Op* op{new Op(spv::Op::OpTypeRuntimeArray, bound)};
+    op->Add(element_type);
+    return AddDeclaration(op);
+}
+
+const Op* Module::TypeStruct(const std::vector<const Op*>& members) {
+    Op* op{new Op(spv::Op::OpTypeStruct, bound)};
+    op->Add(members);
+    return AddDeclaration(op);
+}
+
+const Op* Module::TypeOpaque(const std::string& name) {
+    AddCapability(spv::Capability::Kernel);
+    Op* op{new Op(spv::Op::OpTypeOpaque, bound)};
+    op->Add(name);
+    return AddDeclaration(op);
+}
+
+const Op* Module::TypePointer(spv::StorageClass storage_class, const Op* type) {
+    switch (storage_class) {
+        case spv::StorageClass::Uniform:
+        case spv::StorageClass::Output:
+        case spv::StorageClass::Private:
+        case spv::StorageClass::PushConstant:
+        case spv::StorageClass::StorageBuffer:
+            AddCapability(spv::Capability::Shader);
+            break;
+        case spv::StorageClass::Generic:
+            AddCapability(spv::Capability::GenericPointer);
+            break;
+        case spv::StorageClass::AtomicCounter:
+            AddCapability(spv::Capability::AtomicStorage);
+            break;
+    }
+    Op* op{new Op(spv::Op::OpTypePointer, bound)};
+    op->Add(static_cast<u32>(storage_class));
+    op->Add(type);
+    return AddDeclaration(op);
+}
+
 const Op* Module::TypeFunction(const Op* return_type, const std::vector<const Op*>& arguments) {
     Op* type_func{new Op(spv::Op::OpTypeFunction, bound)};
     type_func->Add(return_type);

@@ -28,13 +28,16 @@ public:
         TypeFloat(64);
         TypeVector(TypeBool(), 4);
         TypeVector(TypeBool(), 3);
-        TypeVector(TypeVector(TypeFloat(32), 4), 3);
-        TypeVector(TypeVector(TypeFloat(32), 4), 3);
         TypeMatrix(TypeVector(TypeFloat(32), 4), 4);
         TypeImage(TypeFloat(32), spv::Dim::Dim2D, 0, false, false, 0,
-                  spv::ImageFormat::Rg32f, spv::AccessQualifier::ReadOnly);
+                  spv::ImageFormat::Rg32f);
         TypeSampledImage(TypeImage(TypeFloat(32), spv::Dim::Rect, 0, false, false, 0,
-                         spv::ImageFormat::Rg32f, spv::AccessQualifier::ReadOnly));
+                         spv::ImageFormat::Rg32f));
+        TypeVector(TypeInt(32, true), 4);
+        TypeVector(TypeInt(64, true), 4);
+        TypeRuntimeArray(TypeInt(32, true));
+        TypeStruct({TypeInt(32, true), TypeFloat(64)});
+        TypePointer(spv::StorageClass::Private, TypeFloat(16));
 
         auto main_type{TypeFunction(TypeVoid())};
         auto main_func{Emit(Function(TypeVoid(), spv::FunctionControlMask::MaskNone, main_type))};
