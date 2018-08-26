@@ -38,6 +38,9 @@ public:
         TypeRuntimeArray(TypeInt(32, true));
         TypeStruct({TypeInt(32, true), TypeFloat(64)});
         TypePointer(spv::StorageClass::Private, TypeFloat(16));
+        ConstantTrue(TypeBool());
+        ConstantTrue(TypeBool());
+        ConstantFalse(TypeBool());
 
         auto main_type{TypeFunction(TypeVoid())};
         auto main_func{Emit(Function(TypeVoid(), spv::FunctionControlMask::MaskNone, main_type))};

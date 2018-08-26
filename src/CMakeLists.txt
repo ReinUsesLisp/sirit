@@ -10,6 +10,7 @@ add_library(sirit
 	common_types.h
     opcodes.h
     opcodes/type.cpp
+    opcodes/constant.cpp
     opcodes/function.cpp
     opcodes/flow.cpp
 )

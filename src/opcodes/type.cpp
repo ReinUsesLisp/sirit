@@ -227,7 +227,7 @@ const Op* Module::TypeQueue() {
 const Op* Module::TypePipe(spv::AccessQualifier access_qualifier) {
     AddCapability(spv::Capability::Pipes);
     Op* op{new Op(spv::Op::OpTypePipe, bound)};
-    op->Add(static_cast<u32>(access_qualifier);
+    op->Add(static_cast<u32>(access_qualifier));
     return AddDeclaration(op);
 }
 

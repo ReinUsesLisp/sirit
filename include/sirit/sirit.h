@@ -120,6 +120,14 @@ public:
     /// Returns type pipe.
     const Op* TypePipe(spv::AccessQualifier access_qualifier);
 
+    // Constant
+    
+    /// Returns a true scalar constant.
+    const Op* ConstantTrue(const Op* result_type);
+
+    /// Returns a false scalar constant.
+    const Op* ConstantFalse(const Op* result_type);
+
     // Function
 
     /// Emits a function.
