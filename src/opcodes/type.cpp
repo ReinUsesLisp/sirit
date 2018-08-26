@@ -198,12 +198,37 @@ const Op* Module::TypePointer(spv::StorageClass storage_class, const Op* type) {
 }
 
 const Op* Module::TypeFunction(const Op* return_type, const std::vector<const Op*>& arguments) {
-    Op* type_func{new Op(spv::Op::OpTypeFunction, bound)};
-    type_func->Add(return_type);
-    for (const Op* arg : arguments) {
-        type_func->Add(arg);
-    }
-    return AddDeclaration(type_func);
+    Op* op{new Op(spv::Op::OpTypeFunction, bound)};
+    op->Add(return_type);
+    op->Add(arguments);
+    return AddDeclaration(op);
+}
+
+const Op* Module::TypeEvent() {
+    AddCapability(spv::Capability::Kernel);
+    return AddDeclaration(new Op(spv::Op::OpTypeEvent, bound));
+}
+
+const Op* Module::TypeDeviceEvent() {
+    AddCapability(spv::Capability::DeviceEnqueue);
+    return AddDeclaration(new Op(spv::Op::OpTypeDeviceEvent, bound));
+}
+
+const Op* Module::TypeReserveId() {
+    AddCapability(spv::Capability::Pipes);
+    return AddDeclaration(new Op(spv::Op::OpTypeReserveId, bound));
+}
+
+const Op* Module::TypeQueue() {
+    AddCapability(spv::Capability::DeviceEnqueue);
+    return AddDeclaration(new Op(spv::Op::OpTypeQueue, bound));
+}
+
+const Op* Module::TypePipe(spv::AccessQualifier access_qualifier) {
+    AddCapability(spv::Capability::Pipes);
+    Op* op{new Op(spv::Op::OpTypePipe, bound)};
+    op->Add(static_cast<u32>(access_qualifier);
+    return AddDeclaration(op);
 }
 
 } // namespace Sirit

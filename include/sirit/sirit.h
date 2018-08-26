@@ -105,6 +105,21 @@ public:
     /// Returns type function.
     const Op* TypeFunction(const Op* return_type, const std::vector<const Op*>& arguments = {});
 
+    /// Returns type event.
+    const Op* TypeEvent();
+
+    /// Returns type device event.
+    const Op* TypeDeviceEvent();
+
+    /// Returns type reserve id.
+    const Op* TypeReserveId();
+
+    /// Returns type queue.
+    const Op* TypeQueue();
+
+    /// Returns type pipe.
+    const Op* TypePipe(spv::AccessQualifier access_qualifier);
+
     // Function
 
     /// Emits a function.
