@@ -34,24 +34,79 @@ OperandType Operand::GetType() const {
     return operand_type;
 }
 
-LiteralInteger::LiteralInteger(u32 integer_)
-    : integer(integer_) {
-    operand_type = OperandType::Integer;
+LiteralNumber::LiteralNumber() {
+    operand_type = OperandType::Number;
 }
 
-LiteralInteger::~LiteralInteger() = default;
-
-void LiteralInteger::Fetch(Stream& stream) const {
-    stream.Write(integer);
+LiteralNumber::LiteralNumber(u32 number)
+    : uint32(number), type(NumberType::U32) {
+    LiteralNumber();
 }
 
-u16 LiteralInteger::GetWordCount() const {
-    return 1;
+LiteralNumber::LiteralNumber(s32 number)
+    : int32(number), type(NumberType::S32) {
+    LiteralNumber();
 }
 
-bool LiteralInteger::operator==(const Operand& other) const {
+LiteralNumber::LiteralNumber(f32 number)
+    : float32(number), type(NumberType::F32) {
+    LiteralNumber();
+}
+
+LiteralNumber::LiteralNumber(u64 number)
+    : uint64(number), type(NumberType::U64) {
+    LiteralNumber();
+}
+
+LiteralNumber::LiteralNumber(s64 number)
+    : int64(number), type(NumberType::S64) {
+    LiteralNumber();
+}
+
+LiteralNumber::LiteralNumber(f64 number)
+    : float64(number), type(NumberType::F64) {
+    LiteralNumber();
+}
+
+LiteralNumber::~LiteralNumber() = default;
+
+void LiteralNumber::Fetch(Stream& stream) const {
+    switch (type) {
+        case NumberType::S32:
+        case NumberType::U32:
+        case NumberType::F32:
+            stream.Write(uint32);
+            break;
+        case NumberType::S64:
+        case NumberType::U64:
+        case NumberType::F64:
+            stream.Write(uint64);
+            break;
+        default:
+            assert(0);
+    }
+}
+
+u16 LiteralNumber::GetWordCount() const {
+    switch (type) {
+        case NumberType::S32:
+        case NumberType::U32:
+        case NumberType::F32:
+            return 1;
+        case NumberType::S64:
+        case NumberType::U64:
+        case NumberType::F64:
+            return 2;
+        default:
+            assert(0);
+            return 0;
+    }
+}
+
+bool LiteralNumber::operator==(const Operand& other) const {
     if (operand_type == other.GetType()) {
-        return dynamic_cast<const LiteralInteger&>(other).integer == integer;
+        const auto& o{dynamic_cast<const LiteralNumber&>(other)};
+        return o.type == type && o.raw == raw;
     }
     return false;
 }

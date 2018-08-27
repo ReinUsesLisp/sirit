@@ -19,6 +19,7 @@ static const std::uint32_t GeneratorMagicNumber = 0;
 static const std::uint32_t Undefined = UINT32_MAX;
 
 class Op;
+class Operand;
 
 class Module {
 public:
@@ -55,7 +56,7 @@ public:
      * @return Returns op.
      */
     const Op* Emit(const Op* op);
-
+ 
     // Types
 
     /// Returns type void.
@@ -128,6 +129,9 @@ public:
     /// Returns a false scalar constant.
     const Op* ConstantFalse(const Op* result_type);
 
+    /// Returns a numeric scalar constant.
+    const Op* Constant(const Op* result_type, Operand* literal);
+
     // Function
 
     /// Emits a function.
@@ -144,6 +148,14 @@ public:
 
     /// Emits a return. It ends a block.
     const Op* Return();
+
+    // Literals
+    static Operand* Literal(std::uint32_t value);
+    static Operand* Literal(std::uint64_t value);
+    static Operand* Literal(std::int32_t value);
+    static Operand* Literal(std::int64_t value);
+    static Operand* Literal(float value);
+    static Operand* Literal(double value);
 
 private:
     const Op* AddCode(Op* op);

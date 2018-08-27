@@ -12,8 +12,8 @@ namespace Sirit {
 
 enum class OperandType {
     Invalid,
-    Ref,
-    Integer,
+    Op,
+    Number,
     String
 };
 
@@ -34,10 +34,15 @@ protected:
     OperandType operand_type{};
 };
 
-class LiteralInteger : public Operand {
+class LiteralNumber : public Operand {
 public:
-    LiteralInteger(u32 integer);
-    ~LiteralInteger();
+    LiteralNumber(u32 number);
+    LiteralNumber(s32 number);
+    LiteralNumber(f32 number);
+    LiteralNumber(u64 number);
+    LiteralNumber(s64 number);
+    LiteralNumber(f64 number);
+    ~LiteralNumber();
 
     virtual void Fetch(Stream& stream) const;
     virtual u16 GetWordCount() const;
@@ -45,7 +50,26 @@ public:
     virtual bool operator==(const Operand& other) const;
 
 private:
-    u32 integer;
+    LiteralNumber();
+
+    enum class NumberType {
+        U32,
+        S32,
+        F32,
+        U64,
+        S64,
+        F64
+    } type;
+
+    union {
+        u64 raw{};
+        u32 uint32;
+        s32 int32;
+        u64 uint64;
+        s64 int64;
+        f32 float32;
+        f64 float64;
+    };
 };
 
 class LiteralString : public Operand {

@@ -13,7 +13,7 @@ namespace Sirit {
 
 Op::Op(spv::Op opcode_, u32 id_, const Op* result_type_) 
     : opcode(opcode_), id(id_), result_type(result_type_) {
-    operand_type = OperandType::Ref;
+    operand_type = OperandType::Op;
 }
 
 Op::~Op() = default;
@@ -69,7 +69,7 @@ void Op::Add(const Operand* operand) {
 }
 
 void Op::Add(u32 integer) {
-    Add(new LiteralInteger(integer));
+    Add(new LiteralNumber(integer));
 }
 
 void Op::Add(const std::string& string) {

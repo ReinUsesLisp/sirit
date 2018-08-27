@@ -41,6 +41,13 @@ public:
         ConstantTrue(TypeBool());
         ConstantTrue(TypeBool());
         ConstantFalse(TypeBool());
+        Constant(TypeFloat(64), Literal(6342.2));
+        Constant(TypeFloat(64), Literal(6342.21));
+        Constant(TypeFloat(32), Literal(6342.21f));
+        Constant(TypeFloat(16), Literal(30u));
+        Constant(TypeInt(32, false), Literal(30u));
+        Constant(TypeInt(16, false), Literal(30u));
+        Constant(TypeInt(8, false), Literal(30u));
 
         auto main_type{TypeFunction(TypeVoid())};
         auto main_func{Emit(Function(TypeVoid(), spv::FunctionControlMask::MaskNone, main_type))};

@@ -18,4 +18,10 @@ const Op* Module::ConstantFalse(const Op* result_type) {
     return AddDeclaration(new Op(spv::Op::OpConstantFalse, bound, result_type));
 }
 
+const Op* Module::Constant(const Op* result_type, Operand* literal) {
+    Op* op{new Op(spv::Op::OpConstant, bound, result_type)};
+    op->Add(literal);
+    return AddDeclaration(op);
+}
+
 } // namespace Sirit

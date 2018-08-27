@@ -7,6 +7,7 @@ add_library(sirit
     stream.h
     operand.cpp
     operand.h
+    literal.cpp
 	common_types.h
     opcodes.h
     opcodes/type.cpp
