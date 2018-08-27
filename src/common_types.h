@@ -1,7 +1,7 @@
 /* This file is part of the sirit project.
  * Copyright (c) 2018 ReinUsesLisp
  * This software may be used and distributed according to the terms of the GNU
- * Lesser General Public License version 2 or any later version.
+ * Lesser General Public License version 2.1 or any later version.
  */
 
 #pragma once
@@ -20,8 +20,6 @@ using s16 = std::int16_t;
 using s32 = std::int32_t;
 using s64 = std::int64_t;
 using sptr = std::intptr_t;
-
-using size_t = std::size_t;
 
 using f32 = float;
 using f64 = double;
