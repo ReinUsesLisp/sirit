@@ -24,4 +24,11 @@ const Op* Module::Constant(const Op* result_type, Operand* literal) {
     return AddDeclaration(op);
 }
 
+const Op* Module::ConstantComposite(const Op* result_type,
+                                    const std::vector<const Op*>& constituents) {
+    Op* op{new Op(spv::Op::OpConstantComposite, bound, result_type)};
+    op->Add(constituents);
+    return AddDeclaration(op);
+}
+
 } // namespace Sirit

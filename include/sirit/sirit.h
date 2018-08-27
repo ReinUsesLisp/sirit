@@ -132,6 +132,9 @@ public:
     /// Returns a numeric scalar constant.
     const Op* Constant(const Op* result_type, Operand* literal);
 
+    /// Returns a numeric scalar constant.
+    const Op* ConstantComposite(const Op* result_type, const std::vector<const Op*>& constituents);
+
     // Function
 
     /// Emits a function.

@@ -48,6 +48,9 @@ public:
         Constant(TypeInt(32, false), Literal(30u));
         Constant(TypeInt(16, false), Literal(30u));
         Constant(TypeInt(8, false), Literal(30u));
+        ConstantComposite(TypeVector(TypeFloat(32), 2),
+                          {Constant(TypeFloat(32), Literal(50.0f)),
+                           Constant(TypeFloat(32), Literal(50.0f))});
 
         auto main_type{TypeFunction(TypeVoid())};
         auto main_func{Emit(Function(TypeVoid(), spv::FunctionControlMask::MaskNone, main_type))};
