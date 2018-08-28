@@ -8,6 +8,10 @@ add_library(sirit
     operand.cpp
     operand.h
     literal.cpp
+    lnumber.cpp
+    lnumber.h
+    lstring.cpp
+    lstring.h
 	common_types.h
     insts.h
     insts/type.cpp

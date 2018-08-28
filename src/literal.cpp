@@ -7,6 +7,7 @@
 #include "sirit/sirit.h"
 #include "common_types.h"
 #include "operand.h"
+#include "lnumber.h"
 
 namespace Sirit {
 

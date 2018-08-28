@@ -8,6 +8,8 @@
 #include "common_types.h"
 #include "operand.h"
 #include "op.h"
+#include "lnumber.h"
+#include "lstring.h"
 
 namespace Sirit {
 

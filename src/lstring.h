@@ -6,32 +6,24 @@
 
 #pragma once
 
+#include <string>
 #include "stream.h"
+#include "operand.h"
 
 namespace Sirit {
 
-enum class OperandType {
-    Invalid,
-    Op,
-    Number,
-    String
-};
-
-class Operand {
+class LiteralString : public Operand {
 public:
-    Operand();
-    virtual ~Operand();
+    LiteralString(const std::string& string);
+    ~LiteralString();
 
     virtual void Fetch(Stream& stream) const;
     virtual u16 GetWordCount() const;
 
     virtual bool operator==(const Operand& other) const;
-    bool operator!=(const Operand& other) const;
 
-    OperandType GetType() const;
-
-protected:
-    OperandType operand_type{};
+private:
+    std::string string;
 };
 
 } // namespace Sirit
