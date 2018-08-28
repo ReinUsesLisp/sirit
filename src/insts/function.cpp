@@ -5,7 +5,7 @@
  */
 
 #include "sirit/sirit.h"
-#include "opcodes.h"
+#include "insts.h"
 
 namespace Sirit {
 

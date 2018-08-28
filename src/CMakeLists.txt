@@ -9,11 +9,11 @@ add_library(sirit
     operand.h
     literal.cpp
 	common_types.h
-    opcodes.h
-    opcodes/type.cpp
-    opcodes/constant.cpp
-    opcodes/function.cpp
-    opcodes/flow.cpp
+    insts.h
+    insts/type.cpp
+    insts/constant.cpp
+    insts/function.cpp
+    insts/flow.cpp
 )
 target_include_directories(sirit
                            PUBLIC ../include

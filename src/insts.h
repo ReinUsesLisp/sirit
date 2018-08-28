@@ -11,11 +11,4 @@
 
 namespace Sirit {
 
-template<typename T>
-inline void WriteEnum(Stream& stream, spv::Op opcode, T value) {
-    Op op{opcode};
-    op.Add(static_cast<u32>(value));
-    op.Write(stream);
-}
-
 } // namespace Sirit
