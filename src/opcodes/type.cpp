@@ -10,15 +10,15 @@
 
 namespace Sirit {
 
-const Op* Module::TypeVoid() {
+Ref Module::TypeVoid() {
     return AddDeclaration(new Op(spv::Op::OpTypeVoid, bound));
 }
 
-const Op* Module::TypeBool() {
+Ref Module::TypeBool() {
     return AddDeclaration(new Op(spv::Op::OpTypeBool, bound));
 }
 
-const Op* Module::TypeInt(int width, bool is_signed) {
+Ref Module::TypeInt(int width, bool is_signed) {
     if (width == 8) {
         AddCapability(spv::Capability::Int8);
     } else if (width == 16) {
@@ -32,7 +32,7 @@ const Op* Module::TypeInt(int width, bool is_signed) {
     return AddDeclaration(op);
 }
 
-const Op* Module::TypeFloat(int width) {
+Ref Module::TypeFloat(int width) {
     if (width == 16) {
         AddCapability(spv::Capability::Float16);
     } else if (width == 64) {
@@ -43,7 +43,7 @@ const Op* Module::TypeFloat(int width) {
     return AddDeclaration(op);
 }
 
-const Op* Module::TypeVector(const Op* component_type, int component_count) {
+Ref Module::TypeVector(Ref component_type, int component_count) {
     assert(component_count >= 2);
     Op* op{new Op(spv::Op::OpTypeVector, bound)};
     op->Add(component_type);
@@ -51,7 +51,7 @@ const Op* Module::TypeVector(const Op* component_type, int component_count) {
     return AddDeclaration(op);
 }
 
-const Op* Module::TypeMatrix(const Op* column_type, int column_count) {
+Ref Module::TypeMatrix(Ref column_type, int column_count) {
     assert(column_count >= 2);
     AddCapability(spv::Capability::Matrix);
     Op* op{new Op(spv::Op::OpTypeMatrix, bound)};
@@ -60,7 +60,7 @@ const Op* Module::TypeMatrix(const Op* column_type, int column_count) {
     return AddDeclaration(op);
 }
 
-const Op* Module::TypeImage(const Op* sampled_type, spv::Dim dim, int depth, bool arrayed, bool ms,
+Ref Module::TypeImage(Ref sampled_type, spv::Dim dim, int depth, bool arrayed, bool ms,
                             int sampled, spv::ImageFormat image_format,
                             spv::AccessQualifier access_qualifier) {
     switch (dim) {
@@ -138,44 +138,44 @@ const Op* Module::TypeImage(const Op* sampled_type, spv::Dim dim, int depth, boo
     return AddDeclaration(op);
 }
 
-const Op* Module::TypeSampler() {
+Ref Module::TypeSampler() {
     return AddDeclaration(new Op(spv::Op::OpTypeSampler, bound));
 }
 
-const Op* Module::TypeSampledImage(const Op* image_type) {
+Ref Module::TypeSampledImage(Ref image_type) {
     Op* op{new Op(spv::Op::OpTypeSampledImage, bound)};
     op->Add(image_type);
     return AddDeclaration(op);
 }
 
-const Op* Module::TypeArray(const Op* element_type, const Op* length) {
+Ref Module::TypeArray(Ref element_type, Ref length) {
     Op* op{new Op(spv::Op::OpTypeArray, bound)};
     op->Add(element_type);
     op->Add(length);
     return AddDeclaration(op);
 }
 
-const Op* Module::TypeRuntimeArray(const Op* element_type) {
+Ref Module::TypeRuntimeArray(Ref element_type) {
     AddCapability(spv::Capability::Shader);
     Op* op{new Op(spv::Op::OpTypeRuntimeArray, bound)};
     op->Add(element_type);
     return AddDeclaration(op);
 }
 
-const Op* Module::TypeStruct(const std::vector<const Op*>& members) {
+Ref Module::TypeStruct(const std::vector<Ref>& members) {
     Op* op{new Op(spv::Op::OpTypeStruct, bound)};
     op->Add(members);
     return AddDeclaration(op);
 }
 
-const Op* Module::TypeOpaque(const std::string& name) {
+Ref Module::TypeOpaque(const std::string& name) {
     AddCapability(spv::Capability::Kernel);
     Op* op{new Op(spv::Op::OpTypeOpaque, bound)};
     op->Add(name);
     return AddDeclaration(op);
 }
 
-const Op* Module::TypePointer(spv::StorageClass storage_class, const Op* type) {
+Ref Module::TypePointer(spv::StorageClass storage_class, Ref type) {
     switch (storage_class) {
         case spv::StorageClass::Uniform:
         case spv::StorageClass::Output:
@@ -197,34 +197,34 @@ const Op* Module::TypePointer(spv::StorageClass storage_class, const Op* type) {
     return AddDeclaration(op);
 }
 
-const Op* Module::TypeFunction(const Op* return_type, const std::vector<const Op*>& arguments) {
+Ref Module::TypeFunction(Ref return_type, const std::vector<Ref>& arguments) {
     Op* op{new Op(spv::Op::OpTypeFunction, bound)};
     op->Add(return_type);
     op->Add(arguments);
     return AddDeclaration(op);
 }
 
-const Op* Module::TypeEvent() {
+Ref Module::TypeEvent() {
     AddCapability(spv::Capability::Kernel);
     return AddDeclaration(new Op(spv::Op::OpTypeEvent, bound));
 }
 
-const Op* Module::TypeDeviceEvent() {
+Ref Module::TypeDeviceEvent() {
     AddCapability(spv::Capability::DeviceEnqueue);
     return AddDeclaration(new Op(spv::Op::OpTypeDeviceEvent, bound));
 }
 
-const Op* Module::TypeReserveId() {
+Ref Module::TypeReserveId() {
     AddCapability(spv::Capability::Pipes);
     return AddDeclaration(new Op(spv::Op::OpTypeReserveId, bound));
 }
 
-const Op* Module::TypeQueue() {
+Ref Module::TypeQueue() {
     AddCapability(spv::Capability::DeviceEnqueue);
     return AddDeclaration(new Op(spv::Op::OpTypeQueue, bound));
 }
 
-const Op* Module::TypePipe(spv::AccessQualifier access_qualifier) {
+Ref Module::TypePipe(spv::AccessQualifier access_qualifier) {
     AddCapability(spv::Capability::Pipes);
     Op* op{new Op(spv::Op::OpTypePipe, bound)};
     op->Add(static_cast<u32>(access_qualifier));

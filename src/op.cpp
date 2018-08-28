@@ -11,7 +11,7 @@
 
 namespace Sirit {
 
-Op::Op(spv::Op opcode_, u32 id_, const Op* result_type_) 
+Op::Op(spv::Op opcode_, u32 id_, Ref result_type_) 
     : opcode(opcode_), id(id_), result_type(result_type_) {
     operand_type = OperandType::Op;
 }
@@ -76,8 +76,8 @@ void Op::Add(const std::string& string) {
     Add(new LiteralString(string));
 }
 
-void Op::Add(const std::vector<const Op*>& ids) {
-    for (const Op* op : ids) {
+void Op::Add(const std::vector<Ref>& ids) {
+    for (Ref op : ids) {
         Add(op);
     }
 }

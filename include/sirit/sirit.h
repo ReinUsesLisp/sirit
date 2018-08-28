@@ -21,6 +21,8 @@ static const std::uint32_t Undefined = UINT32_MAX;
 class Op;
 class Operand;
 
+typedef const Op* Ref;
+
 class Module {
 public:
     explicit Module();
@@ -47,110 +49,109 @@ public:
     void SetMemoryModel(spv::AddressingModel addressing_model, spv::MemoryModel memory_model);
 
     /// Adds an entry point.
-    void AddEntryPoint(spv::ExecutionModel execution_model, const Op* entry_point,
-                       const std::string& name, const std::vector<const Op*>& interfaces = {});
+    void AddEntryPoint(spv::ExecutionModel execution_model, Ref entry_point,
+                       const std::string& name, const std::vector<Ref>& interfaces = {});
 
     /**
      * Adds an instruction to module's code
      * @param op Instruction to insert into code. Types and constants must not be emitted.
      * @return Returns op.
      */
-    const Op* Emit(const Op* op);
+    Ref Emit(Ref op);
  
     // Types
 
     /// Returns type void.
-    const Op* TypeVoid();
+    Ref TypeVoid();
 
     /// Returns type bool.
-    const Op* TypeBool();
+    Ref TypeBool();
 
     /// Returns type integer.
-    const Op* TypeInt(int width, bool is_signed);
+    Ref TypeInt(int width, bool is_signed);
 
     /// Returns type float.
-    const Op* TypeFloat(int width);
+    Ref TypeFloat(int width);
 
     /// Returns type vector.
-    const Op* TypeVector(const Op* component_type, int component_count);
+    Ref TypeVector(Ref component_type, int component_count);
 
     /// Returns type matrix.
-    const Op* TypeMatrix(const Op* column_type, int column_count);
+    Ref TypeMatrix(Ref column_type, int column_count);
 
     /// Returns type image.
-    const Op* TypeImage(const Op* sampled_type, spv::Dim dim, int depth, bool arrayed, bool ms,
+    Ref TypeImage(Ref sampled_type, spv::Dim dim, int depth, bool arrayed, bool ms,
                         int sampled, spv::ImageFormat image_format,
                         spv::AccessQualifier access_qualifier = static_cast<spv::AccessQualifier>(Undefined));
 
     /// Returns type sampler.
-    const Op* TypeSampler();
+    Ref TypeSampler();
 
     /// Returns type sampled image.
-    const Op* TypeSampledImage(const Op* image_type);
+    Ref TypeSampledImage(Ref image_type);
 
     /// Returns type array.
-    const Op* TypeArray(const Op* element_type, const Op* length);
+    Ref TypeArray(Ref element_type, Ref length);
 
     /// Returns type runtime array.
-    const Op* TypeRuntimeArray(const Op* element_type);
+    Ref TypeRuntimeArray(Ref element_type);
 
     /// Returns type struct.
-    const Op* TypeStruct(const std::vector<const Op*>& members = {});
+    Ref TypeStruct(const std::vector<Ref>& members = {});
 
     /// Returns type opaque.
-    const Op* TypeOpaque(const std::string& name);
+    Ref TypeOpaque(const std::string& name);
 
     /// Returns type pointer.
-    const Op* TypePointer(spv::StorageClass storage_class, const Op* type);
+    Ref TypePointer(spv::StorageClass storage_class, Ref type);
 
     /// Returns type function.
-    const Op* TypeFunction(const Op* return_type, const std::vector<const Op*>& arguments = {});
+    Ref TypeFunction(Ref return_type, const std::vector<Ref>& arguments = {});
 
     /// Returns type event.
-    const Op* TypeEvent();
+    Ref TypeEvent();
 
     /// Returns type device event.
-    const Op* TypeDeviceEvent();
+    Ref TypeDeviceEvent();
 
     /// Returns type reserve id.
-    const Op* TypeReserveId();
+    Ref TypeReserveId();
 
     /// Returns type queue.
-    const Op* TypeQueue();
+    Ref TypeQueue();
 
     /// Returns type pipe.
-    const Op* TypePipe(spv::AccessQualifier access_qualifier);
+    Ref TypePipe(spv::AccessQualifier access_qualifier);
 
     // Constant
     
     /// Returns a true scalar constant.
-    const Op* ConstantTrue(const Op* result_type);
+    Ref ConstantTrue(Ref result_type);
 
     /// Returns a false scalar constant.
-    const Op* ConstantFalse(const Op* result_type);
+    Ref ConstantFalse(Ref result_type);
 
     /// Returns a numeric scalar constant.
-    const Op* Constant(const Op* result_type, Operand* literal);
+    Ref Constant(Ref result_type, Operand* literal);
 
     /// Returns a numeric scalar constant.
-    const Op* ConstantComposite(const Op* result_type, const std::vector<const Op*>& constituents);
+    Ref ConstantComposite(Ref result_type, const std::vector<Ref>& constituents);
 
     // Function
 
     /// Emits a function.
-    const Op* Function(const Op* result_type, spv::FunctionControlMask function_control,
-                       const Op* function_type);
+    Ref Function(Ref result_type, spv::FunctionControlMask function_control, Ref function_type);
 
     /// Emits a function end.
-    const Op* FunctionEnd();
+    Ref FunctionEnd();
 
     // Flow
 
     /// Emits a label. It starts a block.
-    const Op* Label();
+    Ref Label();
 
     /// Emits a return. It ends a block.
-    const Op* Return();
+    Ref Return();
 
     // Literals
     static Operand* Literal(std::uint32_t value);
@@ -161,11 +162,11 @@ public:
     static Operand* Literal(double value);
 
 private:
-    const Op* AddCode(Op* op);
+    Ref AddCode(Op* op);
 
-    const Op* AddCode(spv::Op opcode, std::uint32_t id = UINT32_MAX);
+    Ref AddCode(spv::Op opcode, std::uint32_t id = UINT32_MAX);
 
-    const Op* AddDeclaration(Op* op);
+    Ref AddDeclaration(Op* op);
 
     std::uint32_t bound{1};
 
@@ -188,7 +189,7 @@ private:
 
     std::vector<std::unique_ptr<Op>> declarations;
 
-    std::vector<const Op*> code;
+    std::vector<Ref> code;
 
     std::vector<std::unique_ptr<Op>> code_store;
 };

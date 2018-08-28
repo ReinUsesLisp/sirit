@@ -10,22 +10,21 @@
 
 namespace Sirit {
 
-const Op* Module::ConstantTrue(const Op* result_type) {
+Ref Module::ConstantTrue(Ref result_type) {
     return AddDeclaration(new Op(spv::Op::OpConstantTrue, bound, result_type));
 }
 
-const Op* Module::ConstantFalse(const Op* result_type) {
+Ref Module::ConstantFalse(Ref result_type) {
     return AddDeclaration(new Op(spv::Op::OpConstantFalse, bound, result_type));
 }
 
-const Op* Module::Constant(const Op* result_type, Operand* literal) {
+Ref Module::Constant(Ref result_type, Operand* literal) {
     Op* op{new Op(spv::Op::OpConstant, bound, result_type)};
     op->Add(literal);
     return AddDeclaration(op);
 }
 
-const Op* Module::ConstantComposite(const Op* result_type,
-                                    const std::vector<const Op*>& constituents) {
+Ref Module::ConstantComposite(Ref result_type, const std::vector<Ref>& constituents) {
     Op* op{new Op(spv::Op::OpConstantComposite, bound, result_type)};
     op->Add(constituents);
     return AddDeclaration(op);

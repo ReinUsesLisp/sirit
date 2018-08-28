@@ -9,11 +9,11 @@
 
 namespace Sirit {
 
-const Op* Module::Label() {
+Ref Module::Label() {
     return AddCode(spv::Op::OpLabel, bound++);
 }
 
-const Op* Module::Return() {
+Ref Module::Return() {
     return AddCode(spv::Op::OpReturn);
 }
 
