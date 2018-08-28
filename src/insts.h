@@ -11,4 +11,9 @@
 
 namespace Sirit {
 
+template<typename T>
+inline void AddEnum(Op* op, T value) {
+    op->Add(static_cast<u32>(value));
+}
+
 } // namespace Sirit

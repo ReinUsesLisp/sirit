@@ -137,12 +137,16 @@ public:
     /// Returns a numeric scalar constant.
     Ref ConstantComposite(Ref result_type, const std::vector<Ref>& constituents);
 
+    /// Returns a sampler constant.
+    Ref ConstantSampler(Ref result_type, spv::SamplerAddressingMode addressing_mode,
+                        bool normalized, spv::SamplerFilterMode filter_mode);
+
     // Function
 
-    /// Emits a function.
+    /// Declares a function.
     Ref Function(Ref result_type, spv::FunctionControlMask function_control, Ref function_type);
 
-    /// Emits a function end.
+    /// Ends a function.
     Ref FunctionEnd();
 
     // Flow

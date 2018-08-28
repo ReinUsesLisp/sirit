@@ -20,7 +20,6 @@ public:
         // Type testing
         TypeBool();
         TypeBool();
-        TypeInt(64, true);
         TypeInt(64, false);
         TypeInt(16, false);
         TypeFloat(16);
@@ -32,11 +31,11 @@ public:
         TypeImage(TypeFloat(32), spv::Dim::Dim2D, 0, false, false, 0,
                   spv::ImageFormat::Rg32f);
         TypeSampledImage(TypeImage(TypeFloat(32), spv::Dim::Rect, 0, false, false, 0,
-                         spv::ImageFormat::Rg32f));
-        TypeVector(TypeInt(32, true), 4);
-        TypeVector(TypeInt(64, true), 4);
-        TypeRuntimeArray(TypeInt(32, true));
-        TypeStruct({TypeInt(32, true), TypeFloat(64)});
+                                   spv::ImageFormat::Rg32f));
+        TypeVector(TypeInt(32, false), 4);
+        TypeVector(TypeInt(64, false), 4);
+        TypeRuntimeArray(TypeInt(32, false));
+        TypeStruct({TypeInt(32, false), TypeFloat(64)});
         TypePointer(spv::StorageClass::Private, TypeFloat(16));
         ConstantTrue(TypeBool());
         ConstantTrue(TypeBool());

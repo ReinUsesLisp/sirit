@@ -34,7 +34,7 @@ public:
     void Add(const std::string& string);
 
     void Add(const std::vector<Ref>& ids);
-
+ 
 private:
     u16 WordCount() const;
 

@@ -30,4 +30,15 @@ Ref Module::ConstantComposite(Ref result_type, const std::vector<Ref>& constitue
     return AddDeclaration(op);
 }
 
+Ref Module::ConstantSampler(Ref result_type, spv::SamplerAddressingMode addressing_mode,
+                            bool normalized, spv::SamplerFilterMode filter_mode) {
+    AddCapability(spv::Capability::LiteralSampler);
+    AddCapability(spv::Capability::Kernel);
+    Op* op{new Op(spv::Op::OpConstantSampler, bound, result_type)};
+    AddEnum(op, addressing_mode);
+    op->Add(normalized ? 1 : 0);
+    AddEnum(op, filter_mode);
+    return AddDeclaration(op);
+}
+
 } // namespace Sirit
