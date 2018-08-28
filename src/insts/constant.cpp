@@ -41,4 +41,8 @@ Ref Module::ConstantSampler(Ref result_type, spv::SamplerAddressingMode addressi
     return AddDeclaration(op);
 }
 
+Ref Module::ConstantNull(Ref result_type) {
+    return AddDeclaration(new Op(spv::Op::OpConstantNull, bound, result_type));
+}
+
 } // namespace Sirit

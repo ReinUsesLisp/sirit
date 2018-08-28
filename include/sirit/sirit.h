@@ -141,6 +141,9 @@ public:
     Ref ConstantSampler(Ref result_type, spv::SamplerAddressingMode addressing_mode,
                         bool normalized, spv::SamplerFilterMode filter_mode);
 
+    /// Returns a null constant value.
+    Ref ConstantNull(Ref result_type);
+
     // Function
 
     /// Declares a function.

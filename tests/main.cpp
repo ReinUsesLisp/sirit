@@ -40,7 +40,6 @@ public:
         ConstantTrue(TypeBool());
         ConstantTrue(TypeBool());
         ConstantFalse(TypeBool());
-        Constant(TypeFloat(64), Literal(6342.2));
         Constant(TypeFloat(64), Literal(6342.21));
         Constant(TypeFloat(32), Literal(6342.21f));
         Constant(TypeFloat(16), Literal(30u));
@@ -50,6 +49,7 @@ public:
         ConstantComposite(TypeVector(TypeFloat(32), 2),
                           {Constant(TypeFloat(32), Literal(50.0f)),
                            Constant(TypeFloat(32), Literal(50.0f))});
+        ConstantNull(TypeVector(TypeInt(64, false), 4));
 
         auto main_type{TypeFunction(TypeVoid())};
         auto main_func{Emit(Function(TypeVoid(), spv::FunctionControlMask::MaskNone, main_type))};
