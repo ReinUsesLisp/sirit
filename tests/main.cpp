@@ -51,15 +51,16 @@ public:
                            Constant(TypeFloat(32), Literal(50.0f))});
         ConstantNull(TypeVector(TypeInt(64, false), 4));
 
+        auto cont{Label()};
         auto skip{Label()};
-        auto end{Label()};
+        Name(skip, "skip");
         auto main_type{TypeFunction(TypeVoid())};
         auto main_func{Emit(Function(TypeVoid(), spv::FunctionControlMask::MaskNone, main_type))};
         Emit(Label());
-        Emit(BranchConditional(ConstantTrue(TypeBool()), skip, end, 5, 0));
+        Emit(BranchConditional(ConstantTrue(TypeBool()), cont, skip, 5, 0));
+        Emit(cont);
+        Emit(Branch(skip));
         Emit(skip);
-        Emit(Branch(end));
-        Emit(end);
         Emit(Return());
         Emit(FunctionEnd());
 

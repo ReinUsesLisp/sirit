@@ -53,7 +53,9 @@ std::vector<u8> Module::Assemble() const {
 
     // TODO write execution mode
 
-    // TODO write debug symbols
+    for (const auto& debug_symbol : debug) {
+        debug_symbol->Write(stream);
+    }
 
     // TODO write annotations
 

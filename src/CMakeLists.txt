@@ -18,6 +18,7 @@ add_library(sirit
     insts/constant.cpp
     insts/function.cpp
     insts/flow.cpp
+    insts/debug.cpp
 )
 target_include_directories(sirit
                            PUBLIC ../include

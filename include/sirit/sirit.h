@@ -174,6 +174,11 @@ public:
     /// Returns with no value from a function with void return type.
     Ref Return();
 
+    // Debug
+
+    /// Assign a name string to a reference.
+    void Name(Ref target, const std::string& name);
+
     // Literals
     static Operand* Literal(std::uint32_t value);
     static Operand* Literal(std::uint64_t value);
