@@ -164,6 +164,9 @@ public:
     /// The block label instruction: Any reference to a block is through this ref.
     Ref Label();
 
+    /// Unconditional jump to label.
+    Ref Branch(Ref target_label);
+
     /// Returns with no value from a function with void return type.
     Ref Return();
 

@@ -30,6 +30,12 @@ Ref Module::Label() {
     return AddCode(spv::Op::OpLabel, bound++);
 }
 
+Ref Module::Branch(Ref target_label) {
+    Op* op{new Op(spv::Op::OpBranch)};
+    op->Add(target_label);
+    return AddCode(op);
+}
+
 Ref Module::Return() {
     return AddCode(spv::Op::OpReturn);
 }
