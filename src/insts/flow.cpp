@@ -9,6 +9,16 @@
 
 namespace Sirit {
 
+Ref Module::LoopMerge(Ref merge_block, Ref continue_target, spv::LoopControlMask loop_control,
+                      const std::vector<Ref>& literals) {
+    Op* op{new Op(spv::Op::OpLoopMerge)};
+    op->Add(merge_block);
+    op->Add(continue_target);
+    AddEnum(op, loop_control);
+    op->Add(literals);
+    return AddCode(op);
+}
+
 Ref Module::Label() {
     return AddCode(spv::Op::OpLabel, bound++);
 }

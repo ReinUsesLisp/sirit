@@ -154,6 +154,10 @@ public:
 
     // Flow
 
+    /// Declare a structured loop.
+    Ref LoopMerge(Ref merge_block, Ref continue_target, spv::LoopControlMask loop_control,
+                  const std::vector<Ref>& literals = {});
+
     /// The block label instruction: Any reference to a block is through this ref.
     Ref Label();
 
