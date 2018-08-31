@@ -167,6 +167,10 @@ public:
     /// Unconditional jump to label.
     Ref Branch(Ref target_label);
 
+    /// If condition is true branch to true_label, otherwise branch to false_label.
+    Ref BranchConditional(Ref condition, Ref true_label, Ref false_label,
+                          std::uint32_t true_weight = 0, std::uint32_t false_weight = 0);
+
     /// Returns with no value from a function with void return type.
     Ref Return();
 

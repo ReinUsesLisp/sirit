@@ -36,6 +36,19 @@ Ref Module::Branch(Ref target_label) {
     return AddCode(op);
 }
 
+Ref Module::BranchConditional(Ref condition, Ref true_label, Ref false_label,
+                              std::uint32_t true_weight, std::uint32_t false_weight) {
+    Op* op{new Op(spv::Op::OpBranchConditional)};
+    op->Add(condition);
+    op->Add(true_label);
+    op->Add(false_label);
+    if (true_weight != 0 || false_weight != 0) {
+        op->Add(Literal(true_weight));
+        op->Add(Literal(false_weight));
+    }
+    return AddCode(op);
+}
+
 Ref Module::Return() {
     return AddCode(spv::Op::OpReturn);
 }
