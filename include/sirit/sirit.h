@@ -158,6 +158,9 @@ public:
     Ref LoopMerge(Ref merge_block, Ref continue_target, spv::LoopControlMask loop_control,
                   const std::vector<Ref>& literals = {});
 
+    /// Declare a structured selection.
+    Ref SelectionMerge(Ref merge_block, spv::SelectionControlMask selection_control);
+
     /// The block label instruction: Any reference to a block is through this ref.
     Ref Label();
 

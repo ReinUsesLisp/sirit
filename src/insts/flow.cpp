@@ -19,6 +19,13 @@ Ref Module::LoopMerge(Ref merge_block, Ref continue_target, spv::LoopControlMask
     return AddCode(op);
 }
 
+Ref Module::SelectionMerge(Ref merge_block, spv::SelectionControlMask selection_control) {
+    Op* op{new Op(spv::Op::OpSelectionMerge)};
+    op->Add(merge_block);
+    AddEnum(op, selection_control);
+    return AddCode(op);
+}
+
 Ref Module::Label() {
     return AddCode(spv::Op::OpLabel, bound++);
 }
