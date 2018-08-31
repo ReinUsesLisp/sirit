@@ -51,9 +51,8 @@ public:
                            Constant(TypeFloat(32), Literal(50.0f))});
         ConstantNull(TypeVector(TypeInt(64, false), 4));
 
-        auto cont{Label()};
-        auto skip{Label()};
-        Name(skip, "skip");
+        auto cont{Name(Label(), "cont")};
+        auto skip{Name(Label(), "skip")};
         auto main_type{TypeFunction(TypeVoid())};
         auto main_func{Emit(Function(TypeVoid(), spv::FunctionControlMask::MaskNone, main_type))};
         Emit(Label());

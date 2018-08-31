@@ -9,11 +9,12 @@
 
 namespace Sirit {
 
-void Module::Name(Ref target, const std::string& name) {
+Ref Module::Name(Ref target, const std::string& name) {
     Op* op{new Op(spv::Op::OpName)};
     op->Add(target);
     op->Add(name);
     debug.push_back(std::unique_ptr<Op>(op));
+    return target;
 }
 
 } // namespace Sirit

@@ -177,7 +177,8 @@ public:
     // Debug
 
     /// Assign a name string to a reference.
-    void Name(Ref target, const std::string& name);
+    /// @return target
+    Ref Name(Ref target, const std::string& name);
 
     // Literals
     static Operand* Literal(std::uint32_t value);
