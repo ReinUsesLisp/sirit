@@ -10,9 +10,9 @@ What it does for you:
 * Sort declaration opcodes
 * Handle types and constant duplicates
 * Emit SPIR-V opcodes  
+* Add capabilities automatically
 
 What it will try to do in the future:
-* Add capabilities automatically
 * Optimize code
 
 What does not do for you:
