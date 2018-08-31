@@ -66,7 +66,7 @@ int main(int argc, char** argv) {
     module.Generate();
 
     module.Optimize(2);
-    std::vector<std::uint8_t> code{module.Assembly()};
+    std::vector<std::uint8_t> code{module.Assemble()};
 
     FILE* file = fopen("sirit.spv", "wb");
     fwrite(code.data(), 1, code.size(), file);

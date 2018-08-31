@@ -33,7 +33,7 @@ public:
      * It can be called multiple times but it's recommended to copy code externally.
      * @return A stream of bytes representing a SPIR-V module.
      */
-    std::vector<std::uint8_t> Assembly() const;
+    std::vector<std::uint8_t> Assemble() const;
 
     /**
      * Optimizes module's IR.

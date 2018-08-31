@@ -24,7 +24,7 @@ Module::Module() {}
 
 Module::~Module() = default;
 
-std::vector<u8> Module::Assembly() const {
+std::vector<u8> Module::Assemble() const {
     std::vector<u8> bytes;
     Stream stream{bytes};
 
