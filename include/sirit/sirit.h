@@ -154,10 +154,10 @@ public:
 
     // Flow
 
-    /// Emits a label. It starts a block.
+    /// The block label instruction: Any reference to a block is through this ref.
     Ref Label();
 
-    /// Emits a return. It ends a block.
+    /// Returns with no value from a function with void return type.
     Ref Return();
 
     // Literals
