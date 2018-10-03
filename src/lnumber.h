@@ -6,19 +6,15 @@
 
 #pragma once
 
-#include "stream.h"
 #include "operand.h"
- 
+#include "stream.h"
+#include <typeindex>
+
 namespace Sirit {
 
 class LiteralNumber : public Operand {
-public:
-    LiteralNumber(u32 number);
-    LiteralNumber(s32 number);
-    LiteralNumber(f32 number);
-    LiteralNumber(u64 number);
-    LiteralNumber(s64 number);
-    LiteralNumber(f64 number);
+  public:
+    LiteralNumber(std::type_index type);
     ~LiteralNumber();
 
     virtual void Fetch(Stream& stream) const;
@@ -26,27 +22,21 @@ public:
 
     virtual bool operator==(const Operand& other) const;
 
-private:
-    LiteralNumber();
+    template <typename T> static LiteralNumber* Create(T value) {
+        static_assert(sizeof(T) == 4 || sizeof(T) == 8);
+        LiteralNumber* number = new LiteralNumber(std::type_index(typeid(T)));
+        if (number->is_32 = sizeof(T) == 4; number->is_32) {
+            number->raw = *reinterpret_cast<u32*>(&value);
+        } else {
+            number->raw = *reinterpret_cast<u64*>(&value);
+        }
+        return number;
+    }
 
-    enum class NumberType {
-        U32,
-        S32,
-        F32,
-        U64,
-        S64,
-        F64
-    } type;
-
-    union {
-        u64 raw{};
-        u32 uint32;
-        s32 int32;
-        u64 uint64;
-        s64 int64;
-        f32 float32;
-        f64 float64;
-    };
+  private:
+    std::type_index type;
+    bool is_32;
+    u64 raw;
 };
 
 } // namespace Sirit

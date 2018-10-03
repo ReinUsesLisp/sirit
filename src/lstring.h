@@ -6,14 +6,14 @@
 
 #pragma once
 
-#include <string>
-#include "stream.h"
 #include "operand.h"
+#include "stream.h"
+#include <string>
 
 namespace Sirit {
 
 class LiteralString : public Operand {
-public:
+  public:
     LiteralString(const std::string& string);
     ~LiteralString();
 
@@ -22,7 +22,7 @@ public:
 
     virtual bool operator==(const Operand& other) const;
 
-private:
+  private:
     std::string string;
 };
 

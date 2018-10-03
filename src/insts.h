@@ -6,13 +6,12 @@
 
 #pragma once
 
-#include "stream.h"
 #include "op.h"
+#include "stream.h"
 
 namespace Sirit {
 
-template<typename T>
-inline void AddEnum(Op* op, T value) {
+template <typename T> inline void AddEnum(Op* op, T value) {
     op->Add(static_cast<u32>(value));
 }
 

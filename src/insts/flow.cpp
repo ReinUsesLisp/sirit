@@ -11,7 +11,7 @@ namespace Sirit {
 
 Ref Module::LoopMerge(Ref merge_block, Ref continue_target, spv::LoopControlMask loop_control,
                       const std::vector<Ref>& literals) {
-    Op* op{new Op(spv::Op::OpLoopMerge)};
+    auto const op{new Op(spv::Op::OpLoopMerge)};
     op->Add(merge_block);
     op->Add(continue_target);
     AddEnum(op, loop_control);
@@ -20,7 +20,7 @@ Ref Module::LoopMerge(Ref merge_block, Ref continue_target, spv::LoopControlMask
 }
 
 Ref Module::SelectionMerge(Ref merge_block, spv::SelectionControlMask selection_control) {
-    Op* op{new Op(spv::Op::OpSelectionMerge)};
+    auto const op{new Op(spv::Op::OpSelectionMerge)};
     op->Add(merge_block);
     AddEnum(op, selection_control);
     return AddCode(op);
@@ -31,14 +31,14 @@ Ref Module::Label() {
 }
 
 Ref Module::Branch(Ref target_label) {
-    Op* op{new Op(spv::Op::OpBranch)};
+    auto const op{new Op(spv::Op::OpBranch)};
     op->Add(target_label);
     return AddCode(op);
 }
 
 Ref Module::BranchConditional(Ref condition, Ref true_label, Ref false_label,
                               std::uint32_t true_weight, std::uint32_t false_weight) {
-    Op* op{new Op(spv::Op::OpBranchConditional)};
+    auto const op{new Op(spv::Op::OpBranchConditional)};
     op->Add(condition);
     op->Add(true_label);
     op->Add(false_label);

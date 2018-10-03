@@ -4,17 +4,17 @@
  * Lesser General Public License version 2.1 or any later version.
  */
 
-#include <algorithm>
-#include <cassert>
 #include "sirit/sirit.h"
 #include "common_types.h"
 #include "op.h"
 #include "stream.h"
+#include <algorithm>
+#include <cassert>
 
 namespace Sirit {
 
-template<typename T>
-inline void WriteEnum(Stream& stream, spv::Op opcode, T value) {
+template <typename T>
+static void WriteEnum(Stream& stream, spv::Op opcode, T value) {
     Op op{opcode};
     op.Add(static_cast<u32>(value));
     op.Write(stream);
@@ -30,7 +30,7 @@ std::vector<u8> Module::Assemble() const {
 
     stream.Write(spv::MagicNumber);
     stream.Write(spv::Version);
-    stream.Write(GeneratorMagicNumber);
+    stream.Write(GENERATOR_MAGIC_NUMBER);
     stream.Write(bound);
     stream.Write(static_cast<u32>(0));
 
@@ -69,21 +69,22 @@ std::vector<u8> Module::Assemble() const {
     return bytes;
 }
 
-void Module::Optimize(int level) {
-}
+void Module::Optimize(int level) {}
 
 void Module::AddCapability(spv::Capability capability) {
     capabilities.insert(capability);
 }
 
-void Module::SetMemoryModel(spv::AddressingModel addressing_model, spv::MemoryModel memory_model) {
+void Module::SetMemoryModel(spv::AddressingModel addressing_model,
+                            spv::MemoryModel memory_model) {
     this->addressing_model = addressing_model;
     this->memory_model = memory_model;
 }
 
 void Module::AddEntryPoint(spv::ExecutionModel execution_model, Ref entry_point,
-                           const std::string& name, const std::vector<Ref>& interfaces) {
-    Op* op{new Op(spv::Op::OpEntryPoint)};
+                           const std::string& name,
+                           const std::vector<Ref>& interfaces) {
+    auto const op{new Op(spv::Op::OpEntryPoint)};
     op->Add(static_cast<u32>(execution_model));
     op->Add(entry_point);
     op->Add(name);
@@ -102,14 +103,14 @@ Ref Module::AddCode(Op* op) {
     return op;
 }
 
-Ref Module::AddCode(spv::Op opcode, u32 id) {
-    return AddCode(new Op{opcode, id});
+Ref Module::AddCode(spv::Op opcode, std::optional<u32> id) {
+    return AddCode(new Op(opcode, id));
 }
 
 Ref Module::AddDeclaration(Op* op) {
-    const auto& found{std::find_if(declarations.begin(), declarations.end(), [=](const auto& other) {
-        return *other == *op;
-    })};
+    const auto& found{
+        std::find_if(declarations.begin(), declarations.end(),
+                     [&op](const auto& other) { return *other == *op; })};
     if (found != declarations.end()) {
         delete op;
         return found->get();

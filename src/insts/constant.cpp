@@ -19,13 +19,13 @@ Ref Module::ConstantFalse(Ref result_type) {
 }
 
 Ref Module::Constant(Ref result_type, Operand* literal) {
-    Op* op{new Op(spv::Op::OpConstant, bound, result_type)};
+    auto const op{new Op(spv::Op::OpConstant, bound, result_type)};
     op->Add(literal);
     return AddDeclaration(op);
 }
 
 Ref Module::ConstantComposite(Ref result_type, const std::vector<Ref>& constituents) {
-    Op* op{new Op(spv::Op::OpConstantComposite, bound, result_type)};
+    auto const op{new Op(spv::Op::OpConstantComposite, bound, result_type)};
     op->Add(constituents);
     return AddDeclaration(op);
 }
@@ -34,7 +34,7 @@ Ref Module::ConstantSampler(Ref result_type, spv::SamplerAddressingMode addressi
                             bool normalized, spv::SamplerFilterMode filter_mode) {
     AddCapability(spv::Capability::LiteralSampler);
     AddCapability(spv::Capability::Kernel);
-    Op* op{new Op(spv::Op::OpConstantSampler, bound, result_type)};
+    auto const op{new Op(spv::Op::OpConstantSampler, bound, result_type)};
     AddEnum(op, addressing_mode);
     op->Add(normalized ? 1 : 0);
     AddEnum(op, filter_mode);

@@ -10,7 +10,7 @@
 namespace Sirit {
 
 Ref Module::Name(Ref target, const std::string& name) {
-    Op* op{new Op(spv::Op::OpName)};
+    auto const op{new Op(spv::Op::OpName)};
     op->Add(target);
     op->Add(name);
     debug.push_back(std::unique_ptr<Op>(op));

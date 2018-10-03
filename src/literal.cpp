@@ -4,35 +4,23 @@
  * Lesser General Public License version 2.1 or any later version.
  */
 
-#include "sirit/sirit.h"
 #include "common_types.h"
-#include "operand.h"
 #include "lnumber.h"
+#include "operand.h"
+#include "sirit/sirit.h"
 
 namespace Sirit {
 
-Operand* Module::Literal(u32 value) {
-    return new LiteralNumber(value);
-}
+#define DEFINE_LITERAL(type)                                                   \
+    Operand* Module::Literal(type value) {                                     \
+        return LiteralNumber::Create<type>(value);                             \
+    }
 
-Operand* Module::Literal(u64 value) {
-    return new LiteralNumber(value);
-}
-
-Operand* Module::Literal(s32 value) {
-    return new LiteralNumber(value);
-}
-
-Operand* Module::Literal(s64 value) {
-    return new LiteralNumber(value);
-}
-
-Operand* Module::Literal(f32 value) {
-    return new LiteralNumber(value);
-}
-
-Operand* Module::Literal(f64 value) {
-    return new LiteralNumber(value);
-}
+DEFINE_LITERAL(u32)
+DEFINE_LITERAL(u64)
+DEFINE_LITERAL(s32)
+DEFINE_LITERAL(s64)
+DEFINE_LITERAL(f32)
+DEFINE_LITERAL(f64)
 
 } // namespace Sirit

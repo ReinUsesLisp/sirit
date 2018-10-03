@@ -5,29 +5,28 @@
  */
 
 #include <cassert>
+
 #include "common_types.h"
-#include "operand.h"
-#include "op.h"
 #include "lnumber.h"
 #include "lstring.h"
+#include "op.h"
+#include "operand.h"
 
 namespace Sirit {
 
-Op::Op(spv::Op opcode_, u32 id_, Ref result_type_) 
-    : opcode(opcode_), id(id_), result_type(result_type_) {
+Op::Op(spv::Op opcode, std::optional<u32> id, Ref result_type)
+    : opcode(opcode), id(id), result_type(result_type) {
     operand_type = OperandType::Op;
 }
 
 Op::~Op() = default;
 
 void Op::Fetch(Stream& stream) const {
-    assert(id != UINT32_MAX);
-    stream.Write(id);
+    assert(id.has_value());
+    stream.Write(id.value());
 }
 
-u16 Op::GetWordCount() const {
-    return 1;
-}
+u16 Op::GetWordCount() const { return 1; }
 
 bool Op::operator==(const Operand& other) const {
     if (operand_type != other.GetType()) {
@@ -53,8 +52,8 @@ void Op::Write(Stream& stream) const {
     if (result_type) {
         result_type->Fetch(stream);
     }
-    if (id != UINT32_MAX) {
-        stream.Write(id);
+    if (id.has_value()) {
+        stream.Write(id.value());
     }
     for (const Operand* operand : operands) {
         operand->Fetch(stream);
@@ -66,17 +65,11 @@ void Op::Add(Operand* operand) {
     operand_store.push_back(std::unique_ptr<Operand>(operand));
 }
 
-void Op::Add(const Operand* operand) {
-    operands.push_back(operand);
-}
+void Op::Add(const Operand* operand) { operands.push_back(operand); }
 
-void Op::Add(u32 integer) {
-    Add(new LiteralNumber(integer));
-}
+void Op::Add(u32 integer) { Add(LiteralNumber::Create<u32>(integer)); }
 
-void Op::Add(const std::string& string) {
-    Add(new LiteralString(string));
-}
+void Op::Add(const std::string& string) { Add(new LiteralString(string)); }
 
 void Op::Add(const std::vector<Ref>& ids) {
     for (Ref op : ids) {
@@ -89,7 +82,7 @@ u16 Op::WordCount() const {
     if (result_type) {
         count++;
     }
-    if (id != UINT32_MAX) {
+    if (id.has_value()) {
         count++;
     }
     for (const Operand* operand : operands) {

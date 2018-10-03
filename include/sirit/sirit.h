@@ -7,16 +7,15 @@
 #pragma once
 
 #include <cstdint>
-#include <set>
-#include <vector>
 #include <memory>
+#include <optional>
+#include <set>
 #include <spirv/unified1/spirv.hpp11>
+#include <vector>
 
 namespace Sirit {
 
-static const std::uint32_t GeneratorMagicNumber = 0;
-
-static const std::uint32_t Undefined = UINT32_MAX;
+constexpr std::uint32_t GENERATOR_MAGIC_NUMBER = 0;
 
 class Op;
 class Operand;
@@ -24,13 +23,14 @@ class Operand;
 typedef const Op* Ref;
 
 class Module {
-public:
+  public:
     explicit Module();
     ~Module();
 
     /**
      * Assembles current module into a SPIR-V stream.
-     * It can be called multiple times but it's recommended to copy code externally.
+     * It can be called multiple times but it's recommended to copy code
+     * externally.
      * @return A stream of bytes representing a SPIR-V module.
      */
     std::vector<std::uint8_t> Assemble() const;
@@ -46,19 +46,22 @@ public:
     void AddCapability(spv::Capability capability);
 
     /// Sets module memory model.
-    void SetMemoryModel(spv::AddressingModel addressing_model, spv::MemoryModel memory_model);
+    void SetMemoryModel(spv::AddressingModel addressing_model,
+                        spv::MemoryModel memory_model);
 
     /// Adds an entry point.
     void AddEntryPoint(spv::ExecutionModel execution_model, Ref entry_point,
-                       const std::string& name, const std::vector<Ref>& interfaces = {});
+                       const std::string& name,
+                       const std::vector<Ref>& interfaces = {});
 
     /**
      * Adds an instruction to module's code
-     * @param op Instruction to insert into code. Types and constants must not be emitted.
+     * @param op Instruction to insert into code. Types and constants must not
+     * be emitted.
      * @return Returns op.
      */
     Ref Emit(Ref op);
- 
+
     // Types
 
     /// Returns type void.
@@ -80,9 +83,9 @@ public:
     Ref TypeMatrix(Ref column_type, int column_count);
 
     /// Returns type image.
-    Ref TypeImage(Ref sampled_type, spv::Dim dim, int depth, bool arrayed, bool ms,
-                        int sampled, spv::ImageFormat image_format,
-                        spv::AccessQualifier access_qualifier = static_cast<spv::AccessQualifier>(Undefined));
+    Ref TypeImage(Ref sampled_type, spv::Dim dim, int depth, bool arrayed,
+                  bool ms, int sampled, spv::ImageFormat image_format,
+                  std::optional<spv::AccessQualifier> access_qualifier = {});
 
     /// Returns type sampler.
     Ref TypeSampler();
@@ -124,7 +127,7 @@ public:
     Ref TypePipe(spv::AccessQualifier access_qualifier);
 
     // Constant
-    
+
     /// Returns a true scalar constant.
     Ref ConstantTrue(Ref result_type);
 
@@ -135,10 +138,12 @@ public:
     Ref Constant(Ref result_type, Operand* literal);
 
     /// Returns a numeric scalar constant.
-    Ref ConstantComposite(Ref result_type, const std::vector<Ref>& constituents);
+    Ref ConstantComposite(Ref result_type,
+                          const std::vector<Ref>& constituents);
 
     /// Returns a sampler constant.
-    Ref ConstantSampler(Ref result_type, spv::SamplerAddressingMode addressing_mode,
+    Ref ConstantSampler(Ref result_type,
+                        spv::SamplerAddressingMode addressing_mode,
                         bool normalized, spv::SamplerFilterMode filter_mode);
 
     /// Returns a null constant value.
@@ -147,7 +152,8 @@ public:
     // Function
 
     /// Declares a function.
-    Ref Function(Ref result_type, spv::FunctionControlMask function_control, Ref function_type);
+    Ref Function(Ref result_type, spv::FunctionControlMask function_control,
+                 Ref function_type);
 
     /// Ends a function.
     Ref FunctionEnd();
@@ -155,21 +161,26 @@ public:
     // Flow
 
     /// Declare a structured loop.
-    Ref LoopMerge(Ref merge_block, Ref continue_target, spv::LoopControlMask loop_control,
+    Ref LoopMerge(Ref merge_block, Ref continue_target,
+                  spv::LoopControlMask loop_control,
                   const std::vector<Ref>& literals = {});
 
     /// Declare a structured selection.
-    Ref SelectionMerge(Ref merge_block, spv::SelectionControlMask selection_control);
+    Ref SelectionMerge(Ref merge_block,
+                       spv::SelectionControlMask selection_control);
 
-    /// The block label instruction: Any reference to a block is through this ref.
+    /// The block label instruction: Any reference to a block is through this
+    /// ref.
     Ref Label();
 
     /// Unconditional jump to label.
     Ref Branch(Ref target_label);
 
-    /// If condition is true branch to true_label, otherwise branch to false_label.
+    /// If condition is true branch to true_label, otherwise branch to
+    /// false_label.
     Ref BranchConditional(Ref condition, Ref true_label, Ref false_label,
-                          std::uint32_t true_weight = 0, std::uint32_t false_weight = 0);
+                          std::uint32_t true_weight = 0,
+                          std::uint32_t false_weight = 0);
 
     /// Returns with no value from a function with void return type.
     Ref Return();
@@ -188,10 +199,10 @@ public:
     static Operand* Literal(float value);
     static Operand* Literal(double value);
 
-private:
+  private:
     Ref AddCode(Op* op);
 
-    Ref AddCode(spv::Op opcode, std::uint32_t id = UINT32_MAX);
+    Ref AddCode(spv::Op opcode, std::optional<std::uint32_t> id = {});
 
     Ref AddDeclaration(Op* op);
 
