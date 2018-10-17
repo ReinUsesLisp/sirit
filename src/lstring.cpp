@@ -8,7 +8,7 @@
 
 namespace Sirit {
 
-LiteralString::LiteralString(const std::string& string_) : string(string_) {
+LiteralString::LiteralString(const std::string& string) : string(string) {
     operand_type = OperandType::String;
 }
 

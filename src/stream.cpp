@@ -8,7 +8,7 @@
 
 namespace Sirit {
 
-Stream::Stream(std::vector<u8>& bytes_) : bytes(bytes_) {}
+Stream::Stream(std::vector<u8>& bytes) : bytes(bytes) {}
 
 Stream::~Stream() = default;
 
