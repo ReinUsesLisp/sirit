@@ -191,6 +191,12 @@ class Module {
     /// @return target
     Ref Name(Ref target, const std::string& name);
 
+    // Memory
+
+    /// Allocate an object in memory, resulting in a copy to it.
+    Ref Variable(Ref result_type, spv::StorageClass storage_class,
+                 Ref initializer = nullptr);
+
     // Literals
     static Operand* Literal(std::uint32_t value);
     static Operand* Literal(std::uint64_t value);
