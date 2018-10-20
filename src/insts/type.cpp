@@ -6,6 +6,7 @@
 
 #include <cassert>
 #include <optional>
+
 #include "sirit/sirit.h"
 #include "insts.h"
 

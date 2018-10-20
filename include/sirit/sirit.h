@@ -62,6 +62,13 @@ class Module {
      */
     Ref Emit(Ref op);
 
+    /**
+     * Adds a global variable
+     * @param variable Global variable to add.
+     * @return Returns variable.
+     */
+    Ref AddGlobalVariable(Ref variable);
+
     // Types
 
     /// Returns type void.
@@ -232,6 +239,8 @@ class Module {
     std::vector<std::unique_ptr<Op>> annotations;
 
     std::vector<std::unique_ptr<Op>> declarations;
+
+    std::vector<Ref> global_variables;
 
     std::vector<Ref> code;
 

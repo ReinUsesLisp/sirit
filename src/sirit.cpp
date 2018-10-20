@@ -20,6 +20,13 @@ static void WriteEnum(Stream& stream, spv::Op opcode, T value) {
     op.Write(stream);
 }
 
+template <typename T>
+static void WriteSet(Stream& stream, const T& set) {
+    for (const auto& item : set) {
+        item->Write(stream);
+    }
+}
+
 Module::Module() {}
 
 Module::~Module() = default;
@@ -37,9 +44,7 @@ std::vector<u8> Module::Assemble() const {
     for (auto capability : capabilities) {
         WriteEnum(stream, spv::Op::OpCapability, capability);
     }
-
     // TODO write extensions
-
     // TODO write ext inst imports
 
     Op memory_model_ref{spv::Op::OpMemoryModel};
@@ -47,24 +52,13 @@ std::vector<u8> Module::Assemble() const {
     memory_model_ref.Add(static_cast<u32>(memory_model));
     memory_model_ref.Write(stream);
 
-    for (const auto& entry_point : entry_points) {
-        entry_point->Write(stream);
-    }
-
+    WriteSet(stream, entry_points);
     // TODO write execution mode
-
-    for (const auto& debug_symbol : debug) {
-        debug_symbol->Write(stream);
-    }
-
+    WriteSet(stream, debug);
     // TODO write annotations
-
-    for (const auto& decl : declarations) {
-        decl->Write(stream);
-    }
-    for (const auto& line : code) {
-        line->Write(stream);
-    }
+    WriteSet(stream, declarations);
+    WriteSet(stream, global_variables);
+    WriteSet(stream, code);
 
     return bytes;
 }
@@ -96,6 +90,12 @@ Ref Module::Emit(Ref op) {
     assert(op);
     code.push_back(op);
     return op;
+}
+
+Ref Module::AddGlobalVariable(Ref variable) {
+    assert(variable);
+    global_variables.push_back(variable);
+    return variable;
 }
 
 Ref Module::AddCode(Op* op) {
