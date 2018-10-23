@@ -29,6 +29,8 @@ class Op : public Operand {
 
     void Sink(Operand* operand);
 
+    void Sink(const std::vector<Operand*>& operands);
+
     void Add(const Operand* operand);
 
     void Add(u32 integer);
@@ -36,8 +38,6 @@ class Op : public Operand {
     void Add(const std::string& string);
 
     void Add(const std::vector<Ref>& ids);
-
-    void Add(const std::vector<Operand*>& operands);
 
   private:
     u16 WordCount() const;

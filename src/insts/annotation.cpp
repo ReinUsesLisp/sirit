@@ -14,7 +14,7 @@ Ref Module::Decorate(Ref target, spv::Decoration decoration,
     auto const op{new Op(spv::Op::OpDecorate)};
     op->Add(target);
     AddEnum(op, decoration);
-    op->Add(literals);
+    op->Sink(literals);
     return AddAnnotation(op);
 }
 

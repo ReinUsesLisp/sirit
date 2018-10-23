@@ -65,21 +65,21 @@ void Op::Sink(Operand* operand) {
     operand_store.push_back(std::unique_ptr<Operand>(operand));
 }
 
+void Op::Sink(const std::vector<Operand*>& operands) {
+    for (Operand* operand : operands) {
+        Sink(operand);
+    }
+}
+
 void Op::Add(const Operand* operand) { operands.push_back(operand); }
 
-void Op::Add(u32 integer) { Add(LiteralNumber::Create<u32>(integer)); }
+void Op::Add(u32 integer) { Sink(LiteralNumber::Create<u32>(integer)); }
 
-void Op::Add(const std::string& string) { Add(new LiteralString(string)); }
+void Op::Add(const std::string& string) { Sink(new LiteralString(string)); }
 
 void Op::Add(const std::vector<Ref>& ids) {
     for (Ref op : ids) {
         Add(op);
-    }
-}
-
-void Op::Add(const std::vector<Operand*>& operands) {
-    for (Operand* operand : operands) {
-        Add(operand);
     }
 }
 
