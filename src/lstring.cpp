@@ -15,10 +15,10 @@ LiteralString::LiteralString(const std::string& string) : string(string) {
 LiteralString::~LiteralString() = default;
 
 void LiteralString::Fetch(Stream& stream) const {
-    for (std::size_t i{}; i < string.size(); i++) {
+    for (std::size_t i = 0; i < string.size(); i++) {
         stream.Write(static_cast<u8>(string[i]));
     }
-    for (std::size_t i{}; i < 4 - (string.size() % 4); i++) {
+    for (std::size_t i = 0; i < 4 - (string.size() % 4); i++) {
         stream.Write(static_cast<u8>(0));
     }
 }

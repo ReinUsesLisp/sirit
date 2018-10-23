@@ -35,7 +35,7 @@ bool Op::operator==(const Operand& other) const {
     const Op& op = dynamic_cast<const Op&>(other);
     if (op.opcode == opcode && result_type == op.result_type &&
         operands.size() == op.operands.size()) {
-        for (std::size_t i{}; i < operands.size(); i++) {
+        for (std::size_t i = 0; i < operands.size(); i++) {
             if (*operands[i] != *op.operands[i]) {
                 return false;
             }
@@ -55,7 +55,7 @@ void Op::Write(Stream& stream) const {
     if (id.has_value()) {
         stream.Write(id.value());
     }
-    for (const Operand* operand : operands) {
+    for (const auto* operand : operands) {
         operand->Fetch(stream);
     }
 }
@@ -66,7 +66,7 @@ void Op::Sink(Operand* operand) {
 }
 
 void Op::Sink(const std::vector<Operand*>& operands) {
-    for (Operand* operand : operands) {
+    for (auto* operand : operands) {
         Sink(operand);
     }
 }

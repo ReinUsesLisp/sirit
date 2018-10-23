@@ -41,7 +41,7 @@ std::vector<u8> Module::Assemble() const {
     stream.Write(bound);
     stream.Write(static_cast<u32>(0));
 
-    for (auto capability : capabilities) {
+    for (const auto capability : capabilities) {
         WriteEnum(stream, spv::Op::OpCapability, capability);
     }
     // TODO write extensions
