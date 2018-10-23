@@ -11,7 +11,7 @@ namespace Sirit {
 
 Ref Module::Decorate(Ref target, spv::Decoration decoration,
                      const std::vector<Operand*>& literals) {
-    auto const op{new Op(spv::Op::OpDecorate)};
+    auto op{new Op(spv::Op::OpDecorate)};
     op->Add(target);
     AddEnum(op, decoration);
     op->Sink(literals);

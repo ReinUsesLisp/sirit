@@ -11,7 +11,7 @@ namespace Sirit {
 
 Ref Module::Variable(Ref result_type, spv::StorageClass storage_class,
                      Ref initializer) {
-    auto const op{new Op(spv::Op::OpVariable, bound++, result_type)};
+    auto op{new Op(spv::Op::OpVariable, bound++, result_type)};
     AddEnum(op, storage_class);
     if (initializer) {
         op->Add(initializer);

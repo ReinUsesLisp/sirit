@@ -28,7 +28,7 @@ Ref Module::TypeInt(int width, bool is_signed) {
     } else if (width == 64) {
         AddCapability(spv::Capability::Int64);
     }
-    auto const op{new Op(spv::Op::OpTypeInt, bound)};
+    auto op{new Op(spv::Op::OpTypeInt, bound)};
     op->Add(width);
     op->Add(is_signed ? 1 : 0);
     return AddDeclaration(op);
@@ -40,14 +40,14 @@ Ref Module::TypeFloat(int width) {
     } else if (width == 64) {
         AddCapability(spv::Capability::Float64);
     }
-    auto const op{new Op(spv::Op::OpTypeFloat, bound)};
+    auto op{new Op(spv::Op::OpTypeFloat, bound)};
     op->Add(width);
     return AddDeclaration(op);
 }
 
 Ref Module::TypeVector(Ref component_type, int component_count) {
     assert(component_count >= 2);
-    auto const op{new Op(spv::Op::OpTypeVector, bound)};
+    auto op{new Op(spv::Op::OpTypeVector, bound)};
     op->Add(component_type);
     op->Add(component_count);
     return AddDeclaration(op);
@@ -125,7 +125,7 @@ Ref Module::TypeImage(Ref sampled_type, spv::Dim dim, int depth, bool arrayed, b
             AddCapability(spv::Capability::StorageImageExtendedFormats);
             break;
     }
-    auto const op{new Op(spv::Op::OpTypeImage, bound)};
+    auto op{new Op(spv::Op::OpTypeImage, bound)};
     op->Add(sampled_type);
     op->Add(static_cast<u32>(dim));
     op->Add(depth);
@@ -145,13 +145,13 @@ Ref Module::TypeSampler() {
 }
 
 Ref Module::TypeSampledImage(Ref image_type) {
-    auto const op{new Op(spv::Op::OpTypeSampledImage, bound)};
+    auto op{new Op(spv::Op::OpTypeSampledImage, bound)};
     op->Add(image_type);
     return AddDeclaration(op);
 }
 
 Ref Module::TypeArray(Ref element_type, Ref length) {
-    auto const op{new Op(spv::Op::OpTypeArray, bound)};
+    auto op{new Op(spv::Op::OpTypeArray, bound)};
     op->Add(element_type);
     op->Add(length);
     return AddDeclaration(op);
@@ -159,20 +159,20 @@ Ref Module::TypeArray(Ref element_type, Ref length) {
 
 Ref Module::TypeRuntimeArray(Ref element_type) {
     AddCapability(spv::Capability::Shader);
-    auto const op{new Op(spv::Op::OpTypeRuntimeArray, bound)};
+    auto op{new Op(spv::Op::OpTypeRuntimeArray, bound)};
     op->Add(element_type);
     return AddDeclaration(op);
 }
 
 Ref Module::TypeStruct(const std::vector<Ref>& members) {
-    auto const op{new Op(spv::Op::OpTypeStruct, bound)};
+    auto op{new Op(spv::Op::OpTypeStruct, bound)};
     op->Add(members);
     return AddDeclaration(op);
 }
 
 Ref Module::TypeOpaque(const std::string& name) {
     AddCapability(spv::Capability::Kernel);
-    auto const op{new Op(spv::Op::OpTypeOpaque, bound)};
+    auto op{new Op(spv::Op::OpTypeOpaque, bound)};
     op->Add(name);
     return AddDeclaration(op);
 }
@@ -193,14 +193,14 @@ Ref Module::TypePointer(spv::StorageClass storage_class, Ref type) {
             AddCapability(spv::Capability::AtomicStorage);
             break;
     }
-    auto const op{new Op(spv::Op::OpTypePointer, bound)};
+    auto op{new Op(spv::Op::OpTypePointer, bound)};
     op->Add(static_cast<u32>(storage_class));
     op->Add(type);
     return AddDeclaration(op);
 }
 
 Ref Module::TypeFunction(Ref return_type, const std::vector<Ref>& arguments) {
-    auto const op{new Op(spv::Op::OpTypeFunction, bound)};
+    auto op{new Op(spv::Op::OpTypeFunction, bound)};
     op->Add(return_type);
     op->Add(arguments);
     return AddDeclaration(op);
@@ -228,7 +228,7 @@ Ref Module::TypeQueue() {
 
 Ref Module::TypePipe(spv::AccessQualifier access_qualifier) {
     AddCapability(spv::Capability::Pipes);
-    auto const op{new Op(spv::Op::OpTypePipe, bound)};
+    auto op{new Op(spv::Op::OpTypePipe, bound)};
     op->Add(static_cast<u32>(access_qualifier));
     return AddDeclaration(op);
 }
