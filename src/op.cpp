@@ -60,7 +60,7 @@ void Op::Write(Stream& stream) const {
     }
 }
 
-void Op::Add(Operand* operand) {
+void Op::Sink(Operand* operand) {
     Add(static_cast<const Operand*>(operand));
     operand_store.push_back(std::unique_ptr<Operand>(operand));
 }

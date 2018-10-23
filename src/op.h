@@ -27,7 +27,7 @@ class Op : public Operand {
 
     void Write(Stream& stream) const;
 
-    void Add(Operand* operand);
+    void Sink(Operand* operand);
 
     void Add(const Operand* operand);
 
