@@ -204,6 +204,12 @@ class Module {
     Ref Variable(Ref result_type, spv::StorageClass storage_class,
                  Ref initializer = nullptr);
 
+    // Annotation
+
+    /// Add a decoration to target.
+    Ref Decorate(Ref target, spv::Decoration decoration,
+                 const std::vector<Operand*>& literals = {});
+
     // Literals
     static Operand* Literal(std::uint32_t value);
     static Operand* Literal(std::uint64_t value);
@@ -218,6 +224,8 @@ class Module {
     Ref AddCode(spv::Op opcode, std::optional<std::uint32_t> id = {});
 
     Ref AddDeclaration(Op* op);
+
+    Ref AddAnnotation(Op* op);
 
     std::uint32_t bound{1};
 

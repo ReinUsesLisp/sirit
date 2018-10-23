@@ -37,6 +37,8 @@ class Op : public Operand {
 
     void Add(const std::vector<Ref>& ids);
 
+    void Add(const std::vector<Operand*>& operands);
+
   private:
     u16 WordCount() const;
 

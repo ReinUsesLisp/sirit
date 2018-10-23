@@ -1,8 +1,8 @@
 add_library(sirit
     ../include/sirit/sirit.h
     sirit.cpp
-	op.cpp
-	op.h
+    op.cpp
+    op.h
     stream.cpp
     stream.h
     operand.cpp
@@ -12,7 +12,7 @@ add_library(sirit
     lnumber.h
     lstring.cpp
     lstring.h
-	common_types.h
+    common_types.h
     insts.h
     insts/type.cpp
     insts/constant.cpp
@@ -20,6 +20,7 @@ add_library(sirit
     insts/flow.cpp
     insts/debug.cpp
     insts/memory.cpp
+    insts/annotation.cpp
 )
 target_include_directories(sirit
                            PUBLIC ../include

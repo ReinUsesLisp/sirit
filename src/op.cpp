@@ -77,6 +77,12 @@ void Op::Add(const std::vector<Ref>& ids) {
     }
 }
 
+void Op::Add(const std::vector<Operand*>& operands) {
+    for (Operand* operand : operands) {
+        Add(operand);
+    }
+}
+
 u16 Op::WordCount() const {
     u16 count{1};
     if (result_type) {

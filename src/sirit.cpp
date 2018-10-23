@@ -55,7 +55,7 @@ std::vector<u8> Module::Assemble() const {
     WriteSet(stream, entry_points);
     // TODO write execution mode
     WriteSet(stream, debug);
-    // TODO write annotations
+    WriteSet(stream, annotations);
     WriteSet(stream, declarations);
     WriteSet(stream, global_variables);
     WriteSet(stream, code);
@@ -99,6 +99,7 @@ Ref Module::AddGlobalVariable(Ref variable) {
 }
 
 Ref Module::AddCode(Op* op) {
+    assert(op);
     code_store.push_back(std::unique_ptr<Op>(op));
     return op;
 }
@@ -119,6 +120,12 @@ Ref Module::AddDeclaration(Op* op) {
         bound++;
         return op;
     }
+}
+
+Ref Module::AddAnnotation(Op* op) {
+    assert(op);
+    annotations.push_back(std::unique_ptr<Op>(op));
+    return op;
 }
 
 } // namespace Sirit
