@@ -12,9 +12,6 @@ What it does for you:
 * Emit SPIR-V opcodes  
 * Add capabilities automatically
 
-What it will try to do in the future:
-* Optimize code
-
 What does not do for you:
 * Avoid ID duplicates (emitting the same instruction twice)
 * Dump code to disk

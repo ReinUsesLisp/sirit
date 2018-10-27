@@ -35,13 +35,6 @@ class Module {
      */
     std::vector<std::uint8_t> Assemble() const;
 
-    /**
-     * Optimizes module's IR.
-     * All returned references become invalid.
-     * @param level Level of optimization.
-     */
-    void Optimize(int level);
-
     /// Adds a module capability.
     void AddCapability(spv::Capability capability);
 
