@@ -4,9 +4,9 @@
  * Lesser General Public License version 2.1 or any later version.
  */
 
-#include <cassert>
-#include "sirit/sirit.h"
 #include "insts.h"
+#include "sirit/sirit.h"
+#include <cassert>
 
 namespace Sirit {
 
@@ -18,20 +18,23 @@ Ref Module::ConstantFalse(Ref result_type) {
     return AddDeclaration(new Op(spv::Op::OpConstantFalse, bound, result_type));
 }
 
-Ref Module::Constant(Ref result_type, Operand* literal) {
+Ref Module::Constant(Ref result_type, const Literal& literal) {
     auto op{new Op(spv::Op::OpConstant, bound, result_type)};
     op->Add(literal);
     return AddDeclaration(op);
 }
 
-Ref Module::ConstantComposite(Ref result_type, const std::vector<Ref>& constituents) {
+Ref Module::ConstantComposite(Ref result_type,
+                              const std::vector<Ref>& constituents) {
     auto op{new Op(spv::Op::OpConstantComposite, bound, result_type)};
     op->Add(constituents);
     return AddDeclaration(op);
 }
 
-Ref Module::ConstantSampler(Ref result_type, spv::SamplerAddressingMode addressing_mode,
-                            bool normalized, spv::SamplerFilterMode filter_mode) {
+Ref Module::ConstantSampler(Ref result_type,
+                            spv::SamplerAddressingMode addressing_mode,
+                            bool normalized,
+                            spv::SamplerFilterMode filter_mode) {
     AddCapability(spv::Capability::LiteralSampler);
     AddCapability(spv::Capability::Kernel);
     auto op{new Op(spv::Op::OpConstantSampler, bound, result_type)};

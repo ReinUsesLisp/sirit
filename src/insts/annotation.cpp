@@ -10,21 +10,22 @@
 namespace Sirit {
 
 Ref Module::Decorate(Ref target, spv::Decoration decoration,
-                     const std::vector<Operand*>& literals) {
+                     const std::vector<Literal>& literals) {
     auto op{new Op(spv::Op::OpDecorate)};
     op->Add(target);
     AddEnum(op, decoration);
-    op->Sink(literals);
+    op->Add(literals);
     return AddAnnotation(op);
 }
 
-Ref Module::MemberDecorate(Ref structure_type, Operand* member, spv::Decoration decoration,
-                           const std::vector<Operand*>& literals) {
+Ref Module::MemberDecorate(Ref structure_type, Literal member,
+                           spv::Decoration decoration,
+                           const std::vector<Literal>& literals) {
     auto op{new Op(spv::Op::OpMemberDecorate)};
     op->Add(structure_type);
-    op->Sink(member);
+    op->Add(member);
     AddEnum(op, decoration);
-    op->Sink(literals);
+    op->Add(literals);
     return AddAnnotation(op);
 }
 

@@ -31,6 +31,10 @@ class Op : public Operand {
 
     void Sink(const std::vector<Operand*>& operands);
 
+    void Add(const Literal& literal);
+
+    void Add(const std::vector<Literal>& literals);
+
     void Add(const Operand* operand);
 
     void Add(u32 integer);

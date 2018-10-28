@@ -7,7 +7,6 @@ add_library(sirit
     stream.h
     operand.cpp
     operand.h
-    literal.cpp
     literal-number.cpp
     literal-number.h
     literal-string.cpp

@@ -4,8 +4,8 @@
  * Lesser General Public License version 2.1 or any later version.
  */
 
-#include "sirit/sirit.h"
 #include "insts.h"
+#include "sirit/sirit.h"
 
 namespace Sirit {
 

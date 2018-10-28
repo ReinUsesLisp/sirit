@@ -71,6 +71,34 @@ void Op::Sink(const std::vector<Operand*>& operands) {
     }
 }
 
+void Op::Add(const Literal& literal) {
+    Operand* operand = [&]() {
+        switch (literal.index()) {
+        case 0:
+            return LiteralNumber::Create(std::get<0>(literal));
+        case 1:
+            return LiteralNumber::Create(std::get<1>(literal));
+        case 2:
+            return LiteralNumber::Create(std::get<2>(literal));
+        case 3:
+            return LiteralNumber::Create(std::get<3>(literal));
+        case 4:
+            return LiteralNumber::Create(std::get<4>(literal));
+        case 5:
+            return LiteralNumber::Create(std::get<5>(literal));
+        default:
+            assert(!"invalid literal type");
+        }
+    }();
+    Sink(operand);
+}
+
+void Op::Add(const std::vector<Literal>& literals) {
+    for (const auto& literal : literals) {
+        Add(literal);
+    }
+}
+
 void Op::Add(const Operand* operand) { operands.push_back(operand); }
 
 void Op::Add(u32 integer) { Sink(LiteralNumber::Create<u32>(integer)); }

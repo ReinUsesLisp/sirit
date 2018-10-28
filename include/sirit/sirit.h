@@ -11,6 +11,7 @@
 #include <optional>
 #include <set>
 #include <spirv/unified1/spirv.hpp11>
+#include <variant>
 #include <vector>
 
 namespace Sirit {
@@ -20,7 +21,9 @@ constexpr std::uint32_t GENERATOR_MAGIC_NUMBER = 0;
 class Op;
 class Operand;
 
-typedef const Op* Ref;
+using Literal = std::variant<std::uint32_t, std::uint64_t, std::int32_t,
+                             std::int64_t, float, double>;
+using Ref = const Op*;
 
 class Module {
   public:
@@ -135,7 +138,7 @@ class Module {
     Ref ConstantFalse(Ref result_type);
 
     /// Returns a numeric scalar constant.
-    Ref Constant(Ref result_type, Operand* literal);
+    Ref Constant(Ref result_type, const Literal& literal);
 
     /// Returns a numeric scalar constant.
     Ref ConstantComposite(Ref result_type,
@@ -201,18 +204,11 @@ class Module {
 
     /// Add a decoration to target.
     Ref Decorate(Ref target, spv::Decoration decoration,
-                 const std::vector<Operand*>& literals = {});
+                 const std::vector<Literal>& literals = {});
 
-    Ref MemberDecorate(Ref structure_type, Operand* member, spv::Decoration decoration,
-            const std::vector<Operand*>& literals = {});
-
-    // Literals
-    static Operand* Literal(std::uint32_t value);
-    static Operand* Literal(std::uint64_t value);
-    static Operand* Literal(std::int32_t value);
-    static Operand* Literal(std::int64_t value);
-    static Operand* Literal(float value);
-    static Operand* Literal(double value);
+    Ref MemberDecorate(Ref structure_type, Literal member,
+                       spv::Decoration decoration,
+                       const std::vector<Literal>& literals = {});
 
   private:
     Ref AddCode(Op* op);

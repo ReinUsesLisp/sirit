@@ -20,8 +20,7 @@ static void WriteEnum(Stream& stream, spv::Op opcode, T value) {
     op.Write(stream);
 }
 
-template <typename T>
-static void WriteSet(Stream& stream, const T& set) {
+template <typename T> static void WriteSet(Stream& stream, const T& set) {
     for (const auto& item : set) {
         item->Write(stream);
     }

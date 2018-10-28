@@ -7,8 +7,8 @@
 #include <cassert>
 #include <optional>
 
-#include "sirit/sirit.h"
 #include "insts.h"
+#include "sirit/sirit.h"
 
 namespace Sirit {
 
@@ -62,68 +62,68 @@ Ref Module::TypeMatrix(Ref column_type, int column_count) {
     return AddDeclaration(op);
 }
 
-Ref Module::TypeImage(Ref sampled_type, spv::Dim dim, int depth, bool arrayed, bool ms,
-                      int sampled, spv::ImageFormat image_format,
+Ref Module::TypeImage(Ref sampled_type, spv::Dim dim, int depth, bool arrayed,
+                      bool ms, int sampled, spv::ImageFormat image_format,
                       std::optional<spv::AccessQualifier> access_qualifier) {
     switch (dim) {
-        case spv::Dim::Dim1D:
-            AddCapability(spv::Capability::Sampled1D);
-            break;
-        case spv::Dim::Cube:
-            AddCapability(spv::Capability::Shader);
-            break;
-        case spv::Dim::Rect:
-            AddCapability(spv::Capability::SampledRect);
-            break;
-        case spv::Dim::Buffer:
-            AddCapability(spv::Capability::SampledBuffer);
-            break;
-        case spv::Dim::SubpassData:
-            AddCapability(spv::Capability::InputAttachment);
-            break;
+    case spv::Dim::Dim1D:
+        AddCapability(spv::Capability::Sampled1D);
+        break;
+    case spv::Dim::Cube:
+        AddCapability(spv::Capability::Shader);
+        break;
+    case spv::Dim::Rect:
+        AddCapability(spv::Capability::SampledRect);
+        break;
+    case spv::Dim::Buffer:
+        AddCapability(spv::Capability::SampledBuffer);
+        break;
+    case spv::Dim::SubpassData:
+        AddCapability(spv::Capability::InputAttachment);
+        break;
     }
     switch (image_format) {
-        case spv::ImageFormat::Rgba32f:
-        case spv::ImageFormat::Rgba16f:
-        case spv::ImageFormat::R32f:
-        case spv::ImageFormat::Rgba8:
-        case spv::ImageFormat::Rgba8Snorm:
-        case spv::ImageFormat::Rgba32i:
-        case spv::ImageFormat::Rgba16i:
-        case spv::ImageFormat::Rgba8i:
-        case spv::ImageFormat::R32i:
-        case spv::ImageFormat::Rgba32ui:
-        case spv::ImageFormat::Rgba16ui:
-        case spv::ImageFormat::Rgba8ui:
-        case spv::ImageFormat::R32ui:
-            AddCapability(spv::Capability::Shader);
-            break;
-        case spv::ImageFormat::Rg32f:
-        case spv::ImageFormat::Rg16f:
-        case spv::ImageFormat::R11fG11fB10f:
-        case spv::ImageFormat::R16f:
-        case spv::ImageFormat::Rgba16:
-        case spv::ImageFormat::Rgb10A2:
-        case spv::ImageFormat::Rg16:
-        case spv::ImageFormat::Rg8:
-        case spv::ImageFormat::R16:
-        case spv::ImageFormat::R8:
-        case spv::ImageFormat::Rgba16Snorm:
-        case spv::ImageFormat::Rg16Snorm:
-        case spv::ImageFormat::Rg8Snorm:
-        case spv::ImageFormat::Rg32i:
-        case spv::ImageFormat::Rg16i:
-        case spv::ImageFormat::Rg8i:
-        case spv::ImageFormat::R16i:
-        case spv::ImageFormat::R8i:
-        case spv::ImageFormat::Rgb10a2ui:
-        case spv::ImageFormat::Rg32ui:
-        case spv::ImageFormat::Rg16ui:
-        case spv::ImageFormat::Rg8ui:
-        case spv::ImageFormat::R16ui:
-        case spv::ImageFormat::R8ui:
-            AddCapability(spv::Capability::StorageImageExtendedFormats);
-            break;
+    case spv::ImageFormat::Rgba32f:
+    case spv::ImageFormat::Rgba16f:
+    case spv::ImageFormat::R32f:
+    case spv::ImageFormat::Rgba8:
+    case spv::ImageFormat::Rgba8Snorm:
+    case spv::ImageFormat::Rgba32i:
+    case spv::ImageFormat::Rgba16i:
+    case spv::ImageFormat::Rgba8i:
+    case spv::ImageFormat::R32i:
+    case spv::ImageFormat::Rgba32ui:
+    case spv::ImageFormat::Rgba16ui:
+    case spv::ImageFormat::Rgba8ui:
+    case spv::ImageFormat::R32ui:
+        AddCapability(spv::Capability::Shader);
+        break;
+    case spv::ImageFormat::Rg32f:
+    case spv::ImageFormat::Rg16f:
+    case spv::ImageFormat::R11fG11fB10f:
+    case spv::ImageFormat::R16f:
+    case spv::ImageFormat::Rgba16:
+    case spv::ImageFormat::Rgb10A2:
+    case spv::ImageFormat::Rg16:
+    case spv::ImageFormat::Rg8:
+    case spv::ImageFormat::R16:
+    case spv::ImageFormat::R8:
+    case spv::ImageFormat::Rgba16Snorm:
+    case spv::ImageFormat::Rg16Snorm:
+    case spv::ImageFormat::Rg8Snorm:
+    case spv::ImageFormat::Rg32i:
+    case spv::ImageFormat::Rg16i:
+    case spv::ImageFormat::Rg8i:
+    case spv::ImageFormat::R16i:
+    case spv::ImageFormat::R8i:
+    case spv::ImageFormat::Rgb10a2ui:
+    case spv::ImageFormat::Rg32ui:
+    case spv::ImageFormat::Rg16ui:
+    case spv::ImageFormat::Rg8ui:
+    case spv::ImageFormat::R16ui:
+    case spv::ImageFormat::R8ui:
+        AddCapability(spv::Capability::StorageImageExtendedFormats);
+        break;
     }
     auto op{new Op(spv::Op::OpTypeImage, bound)};
     op->Add(sampled_type);
@@ -179,19 +179,19 @@ Ref Module::TypeOpaque(const std::string& name) {
 
 Ref Module::TypePointer(spv::StorageClass storage_class, Ref type) {
     switch (storage_class) {
-        case spv::StorageClass::Uniform:
-        case spv::StorageClass::Output:
-        case spv::StorageClass::Private:
-        case spv::StorageClass::PushConstant:
-        case spv::StorageClass::StorageBuffer:
-            AddCapability(spv::Capability::Shader);
-            break;
-        case spv::StorageClass::Generic:
-            AddCapability(spv::Capability::GenericPointer);
-            break;
-        case spv::StorageClass::AtomicCounter:
-            AddCapability(spv::Capability::AtomicStorage);
-            break;
+    case spv::StorageClass::Uniform:
+    case spv::StorageClass::Output:
+    case spv::StorageClass::Private:
+    case spv::StorageClass::PushConstant:
+    case spv::StorageClass::StorageBuffer:
+        AddCapability(spv::Capability::Shader);
+        break;
+    case spv::StorageClass::Generic:
+        AddCapability(spv::Capability::GenericPointer);
+        break;
+    case spv::StorageClass::AtomicCounter:
+        AddCapability(spv::Capability::AtomicStorage);
+        break;
     }
     auto op{new Op(spv::Op::OpTypePointer, bound)};
     op->Add(static_cast<u32>(storage_class));
