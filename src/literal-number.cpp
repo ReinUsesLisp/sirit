@@ -4,7 +4,7 @@
  * Lesser General Public License version 2.1 or any later version.
  */
 
-#include "lnumber.h"
+#include "literal-number.h"
 #include <cassert>
 
 namespace Sirit {

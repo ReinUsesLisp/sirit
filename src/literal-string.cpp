@@ -4,7 +4,7 @@
  * Lesser General Public License version 2.1 or any later version.
  */
 
-#include "lstring.h"
+#include "literal-string.h"
 
 namespace Sirit {
 

@@ -5,7 +5,7 @@
  */
 
 #include "common_types.h"
-#include "lnumber.h"
+#include "literal-number.h"
 #include "operand.h"
 #include "sirit/sirit.h"
 

@@ -7,8 +7,8 @@
 #include <cassert>
 
 #include "common_types.h"
-#include "lnumber.h"
-#include "lstring.h"
+#include "literal-number.h"
+#include "literal-string.h"
 #include "op.h"
 #include "operand.h"
 

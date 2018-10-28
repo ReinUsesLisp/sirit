@@ -63,8 +63,6 @@ std::vector<u8> Module::Assemble() const {
     return bytes;
 }
 
-void Module::Optimize(int level) {}
-
 void Module::AddCapability(spv::Capability capability) {
     capabilities.insert(capability);
 }
