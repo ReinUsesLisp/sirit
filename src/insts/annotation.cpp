@@ -18,4 +18,14 @@ Ref Module::Decorate(Ref target, spv::Decoration decoration,
     return AddAnnotation(op);
 }
 
+Ref Module::MemberDecorate(Ref structure_type, Operand* member, spv::Decoration decoration,
+                           const std::vector<Operand*>& literals) {
+    auto op{new Op(spv::Op::OpMemberDecorate)};
+    op->Add(structure_type);
+    op->Sink(member);
+    AddEnum(op, decoration);
+    op->Sink(literals);
+    return AddAnnotation(op);
+}
+
 } // namespace Sirit

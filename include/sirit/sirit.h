@@ -203,6 +203,9 @@ class Module {
     Ref Decorate(Ref target, spv::Decoration decoration,
                  const std::vector<Operand*>& literals = {});
 
+    Ref MemberDecorate(Ref structure_type, Operand* member, spv::Decoration decoration,
+            const std::vector<Operand*>& literals = {});
+
     // Literals
     static Operand* Literal(std::uint32_t value);
     static Operand* Literal(std::uint64_t value);
