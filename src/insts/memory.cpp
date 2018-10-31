@@ -6,6 +6,7 @@
 
 #include "insts.h"
 #include "sirit/sirit.h"
+#include <cassert>
 
 namespace Sirit {
 
@@ -16,6 +17,15 @@ Ref Module::Variable(Ref result_type, spv::StorageClass storage_class,
     if (initializer) {
         op->Add(initializer);
     }
+    return AddCode(op);
+}
+
+Ref Module::AccessChain(Ref result_type, Ref base,
+                        const std::vector<Ref>& indexes) {
+    assert(indexes.size() > 0);
+    auto op{new Op(spv::Op::OpAccessChain, bound++, result_type)};
+    op->Add(base);
+    op->Add(indexes);
     return AddCode(op);
 }
 

@@ -200,6 +200,11 @@ class Module {
     Ref Variable(Ref result_type, spv::StorageClass storage_class,
                  Ref initializer = nullptr);
 
+    /// Create a pointer into a composite object that can be used with OpLoad
+    /// and OpStore.
+    Ref AccessChain(Ref result_type, Ref base,
+                    const std::vector<Ref>& indexes = {});
+
     // Annotation
 
     /// Add a decoration to target.
