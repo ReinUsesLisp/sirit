@@ -20,6 +20,16 @@ Ref Module::Variable(Ref result_type, spv::StorageClass storage_class,
     return AddCode(op);
 }
 
+Ref Module::Load(Ref result_type, Ref pointer,
+                 std::optional<spv::MemoryAccessMask> memory_access) {
+    auto op{new Op(spv::Op::OpLoad, bound++, result_type)};
+    op->Add(pointer);
+    if (memory_access) {
+        AddEnum(op, *memory_access);
+    }
+    return AddCode(op);
+}
+
 Ref Module::AccessChain(Ref result_type, Ref base,
                         const std::vector<Ref>& indexes) {
     assert(indexes.size() > 0);
