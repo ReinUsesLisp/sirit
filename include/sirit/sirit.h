@@ -219,6 +219,11 @@ class Module {
                        spv::Decoration decoration,
                        const std::vector<Literal>& literals = {});
 
+    // Misc
+
+    /// Make an intermediate object whose value is undefined.
+    Ref Undef(Ref result_type);
+
   private:
     Ref AddCode(Op* op);
 

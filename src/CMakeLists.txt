@@ -20,6 +20,7 @@ add_library(sirit
     insts/debug.cpp
     insts/memory.cpp
     insts/annotation.cpp
+    insts/misc.cpp
 )
 target_include_directories(sirit
                            PUBLIC ../include
