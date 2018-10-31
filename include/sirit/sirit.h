@@ -204,10 +204,18 @@ class Module {
     Ref Load(Ref result_type, Ref pointer,
              std::optional<spv::MemoryAccessMask> memory_access = {});
 
+    /// Store through a pointer.
+    Ref Store(Ref pointer, Ref object,
+              std::optional<spv::MemoryAccessMask> memory_access = {});
+
     /// Create a pointer into a composite object that can be used with OpLoad
     /// and OpStore.
     Ref AccessChain(Ref result_type, Ref base,
                     const std::vector<Ref>& indexes = {});
+
+    /// Make a copy of a composite object, while modifying one part of it.
+    Ref CompositeInsert(Ref result_type, Ref object, Ref composite,
+                        const std::vector<Literal>& indexes = {});
 
     // Annotation
 

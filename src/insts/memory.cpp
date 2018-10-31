@@ -30,11 +30,31 @@ Ref Module::Load(Ref result_type, Ref pointer,
     return AddCode(op);
 }
 
+Ref Module::Store(Ref pointer, Ref object,
+                  std::optional<spv::MemoryAccessMask> memory_access) {
+    auto op{new Op(spv::Op::OpStore)};
+    op->Add(pointer);
+    op->Add(object);
+    if (memory_access) {
+        AddEnum(op, *memory_access);
+    }
+    return AddCode(op);
+}
+
 Ref Module::AccessChain(Ref result_type, Ref base,
                         const std::vector<Ref>& indexes) {
     assert(indexes.size() > 0);
     auto op{new Op(spv::Op::OpAccessChain, bound++, result_type)};
     op->Add(base);
+    op->Add(indexes);
+    return AddCode(op);
+}
+
+Ref Module::CompositeInsert(Ref result_type, Ref object, Ref composite,
+                            const std::vector<Literal>& indexes) {
+    auto op{new Op(spv::Op::OpCompositeInsert, bound++, result_type)};
+    op->Add(object);
+    op->Add(composite);
     op->Add(indexes);
     return AddCode(op);
 }
