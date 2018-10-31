@@ -8,62 +8,61 @@
 #include <cstdio>
 #include <cstdlib>
 
+using u32 = uint32_t;
+
 class MyModule : public Sirit::Module {
 public:
-    MyModule() {}
+    MyModule() = default;
     ~MyModule() = default;
 
     void Generate() {
         AddCapability(spv::Capability::Shader);
         SetMemoryModel(spv::AddressingModel::Logical, spv::MemoryModel::GLSL450);
         
-        // Type testing
-        TypeBool();
-        TypeBool();
-        TypeInt(64, false);
-        TypeInt(16, false);
-        TypeFloat(16);
-        TypeFloat(32);
-        TypeFloat(64);
-        TypeVector(TypeBool(), 4);
-        TypeVector(TypeBool(), 3);
-        TypeMatrix(TypeVector(TypeFloat(32), 4), 4);
-        TypeImage(TypeFloat(32), spv::Dim::Dim2D, 0, false, false, 0,
-                  spv::ImageFormat::Rg32f);
-        TypeSampledImage(TypeImage(TypeFloat(32), spv::Dim::Rect, 0, false, false, 0,
-                                   spv::ImageFormat::Rg32f));
-        TypeVector(TypeInt(32, false), 4);
-        TypeVector(TypeInt(64, false), 4);
-        TypeRuntimeArray(TypeInt(32, false));
-        TypeStruct({TypeInt(32, false), TypeFloat(64)});
-        TypePointer(spv::StorageClass::Private, TypeFloat(16));
-        ConstantTrue(TypeBool());
-        ConstantTrue(TypeBool());
-        ConstantFalse(TypeBool());
-        Constant(TypeFloat(64), Literal(6342.21));
-        Constant(TypeFloat(32), Literal(6342.21f));
-        Constant(TypeFloat(16), Literal(30u));
-        Constant(TypeInt(32, false), Literal(30u));
-        Constant(TypeInt(16, false), Literal(30u));
-        Constant(TypeInt(8, false), Literal(30u));
-        ConstantComposite(TypeVector(TypeFloat(32), 2),
-                          {Constant(TypeFloat(32), Literal(50.0f)),
-                           Constant(TypeFloat(32), Literal(50.0f))});
-        ConstantNull(TypeVector(TypeInt(64, false), 4));
+        const auto t_void = Name(TypeVoid(), "void");
+        const auto t_uint = Name(TypeInt(32, false), "uint");
+        const auto t_float = Name(TypeFloat(32), "float");
 
-        auto cont{Name(Label(), "cont")};
-        auto skip{Name(Label(), "skip")};
-        auto main_type{TypeFunction(TypeVoid())};
-        auto main_func{Emit(Function(TypeVoid(), spv::FunctionControlMask::MaskNone, main_type))};
+        const auto float4 = Name(TypeVector(t_float, 4), "float4");
+        const auto in_float = Name(TypePointer(spv::StorageClass::Input, t_float), "in_float");
+        const auto in_float4 = Name(TypePointer(spv::StorageClass::Input, float4), "in_float4");
+        const auto out_float4 = Name(TypePointer(spv::StorageClass::Output, float4), "out_float4");
+
+        const auto gl_per_vertex = Name(TypeStruct({float4}), "gl_PerVertex");
+        const auto gl_per_vertex_ptr = Name(TypePointer(spv::StorageClass::Output, gl_per_vertex), "out_gl_PerVertex");
+        
+        const auto in_pos = Name(Variable(in_float4, spv::StorageClass::Input), "in_pos");
+        const auto per_vertex = Name(Variable(gl_per_vertex_ptr, spv::StorageClass::Output), "per_vertex");
+
+        Decorate(in_pos, spv::Decoration::Location, {0});
+        Decorate(gl_per_vertex, spv::Decoration::Block);
+        MemberDecorate(gl_per_vertex, 0, spv::Decoration::BuiltIn, {static_cast<u32>(spv::BuiltIn::Position)});
+        
+        AddGlobalVariable(in_pos);
+        AddGlobalVariable(per_vertex);
+
+        const auto main_func = Emit(Name(Function(t_void, spv::FunctionControlMask::MaskNone, TypeFunction(t_void)), "main"));
         Emit(Label());
-        Emit(BranchConditional(ConstantTrue(TypeBool()), cont, skip, 5, 0));
-        Emit(cont);
-        Emit(Branch(skip));
-        Emit(skip);
+
+        const auto ptr_pos_x = Emit(AccessChain(in_float, in_pos, {Constant(t_uint, 0u)}));
+        const auto ptr_pos_y = Emit(AccessChain(in_float, in_pos, {Constant(t_uint, 1u)}));
+
+        const auto pos_x = Emit(Load(t_float, ptr_pos_x));
+        const auto pos_y = Emit(Load(t_float, ptr_pos_y));
+
+        auto tmp_position = Emit(Undef(float4));
+        tmp_position = Emit(CompositeInsert(float4, pos_x, tmp_position, {0}));
+        tmp_position = Emit(CompositeInsert(float4, pos_y, tmp_position, {1}));
+        tmp_position = Emit(CompositeInsert(float4, Constant(t_float, 0.f), tmp_position, {2}));
+        tmp_position = Emit(CompositeInsert(float4, Constant(t_float, 1.f), tmp_position, {3}));
+
+        const auto gl_position = Emit(AccessChain(out_float4, per_vertex, {Constant(t_uint, 0u)}));
+        Emit(Store(gl_position, tmp_position));
+
         Emit(Return());
         Emit(FunctionEnd());
 
-        AddEntryPoint(spv::ExecutionModel::Vertex, main_func, "main");
+        AddEntryPoint(spv::ExecutionModel::Vertex, main_func, "main", {in_pos, per_vertex});
     }
 };
 
@@ -71,7 +70,6 @@ int main(int argc, char** argv) {
     MyModule module;
     module.Generate();
 
-    module.Optimize(2);
     std::vector<std::uint8_t> code{module.Assemble()};
 
     FILE* file = fopen("sirit.spv", "wb");
