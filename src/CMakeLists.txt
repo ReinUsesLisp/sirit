@@ -7,10 +7,10 @@ add_library(sirit
     stream.h
     operand.cpp
     operand.h
-    literal-number.cpp
-    literal-number.h
-    literal-string.cpp
-    literal-string.h
+    literal_number.cpp
+    literal_number.h
+    literal_string.cpp
+    literal_string.h
     common_types.h
     insts.h
     insts/type.cpp

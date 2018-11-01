@@ -7,8 +7,8 @@
 #include <cassert>
 
 #include "common_types.h"
-#include "literal-number.h"
-#include "literal-string.h"
+#include "literal_number.h"
+#include "literal_string.h"
 #include "op.h"
 #include "operand.h"
 
@@ -88,6 +88,7 @@ void Op::Add(const Literal& literal) {
             return LiteralNumber::Create(std::get<5>(literal));
         default:
             assert(!"invalid literal type");
+            abort();
         }
     }();
     Sink(operand);

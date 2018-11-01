@@ -23,7 +23,7 @@ class LiteralString : public Operand {
     virtual bool operator==(const Operand& other) const;
 
   private:
-    std::string string;
+    const std::string string;
 };
 
 } // namespace Sirit

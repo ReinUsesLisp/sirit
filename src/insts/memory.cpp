@@ -10,8 +10,8 @@
 
 namespace Sirit {
 
-Ref Module::Variable(Ref result_type, spv::StorageClass storage_class,
-                     Ref initializer) {
+Ref Module::OpVariable(Ref result_type, spv::StorageClass storage_class,
+                       Ref initializer) {
     auto op{new Op(spv::Op::OpVariable, bound++, result_type)};
     AddEnum(op, storage_class);
     if (initializer) {
@@ -20,8 +20,8 @@ Ref Module::Variable(Ref result_type, spv::StorageClass storage_class,
     return AddCode(op);
 }
 
-Ref Module::Load(Ref result_type, Ref pointer,
-                 std::optional<spv::MemoryAccessMask> memory_access) {
+Ref Module::OpLoad(Ref result_type, Ref pointer,
+                   std::optional<spv::MemoryAccessMask> memory_access) {
     auto op{new Op(spv::Op::OpLoad, bound++, result_type)};
     op->Add(pointer);
     if (memory_access) {
@@ -30,8 +30,8 @@ Ref Module::Load(Ref result_type, Ref pointer,
     return AddCode(op);
 }
 
-Ref Module::Store(Ref pointer, Ref object,
-                  std::optional<spv::MemoryAccessMask> memory_access) {
+Ref Module::OpStore(Ref pointer, Ref object,
+                    std::optional<spv::MemoryAccessMask> memory_access) {
     auto op{new Op(spv::Op::OpStore)};
     op->Add(pointer);
     op->Add(object);
@@ -41,8 +41,8 @@ Ref Module::Store(Ref pointer, Ref object,
     return AddCode(op);
 }
 
-Ref Module::AccessChain(Ref result_type, Ref base,
-                        const std::vector<Ref>& indexes) {
+Ref Module::OpAccessChain(Ref result_type, Ref base,
+                          const std::vector<Ref>& indexes) {
     assert(indexes.size() > 0);
     auto op{new Op(spv::Op::OpAccessChain, bound++, result_type)};
     op->Add(base);
@@ -50,8 +50,8 @@ Ref Module::AccessChain(Ref result_type, Ref base,
     return AddCode(op);
 }
 
-Ref Module::CompositeInsert(Ref result_type, Ref object, Ref composite,
-                            const std::vector<Literal>& indexes) {
+Ref Module::OpCompositeInsert(Ref result_type, Ref object, Ref composite,
+                              const std::vector<Literal>& indexes) {
     auto op{new Op(spv::Op::OpCompositeInsert, bound++, result_type)};
     op->Add(object);
     op->Add(composite);

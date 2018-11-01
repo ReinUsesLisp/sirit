@@ -9,9 +9,9 @@
 
 namespace Sirit {
 
-Ref Module::LoopMerge(Ref merge_block, Ref continue_target,
-                      spv::LoopControlMask loop_control,
-                      const std::vector<Ref>& literals) {
+Ref Module::OpLoopMerge(Ref merge_block, Ref continue_target,
+                        spv::LoopControlMask loop_control,
+                        const std::vector<Ref>& literals) {
     auto op{new Op(spv::Op::OpLoopMerge)};
     op->Add(merge_block);
     op->Add(continue_target);
@@ -20,25 +20,25 @@ Ref Module::LoopMerge(Ref merge_block, Ref continue_target,
     return AddCode(op);
 }
 
-Ref Module::SelectionMerge(Ref merge_block,
-                           spv::SelectionControlMask selection_control) {
+Ref Module::OpSelectionMerge(Ref merge_block,
+                             spv::SelectionControlMask selection_control) {
     auto op{new Op(spv::Op::OpSelectionMerge)};
     op->Add(merge_block);
     AddEnum(op, selection_control);
     return AddCode(op);
 }
 
-Ref Module::Label() { return AddCode(spv::Op::OpLabel, bound++); }
+Ref Module::OpLabel() { return AddCode(spv::Op::OpLabel, bound++); }
 
-Ref Module::Branch(Ref target_label) {
+Ref Module::OpBranch(Ref target_label) {
     auto op{new Op(spv::Op::OpBranch)};
     op->Add(target_label);
     return AddCode(op);
 }
 
-Ref Module::BranchConditional(Ref condition, Ref true_label, Ref false_label,
-                              std::uint32_t true_weight,
-                              std::uint32_t false_weight) {
+Ref Module::OpBranchConditional(Ref condition, Ref true_label, Ref false_label,
+                                std::uint32_t true_weight,
+                                std::uint32_t false_weight) {
     auto op{new Op(spv::Op::OpBranchConditional)};
     op->Add(condition);
     op->Add(true_label);
@@ -50,6 +50,6 @@ Ref Module::BranchConditional(Ref condition, Ref true_label, Ref false_label,
     return AddCode(op);
 }
 
-Ref Module::Return() { return AddCode(spv::Op::OpReturn); }
+Ref Module::OpReturn() { return AddCode(spv::Op::OpReturn); }
 
 } // namespace Sirit

@@ -68,154 +68,154 @@ class Module {
     // Types
 
     /// Returns type void.
-    Ref TypeVoid();
+    Ref OpTypeVoid();
 
     /// Returns type bool.
-    Ref TypeBool();
+    Ref OpTypeBool();
 
     /// Returns type integer.
-    Ref TypeInt(int width, bool is_signed);
+    Ref OpTypeInt(int width, bool is_signed);
 
     /// Returns type float.
-    Ref TypeFloat(int width);
+    Ref OpTypeFloat(int width);
 
     /// Returns type vector.
-    Ref TypeVector(Ref component_type, int component_count);
+    Ref OpTypeVector(Ref component_type, int component_count);
 
     /// Returns type matrix.
-    Ref TypeMatrix(Ref column_type, int column_count);
+    Ref OpTypeMatrix(Ref column_type, int column_count);
 
     /// Returns type image.
-    Ref TypeImage(Ref sampled_type, spv::Dim dim, int depth, bool arrayed,
-                  bool ms, int sampled, spv::ImageFormat image_format,
-                  std::optional<spv::AccessQualifier> access_qualifier = {});
+    Ref OpTypeImage(Ref sampled_type, spv::Dim dim, int depth, bool arrayed,
+                    bool ms, int sampled, spv::ImageFormat image_format,
+                    std::optional<spv::AccessQualifier> access_qualifier = {});
 
     /// Returns type sampler.
-    Ref TypeSampler();
+    Ref OpTypeSampler();
 
     /// Returns type sampled image.
-    Ref TypeSampledImage(Ref image_type);
+    Ref OpTypeSampledImage(Ref image_type);
 
     /// Returns type array.
-    Ref TypeArray(Ref element_type, Ref length);
+    Ref OpTypeArray(Ref element_type, Ref length);
 
     /// Returns type runtime array.
-    Ref TypeRuntimeArray(Ref element_type);
+    Ref OpTypeRuntimeArray(Ref element_type);
 
     /// Returns type struct.
-    Ref TypeStruct(const std::vector<Ref>& members = {});
+    Ref OpTypeStruct(const std::vector<Ref>& members = {});
 
     /// Returns type opaque.
-    Ref TypeOpaque(const std::string& name);
+    Ref OpTypeOpaque(const std::string& name);
 
     /// Returns type pointer.
-    Ref TypePointer(spv::StorageClass storage_class, Ref type);
+    Ref OpTypePointer(spv::StorageClass storage_class, Ref type);
 
     /// Returns type function.
-    Ref TypeFunction(Ref return_type, const std::vector<Ref>& arguments = {});
+    Ref OpTypeFunction(Ref return_type, const std::vector<Ref>& arguments = {});
 
     /// Returns type event.
-    Ref TypeEvent();
+    Ref OpTypeEvent();
 
     /// Returns type device event.
-    Ref TypeDeviceEvent();
+    Ref OpTypeDeviceEvent();
 
     /// Returns type reserve id.
-    Ref TypeReserveId();
+    Ref OpTypeReserveId();
 
     /// Returns type queue.
-    Ref TypeQueue();
+    Ref OpTypeQueue();
 
     /// Returns type pipe.
-    Ref TypePipe(spv::AccessQualifier access_qualifier);
+    Ref OpTypePipe(spv::AccessQualifier access_qualifier);
 
     // Constant
 
     /// Returns a true scalar constant.
-    Ref ConstantTrue(Ref result_type);
+    Ref OpConstantTrue(Ref result_type);
 
     /// Returns a false scalar constant.
-    Ref ConstantFalse(Ref result_type);
+    Ref OpConstantFalse(Ref result_type);
 
     /// Returns a numeric scalar constant.
-    Ref Constant(Ref result_type, const Literal& literal);
+    Ref OpConstant(Ref result_type, const Literal& literal);
 
     /// Returns a numeric scalar constant.
-    Ref ConstantComposite(Ref result_type,
-                          const std::vector<Ref>& constituents);
+    Ref OpConstantComposite(Ref result_type,
+                            const std::vector<Ref>& constituents);
 
     /// Returns a sampler constant.
-    Ref ConstantSampler(Ref result_type,
-                        spv::SamplerAddressingMode addressing_mode,
-                        bool normalized, spv::SamplerFilterMode filter_mode);
+    Ref OpConstantSampler(Ref result_type,
+                          spv::SamplerAddressingMode addressing_mode,
+                          bool normalized, spv::SamplerFilterMode filter_mode);
 
     /// Returns a null constant value.
-    Ref ConstantNull(Ref result_type);
+    Ref OpConstantNull(Ref result_type);
 
     // Function
 
     /// Declares a function.
-    Ref Function(Ref result_type, spv::FunctionControlMask function_control,
-                 Ref function_type);
+    Ref OpFunction(Ref result_type, spv::FunctionControlMask function_control,
+                   Ref function_type);
 
     /// Ends a function.
-    Ref FunctionEnd();
+    Ref OpFunctionEnd();
 
     // Flow
 
     /// Declare a structured loop.
-    Ref LoopMerge(Ref merge_block, Ref continue_target,
-                  spv::LoopControlMask loop_control,
-                  const std::vector<Ref>& literals = {});
+    Ref OpLoopMerge(Ref merge_block, Ref continue_target,
+                    spv::LoopControlMask loop_control,
+                    const std::vector<Ref>& literals = {});
 
     /// Declare a structured selection.
-    Ref SelectionMerge(Ref merge_block,
-                       spv::SelectionControlMask selection_control);
+    Ref OpSelectionMerge(Ref merge_block,
+                         spv::SelectionControlMask selection_control);
 
     /// The block label instruction: Any reference to a block is through this
     /// ref.
-    Ref Label();
+    Ref OpLabel();
 
     /// Unconditional jump to label.
-    Ref Branch(Ref target_label);
+    Ref OpBranch(Ref target_label);
 
     /// If condition is true branch to true_label, otherwise branch to
     /// false_label.
-    Ref BranchConditional(Ref condition, Ref true_label, Ref false_label,
-                          std::uint32_t true_weight = 0,
-                          std::uint32_t false_weight = 0);
+    Ref OpBranchConditional(Ref condition, Ref true_label, Ref false_label,
+                            std::uint32_t true_weight = 0,
+                            std::uint32_t false_weight = 0);
 
     /// Returns with no value from a function with void return type.
-    Ref Return();
+    Ref OpReturn();
 
     // Debug
 
     /// Assign a name string to a reference.
     /// @return target
-    Ref Name(Ref target, const std::string& name);
+    Ref OpName(Ref target, const std::string& name);
 
     // Memory
 
     /// Allocate an object in memory, resulting in a copy to it.
-    Ref Variable(Ref result_type, spv::StorageClass storage_class,
-                 Ref initializer = nullptr);
+    Ref OpVariable(Ref result_type, spv::StorageClass storage_class,
+                   Ref initializer = nullptr);
 
     /// Load through a pointer.
-    Ref Load(Ref result_type, Ref pointer,
-             std::optional<spv::MemoryAccessMask> memory_access = {});
+    Ref OpLoad(Ref result_type, Ref pointer,
+               std::optional<spv::MemoryAccessMask> memory_access = {});
 
     /// Store through a pointer.
-    Ref Store(Ref pointer, Ref object,
-              std::optional<spv::MemoryAccessMask> memory_access = {});
+    Ref OpStore(Ref pointer, Ref object,
+                std::optional<spv::MemoryAccessMask> memory_access = {});
 
     /// Create a pointer into a composite object that can be used with OpLoad
     /// and OpStore.
-    Ref AccessChain(Ref result_type, Ref base,
-                    const std::vector<Ref>& indexes = {});
+    Ref OpAccessChain(Ref result_type, Ref base,
+                      const std::vector<Ref>& indexes = {});
 
     /// Make a copy of a composite object, while modifying one part of it.
-    Ref CompositeInsert(Ref result_type, Ref object, Ref composite,
-                        const std::vector<Literal>& indexes = {});
+    Ref OpCompositeInsert(Ref result_type, Ref object, Ref composite,
+                          const std::vector<Literal>& indexes = {});
 
     // Annotation
 
@@ -230,7 +230,7 @@ class Module {
     // Misc
 
     /// Make an intermediate object whose value is undefined.
-    Ref Undef(Ref result_type);
+    Ref OpUndef(Ref result_type);
 
   private:
     Ref AddCode(Op* op);

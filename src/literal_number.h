@@ -24,6 +24,7 @@ class LiteralNumber : public Operand {
 
     template <typename T> static LiteralNumber* Create(T value) {
         static_assert(sizeof(T) == 4 || sizeof(T) == 8);
+
         LiteralNumber* number = new LiteralNumber(std::type_index(typeid(T)));
         if (number->is_32 = sizeof(T) == 4; number->is_32) {
             number->raw = *reinterpret_cast<u32*>(&value);
@@ -34,7 +35,7 @@ class LiteralNumber : public Operand {
     }
 
   private:
-    std::type_index type;
+    const std::type_index type;
     bool is_32;
     u64 raw;
 };

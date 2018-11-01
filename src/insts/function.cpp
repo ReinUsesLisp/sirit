@@ -9,14 +9,15 @@
 
 namespace Sirit {
 
-Ref Module::Function(Ref result_type, spv::FunctionControlMask function_control,
-                     Ref function_type) {
+Ref Module::OpFunction(Ref result_type,
+                       spv::FunctionControlMask function_control,
+                       Ref function_type) {
     auto op{new Op{spv::Op::OpFunction, bound++, result_type}};
     op->Add(static_cast<u32>(function_control));
     op->Add(function_type);
     return AddCode(op);
 }
 
-Ref Module::FunctionEnd() { return AddCode(spv::Op::OpFunctionEnd); }
+Ref Module::OpFunctionEnd() { return AddCode(spv::Op::OpFunctionEnd); }
 
 } // namespace Sirit
