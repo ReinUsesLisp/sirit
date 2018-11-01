@@ -87,8 +87,8 @@ class Module {
 
     /// Returns type image.
     Id OpTypeImage(Id sampled_type, spv::Dim dim, int depth, bool arrayed,
-                    bool ms, int sampled, spv::ImageFormat image_format,
-                    std::optional<spv::AccessQualifier> access_qualifier = {});
+                   bool ms, int sampled, spv::ImageFormat image_format,
+                   std::optional<spv::AccessQualifier> access_qualifier = {});
 
     /// Returns type sampler.
     Id OpTypeSampler();
@@ -141,13 +141,12 @@ class Module {
     Id OpConstant(Id result_type, const Literal& literal);
 
     /// Returns a numeric scalar constant.
-    Id OpConstantComposite(Id result_type,
-                            const std::vector<Id>& constituents);
+    Id OpConstantComposite(Id result_type, const std::vector<Id>& constituents);
 
     /// Returns a sampler constant.
     Id OpConstantSampler(Id result_type,
-                          spv::SamplerAddressingMode addressing_mode,
-                          bool normalized, spv::SamplerFilterMode filter_mode);
+                         spv::SamplerAddressingMode addressing_mode,
+                         bool normalized, spv::SamplerFilterMode filter_mode);
 
     /// Returns a null constant value.
     Id OpConstantNull(Id result_type);
@@ -156,7 +155,7 @@ class Module {
 
     /// Declares a function.
     Id OpFunction(Id result_type, spv::FunctionControlMask function_control,
-                   Id function_type);
+                  Id function_type);
 
     /// Ends a function.
     Id OpFunctionEnd();
@@ -165,12 +164,12 @@ class Module {
 
     /// Declare a structured loop.
     Id OpLoopMerge(Id merge_block, Id continue_target,
-                    spv::LoopControlMask loop_control,
-                    const std::vector<Id>& literals = {});
+                   spv::LoopControlMask loop_control,
+                   const std::vector<Id>& literals = {});
 
     /// Declare a structured selection.
     Id OpSelectionMerge(Id merge_block,
-                         spv::SelectionControlMask selection_control);
+                        spv::SelectionControlMask selection_control);
 
     /// The block label instruction: Any reference to a block is through this
     /// ref.
@@ -182,11 +181,14 @@ class Module {
     /// If condition is true branch to true_label, otherwise branch to
     /// false_label.
     Id OpBranchConditional(Id condition, Id true_label, Id false_label,
-                            std::uint32_t true_weight = 0,
-                            std::uint32_t false_weight = 0);
+                           std::uint32_t true_weight = 0,
+                           std::uint32_t false_weight = 0);
 
     /// Returns with no value from a function with void return type.
     Id OpReturn();
+
+    /// Return a value from a function.
+    Id OpReturnValue(Id value);
 
     // Debug
 
@@ -198,34 +200,34 @@ class Module {
 
     /// Allocate an object in memory, resulting in a copy to it.
     Id OpVariable(Id result_type, spv::StorageClass storage_class,
-                   Id initializer = nullptr);
+                  Id initializer = nullptr);
 
     /// Load through a pointer.
     Id OpLoad(Id result_type, Id pointer,
-               std::optional<spv::MemoryAccessMask> memory_access = {});
+              std::optional<spv::MemoryAccessMask> memory_access = {});
 
     /// Store through a pointer.
     Id OpStore(Id pointer, Id object,
-                std::optional<spv::MemoryAccessMask> memory_access = {});
+               std::optional<spv::MemoryAccessMask> memory_access = {});
 
     /// Create a pointer into a composite object that can be used with OpLoad
     /// and OpStore.
     Id OpAccessChain(Id result_type, Id base,
-                      const std::vector<Id>& indexes = {});
+                     const std::vector<Id>& indexes = {});
 
     /// Make a copy of a composite object, while modifying one part of it.
     Id OpCompositeInsert(Id result_type, Id object, Id composite,
-                          const std::vector<Literal>& indexes = {});
+                         const std::vector<Literal>& indexes = {});
 
     // Annotation
 
     /// Add a decoration to target.
     Id Decorate(Id target, spv::Decoration decoration,
-                 const std::vector<Literal>& literals = {});
+                const std::vector<Literal>& literals = {});
 
     Id MemberDecorate(Id structure_type, Literal member,
-                       spv::Decoration decoration,
-                       const std::vector<Literal>& literals = {});
+                      spv::Decoration decoration,
+                      const std::vector<Literal>& literals = {});
 
     // Misc
 

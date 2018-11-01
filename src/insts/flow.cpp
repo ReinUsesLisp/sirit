@@ -53,4 +53,10 @@ Id Module::OpBranchConditional(Id condition, Id true_label, Id false_label,
 
 Id Module::OpReturn() { return AddCode(spv::Op::OpReturn); }
 
+Id Module::OpReturnValue(Id value) {
+    auto op{std::make_unique<Op>(spv::Op::OpReturnValue)};
+    op->Add(value);
+    return AddCode(std::move(op));
+}
+
 } // namespace Sirit
