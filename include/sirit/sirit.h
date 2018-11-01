@@ -160,6 +160,10 @@ class Module {
     /// Ends a function.
     Id OpFunctionEnd();
 
+    /// Call a function.
+    Id OpFunctionCall(Id result_type, Id function,
+                      const std::vector<Id>& arguments = {});
+
     // Flow
 
     /// Declare a structured loop.
