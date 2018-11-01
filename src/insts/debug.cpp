@@ -9,7 +9,7 @@
 
 namespace Sirit {
 
-Ref Module::Name(Ref target, const std::string& name) {
+Id Module::Name(Id target, const std::string& name) {
     auto op{new Op(spv::Op::OpName)};
     op->Add(target);
     op->Add(name);

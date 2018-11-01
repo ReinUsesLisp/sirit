@@ -10,7 +10,7 @@
 
 namespace Sirit {
 
-Ref Module::OpUndef(Ref result_type) {
+Id Module::OpUndef(Id result_type) {
     return AddCode(new Op(spv::Op::OpUndef, bound++, result_type));
 }
 

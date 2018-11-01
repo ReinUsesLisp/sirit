@@ -9,9 +9,9 @@
 
 namespace Sirit {
 
-Ref Module::OpLoopMerge(Ref merge_block, Ref continue_target,
+Id Module::OpLoopMerge(Id merge_block, Id continue_target,
                         spv::LoopControlMask loop_control,
-                        const std::vector<Ref>& literals) {
+                        const std::vector<Id>& literals) {
     auto op{new Op(spv::Op::OpLoopMerge)};
     op->Add(merge_block);
     op->Add(continue_target);
@@ -20,7 +20,7 @@ Ref Module::OpLoopMerge(Ref merge_block, Ref continue_target,
     return AddCode(op);
 }
 
-Ref Module::OpSelectionMerge(Ref merge_block,
+Id Module::OpSelectionMerge(Id merge_block,
                              spv::SelectionControlMask selection_control) {
     auto op{new Op(spv::Op::OpSelectionMerge)};
     op->Add(merge_block);
@@ -28,15 +28,15 @@ Ref Module::OpSelectionMerge(Ref merge_block,
     return AddCode(op);
 }
 
-Ref Module::OpLabel() { return AddCode(spv::Op::OpLabel, bound++); }
+Id Module::OpLabel() { return AddCode(spv::Op::OpLabel, bound++); }
 
-Ref Module::OpBranch(Ref target_label) {
+Id Module::OpBranch(Id target_label) {
     auto op{new Op(spv::Op::OpBranch)};
     op->Add(target_label);
     return AddCode(op);
 }
 
-Ref Module::OpBranchConditional(Ref condition, Ref true_label, Ref false_label,
+Id Module::OpBranchConditional(Id condition, Id true_label, Id false_label,
                                 std::uint32_t true_weight,
                                 std::uint32_t false_weight) {
     auto op{new Op(spv::Op::OpBranchConditional)};
@@ -50,6 +50,6 @@ Ref Module::OpBranchConditional(Ref condition, Ref true_label, Ref false_label,
     return AddCode(op);
 }
 
-Ref Module::OpReturn() { return AddCode(spv::Op::OpReturn); }
+Id Module::OpReturn() { return AddCode(spv::Op::OpReturn); }
 
 } // namespace Sirit

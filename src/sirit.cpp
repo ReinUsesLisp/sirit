@@ -72,9 +72,9 @@ void Module::SetMemoryModel(spv::AddressingModel addressing_model,
     this->memory_model = memory_model;
 }
 
-void Module::AddEntryPoint(spv::ExecutionModel execution_model, Ref entry_point,
+void Module::AddEntryPoint(spv::ExecutionModel execution_model, Id entry_point,
                            const std::string& name,
-                           const std::vector<Ref>& interfaces) {
+                           const std::vector<Id>& interfaces) {
     auto const op{new Op(spv::Op::OpEntryPoint)};
     op->Add(static_cast<u32>(execution_model));
     op->Add(entry_point);
@@ -83,29 +83,29 @@ void Module::AddEntryPoint(spv::ExecutionModel execution_model, Ref entry_point,
     entry_points.push_back(std::unique_ptr<Op>(op));
 }
 
-Ref Module::Emit(Ref op) {
+Id Module::Emit(Id op) {
     assert(op);
     code.push_back(op);
     return op;
 }
 
-Ref Module::AddGlobalVariable(Ref variable) {
+Id Module::AddGlobalVariable(Id variable) {
     assert(variable);
     global_variables.push_back(variable);
     return variable;
 }
 
-Ref Module::AddCode(Op* op) {
+Id Module::AddCode(Op* op) {
     assert(op);
     code_store.push_back(std::unique_ptr<Op>(op));
     return op;
 }
 
-Ref Module::AddCode(spv::Op opcode, std::optional<u32> id) {
+Id Module::AddCode(spv::Op opcode, std::optional<u32> id) {
     return AddCode(new Op(opcode, id));
 }
 
-Ref Module::AddDeclaration(Op* op) {
+Id Module::AddDeclaration(Op* op) {
     const auto& found{
         std::find_if(declarations.begin(), declarations.end(),
                      [&op](const auto& other) { return *other == *op; })};
@@ -119,7 +119,7 @@ Ref Module::AddDeclaration(Op* op) {
     }
 }
 
-Ref Module::AddAnnotation(Op* op) {
+Id Module::AddAnnotation(Op* op) {
     assert(op);
     annotations.push_back(std::unique_ptr<Op>(op));
     return op;

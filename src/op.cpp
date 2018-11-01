@@ -14,7 +14,7 @@
 
 namespace Sirit {
 
-Op::Op(spv::Op opcode, std::optional<u32> id, Ref result_type)
+Op::Op(spv::Op opcode, std::optional<u32> id, Id result_type)
     : opcode(opcode), id(id), result_type(result_type) {
     operand_type = OperandType::Op;
 }
@@ -106,8 +106,8 @@ void Op::Add(u32 integer) { Sink(LiteralNumber::Create<u32>(integer)); }
 
 void Op::Add(const std::string& string) { Sink(new LiteralString(string)); }
 
-void Op::Add(const std::vector<Ref>& ids) {
-    for (Ref op : ids) {
+void Op::Add(const std::vector<Id>& ids) {
+    for (Id op : ids) {
         Add(op);
     }
 }

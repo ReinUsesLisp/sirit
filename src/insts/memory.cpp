@@ -10,8 +10,8 @@
 
 namespace Sirit {
 
-Ref Module::OpVariable(Ref result_type, spv::StorageClass storage_class,
-                       Ref initializer) {
+Id Module::OpVariable(Id result_type, spv::StorageClass storage_class,
+                       Id initializer) {
     auto op{new Op(spv::Op::OpVariable, bound++, result_type)};
     AddEnum(op, storage_class);
     if (initializer) {
@@ -20,7 +20,7 @@ Ref Module::OpVariable(Ref result_type, spv::StorageClass storage_class,
     return AddCode(op);
 }
 
-Ref Module::OpLoad(Ref result_type, Ref pointer,
+Id Module::OpLoad(Id result_type, Id pointer,
                    std::optional<spv::MemoryAccessMask> memory_access) {
     auto op{new Op(spv::Op::OpLoad, bound++, result_type)};
     op->Add(pointer);
@@ -30,7 +30,7 @@ Ref Module::OpLoad(Ref result_type, Ref pointer,
     return AddCode(op);
 }
 
-Ref Module::OpStore(Ref pointer, Ref object,
+Id Module::OpStore(Id pointer, Id object,
                     std::optional<spv::MemoryAccessMask> memory_access) {
     auto op{new Op(spv::Op::OpStore)};
     op->Add(pointer);
@@ -41,8 +41,8 @@ Ref Module::OpStore(Ref pointer, Ref object,
     return AddCode(op);
 }
 
-Ref Module::OpAccessChain(Ref result_type, Ref base,
-                          const std::vector<Ref>& indexes) {
+Id Module::OpAccessChain(Id result_type, Id base,
+                          const std::vector<Id>& indexes) {
     assert(indexes.size() > 0);
     auto op{new Op(spv::Op::OpAccessChain, bound++, result_type)};
     op->Add(base);
@@ -50,7 +50,7 @@ Ref Module::OpAccessChain(Ref result_type, Ref base,
     return AddCode(op);
 }
 
-Ref Module::OpCompositeInsert(Ref result_type, Ref object, Ref composite,
+Id Module::OpCompositeInsert(Id result_type, Id object, Id composite,
                               const std::vector<Literal>& indexes) {
     auto op{new Op(spv::Op::OpCompositeInsert, bound++, result_type)};
     op->Add(object);

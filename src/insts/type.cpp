@@ -12,15 +12,15 @@
 
 namespace Sirit {
 
-Ref Module::OpTypeVoid() {
+Id Module::OpTypeVoid() {
     return AddDeclaration(new Op(spv::Op::OpTypeVoid, bound));
 }
 
-Ref Module::OpTypeBool() {
+Id Module::OpTypeBool() {
     return AddDeclaration(new Op(spv::Op::OpTypeBool, bound));
 }
 
-Ref Module::OpTypeInt(int width, bool is_signed) {
+Id Module::OpTypeInt(int width, bool is_signed) {
     if (width == 8) {
         AddCapability(spv::Capability::Int8);
     } else if (width == 16) {
@@ -34,7 +34,7 @@ Ref Module::OpTypeInt(int width, bool is_signed) {
     return AddDeclaration(op);
 }
 
-Ref Module::OpTypeFloat(int width) {
+Id Module::OpTypeFloat(int width) {
     if (width == 16) {
         AddCapability(spv::Capability::Float16);
     } else if (width == 64) {
@@ -45,7 +45,7 @@ Ref Module::OpTypeFloat(int width) {
     return AddDeclaration(op);
 }
 
-Ref Module::OpTypeVector(Ref component_type, int component_count) {
+Id Module::OpTypeVector(Id component_type, int component_count) {
     assert(component_count >= 2);
     auto op{new Op(spv::Op::OpTypeVector, bound)};
     op->Add(component_type);
@@ -53,7 +53,7 @@ Ref Module::OpTypeVector(Ref component_type, int component_count) {
     return AddDeclaration(op);
 }
 
-Ref Module::OpTypeMatrix(Ref column_type, int column_count) {
+Id Module::OpTypeMatrix(Id column_type, int column_count) {
     assert(column_count >= 2);
     AddCapability(spv::Capability::Matrix);
     Op* op{new Op(spv::Op::OpTypeMatrix, bound)};
@@ -62,7 +62,7 @@ Ref Module::OpTypeMatrix(Ref column_type, int column_count) {
     return AddDeclaration(op);
 }
 
-Ref Module::OpTypeImage(Ref sampled_type, spv::Dim dim, int depth, bool arrayed,
+Id Module::OpTypeImage(Id sampled_type, spv::Dim dim, int depth, bool arrayed,
                         bool ms, int sampled, spv::ImageFormat image_format,
                         std::optional<spv::AccessQualifier> access_qualifier) {
     switch (dim) {
@@ -140,44 +140,44 @@ Ref Module::OpTypeImage(Ref sampled_type, spv::Dim dim, int depth, bool arrayed,
     return AddDeclaration(op);
 }
 
-Ref Module::OpTypeSampler() {
+Id Module::OpTypeSampler() {
     return AddDeclaration(new Op(spv::Op::OpTypeSampler, bound));
 }
 
-Ref Module::OpTypeSampledImage(Ref image_type) {
+Id Module::OpTypeSampledImage(Id image_type) {
     auto op{new Op(spv::Op::OpTypeSampledImage, bound)};
     op->Add(image_type);
     return AddDeclaration(op);
 }
 
-Ref Module::OpTypeArray(Ref element_type, Ref length) {
+Id Module::OpTypeArray(Id element_type, Id length) {
     auto op{new Op(spv::Op::OpTypeArray, bound)};
     op->Add(element_type);
     op->Add(length);
     return AddDeclaration(op);
 }
 
-Ref Module::OpTypeRuntimeArray(Ref element_type) {
+Id Module::OpTypeRuntimeArray(Id element_type) {
     AddCapability(spv::Capability::Shader);
     auto op{new Op(spv::Op::OpTypeRuntimeArray, bound)};
     op->Add(element_type);
     return AddDeclaration(op);
 }
 
-Ref Module::OpTypeStruct(const std::vector<Ref>& members) {
+Id Module::OpTypeStruct(const std::vector<Id>& members) {
     auto op{new Op(spv::Op::OpTypeStruct, bound)};
     op->Add(members);
     return AddDeclaration(op);
 }
 
-Ref Module::OpTypeOpaque(const std::string& name) {
+Id Module::OpTypeOpaque(const std::string& name) {
     AddCapability(spv::Capability::Kernel);
     auto op{new Op(spv::Op::OpTypeOpaque, bound)};
     op->Add(name);
     return AddDeclaration(op);
 }
 
-Ref Module::OpTypePointer(spv::StorageClass storage_class, Ref type) {
+Id Module::OpTypePointer(spv::StorageClass storage_class, Id type) {
     switch (storage_class) {
     case spv::StorageClass::Uniform:
     case spv::StorageClass::Output:
@@ -199,34 +199,34 @@ Ref Module::OpTypePointer(spv::StorageClass storage_class, Ref type) {
     return AddDeclaration(op);
 }
 
-Ref Module::OpTypeFunction(Ref return_type, const std::vector<Ref>& arguments) {
+Id Module::OpTypeFunction(Id return_type, const std::vector<Id>& arguments) {
     auto op{new Op(spv::Op::OpTypeFunction, bound)};
     op->Add(return_type);
     op->Add(arguments);
     return AddDeclaration(op);
 }
 
-Ref Module::OpTypeEvent() {
+Id Module::OpTypeEvent() {
     AddCapability(spv::Capability::Kernel);
     return AddDeclaration(new Op(spv::Op::OpTypeEvent, bound));
 }
 
-Ref Module::OpTypeDeviceEvent() {
+Id Module::OpTypeDeviceEvent() {
     AddCapability(spv::Capability::DeviceEnqueue);
     return AddDeclaration(new Op(spv::Op::OpTypeDeviceEvent, bound));
 }
 
-Ref Module::OpTypeReserveId() {
+Id Module::OpTypeReserveId() {
     AddCapability(spv::Capability::Pipes);
     return AddDeclaration(new Op(spv::Op::OpTypeReserveId, bound));
 }
 
-Ref Module::OpTypeQueue() {
+Id Module::OpTypeQueue() {
     AddCapability(spv::Capability::DeviceEnqueue);
     return AddDeclaration(new Op(spv::Op::OpTypeQueue, bound));
 }
 
-Ref Module::OpTypePipe(spv::AccessQualifier access_qualifier) {
+Id Module::OpTypePipe(spv::AccessQualifier access_qualifier) {
     AddCapability(spv::Capability::Pipes);
     auto op{new Op(spv::Op::OpTypePipe, bound)};
     op->Add(static_cast<u32>(access_qualifier));

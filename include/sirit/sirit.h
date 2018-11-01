@@ -23,7 +23,7 @@ class Operand;
 
 using Literal = std::variant<std::uint32_t, std::uint64_t, std::int32_t,
                              std::int64_t, float, double>;
-using Ref = const Op*;
+using Id = const Op*;
 
 class Module {
   public:
@@ -46,9 +46,9 @@ class Module {
                         spv::MemoryModel memory_model);
 
     /// Adds an entry point.
-    void AddEntryPoint(spv::ExecutionModel execution_model, Ref entry_point,
+    void AddEntryPoint(spv::ExecutionModel execution_model, Id entry_point,
                        const std::string& name,
-                       const std::vector<Ref>& interfaces = {});
+                       const std::vector<Id>& interfaces = {});
 
     /**
      * Adds an instruction to module's code
@@ -56,190 +56,190 @@ class Module {
      * be emitted.
      * @return Returns op.
      */
-    Ref Emit(Ref op);
+    Id Emit(Id op);
 
     /**
      * Adds a global variable
      * @param variable Global variable to add.
      * @return Returns variable.
      */
-    Ref AddGlobalVariable(Ref variable);
+    Id AddGlobalVariable(Id variable);
 
     // Types
 
     /// Returns type void.
-    Ref OpTypeVoid();
+    Id OpTypeVoid();
 
     /// Returns type bool.
-    Ref OpTypeBool();
+    Id OpTypeBool();
 
     /// Returns type integer.
-    Ref OpTypeInt(int width, bool is_signed);
+    Id OpTypeInt(int width, bool is_signed);
 
     /// Returns type float.
-    Ref OpTypeFloat(int width);
+    Id OpTypeFloat(int width);
 
     /// Returns type vector.
-    Ref OpTypeVector(Ref component_type, int component_count);
+    Id OpTypeVector(Id component_type, int component_count);
 
     /// Returns type matrix.
-    Ref OpTypeMatrix(Ref column_type, int column_count);
+    Id OpTypeMatrix(Id column_type, int column_count);
 
     /// Returns type image.
-    Ref OpTypeImage(Ref sampled_type, spv::Dim dim, int depth, bool arrayed,
+    Id OpTypeImage(Id sampled_type, spv::Dim dim, int depth, bool arrayed,
                     bool ms, int sampled, spv::ImageFormat image_format,
                     std::optional<spv::AccessQualifier> access_qualifier = {});
 
     /// Returns type sampler.
-    Ref OpTypeSampler();
+    Id OpTypeSampler();
 
     /// Returns type sampled image.
-    Ref OpTypeSampledImage(Ref image_type);
+    Id OpTypeSampledImage(Id image_type);
 
     /// Returns type array.
-    Ref OpTypeArray(Ref element_type, Ref length);
+    Id OpTypeArray(Id element_type, Id length);
 
     /// Returns type runtime array.
-    Ref OpTypeRuntimeArray(Ref element_type);
+    Id OpTypeRuntimeArray(Id element_type);
 
     /// Returns type struct.
-    Ref OpTypeStruct(const std::vector<Ref>& members = {});
+    Id OpTypeStruct(const std::vector<Id>& members = {});
 
     /// Returns type opaque.
-    Ref OpTypeOpaque(const std::string& name);
+    Id OpTypeOpaque(const std::string& name);
 
     /// Returns type pointer.
-    Ref OpTypePointer(spv::StorageClass storage_class, Ref type);
+    Id OpTypePointer(spv::StorageClass storage_class, Id type);
 
     /// Returns type function.
-    Ref OpTypeFunction(Ref return_type, const std::vector<Ref>& arguments = {});
+    Id OpTypeFunction(Id return_type, const std::vector<Id>& arguments = {});
 
     /// Returns type event.
-    Ref OpTypeEvent();
+    Id OpTypeEvent();
 
     /// Returns type device event.
-    Ref OpTypeDeviceEvent();
+    Id OpTypeDeviceEvent();
 
     /// Returns type reserve id.
-    Ref OpTypeReserveId();
+    Id OpTypeReserveId();
 
     /// Returns type queue.
-    Ref OpTypeQueue();
+    Id OpTypeQueue();
 
     /// Returns type pipe.
-    Ref OpTypePipe(spv::AccessQualifier access_qualifier);
+    Id OpTypePipe(spv::AccessQualifier access_qualifier);
 
     // Constant
 
     /// Returns a true scalar constant.
-    Ref OpConstantTrue(Ref result_type);
+    Id OpConstantTrue(Id result_type);
 
     /// Returns a false scalar constant.
-    Ref OpConstantFalse(Ref result_type);
+    Id OpConstantFalse(Id result_type);
 
     /// Returns a numeric scalar constant.
-    Ref OpConstant(Ref result_type, const Literal& literal);
+    Id OpConstant(Id result_type, const Literal& literal);
 
     /// Returns a numeric scalar constant.
-    Ref OpConstantComposite(Ref result_type,
-                            const std::vector<Ref>& constituents);
+    Id OpConstantComposite(Id result_type,
+                            const std::vector<Id>& constituents);
 
     /// Returns a sampler constant.
-    Ref OpConstantSampler(Ref result_type,
+    Id OpConstantSampler(Id result_type,
                           spv::SamplerAddressingMode addressing_mode,
                           bool normalized, spv::SamplerFilterMode filter_mode);
 
     /// Returns a null constant value.
-    Ref OpConstantNull(Ref result_type);
+    Id OpConstantNull(Id result_type);
 
     // Function
 
     /// Declares a function.
-    Ref OpFunction(Ref result_type, spv::FunctionControlMask function_control,
-                   Ref function_type);
+    Id OpFunction(Id result_type, spv::FunctionControlMask function_control,
+                   Id function_type);
 
     /// Ends a function.
-    Ref OpFunctionEnd();
+    Id OpFunctionEnd();
 
     // Flow
 
     /// Declare a structured loop.
-    Ref OpLoopMerge(Ref merge_block, Ref continue_target,
+    Id OpLoopMerge(Id merge_block, Id continue_target,
                     spv::LoopControlMask loop_control,
-                    const std::vector<Ref>& literals = {});
+                    const std::vector<Id>& literals = {});
 
     /// Declare a structured selection.
-    Ref OpSelectionMerge(Ref merge_block,
+    Id OpSelectionMerge(Id merge_block,
                          spv::SelectionControlMask selection_control);
 
     /// The block label instruction: Any reference to a block is through this
     /// ref.
-    Ref OpLabel();
+    Id OpLabel();
 
     /// Unconditional jump to label.
-    Ref OpBranch(Ref target_label);
+    Id OpBranch(Id target_label);
 
     /// If condition is true branch to true_label, otherwise branch to
     /// false_label.
-    Ref OpBranchConditional(Ref condition, Ref true_label, Ref false_label,
+    Id OpBranchConditional(Id condition, Id true_label, Id false_label,
                             std::uint32_t true_weight = 0,
                             std::uint32_t false_weight = 0);
 
     /// Returns with no value from a function with void return type.
-    Ref OpReturn();
+    Id OpReturn();
 
     // Debug
 
     /// Assign a name string to a reference.
     /// @return target
-    Ref Name(Ref target, const std::string& name);
+    Id Name(Id target, const std::string& name);
 
     // Memory
 
     /// Allocate an object in memory, resulting in a copy to it.
-    Ref OpVariable(Ref result_type, spv::StorageClass storage_class,
-                   Ref initializer = nullptr);
+    Id OpVariable(Id result_type, spv::StorageClass storage_class,
+                   Id initializer = nullptr);
 
     /// Load through a pointer.
-    Ref OpLoad(Ref result_type, Ref pointer,
+    Id OpLoad(Id result_type, Id pointer,
                std::optional<spv::MemoryAccessMask> memory_access = {});
 
     /// Store through a pointer.
-    Ref OpStore(Ref pointer, Ref object,
+    Id OpStore(Id pointer, Id object,
                 std::optional<spv::MemoryAccessMask> memory_access = {});
 
     /// Create a pointer into a composite object that can be used with OpLoad
     /// and OpStore.
-    Ref OpAccessChain(Ref result_type, Ref base,
-                      const std::vector<Ref>& indexes = {});
+    Id OpAccessChain(Id result_type, Id base,
+                      const std::vector<Id>& indexes = {});
 
     /// Make a copy of a composite object, while modifying one part of it.
-    Ref OpCompositeInsert(Ref result_type, Ref object, Ref composite,
+    Id OpCompositeInsert(Id result_type, Id object, Id composite,
                           const std::vector<Literal>& indexes = {});
 
     // Annotation
 
     /// Add a decoration to target.
-    Ref Decorate(Ref target, spv::Decoration decoration,
+    Id Decorate(Id target, spv::Decoration decoration,
                  const std::vector<Literal>& literals = {});
 
-    Ref MemberDecorate(Ref structure_type, Literal member,
+    Id MemberDecorate(Id structure_type, Literal member,
                        spv::Decoration decoration,
                        const std::vector<Literal>& literals = {});
 
     // Misc
 
     /// Make an intermediate object whose value is undefined.
-    Ref OpUndef(Ref result_type);
+    Id OpUndef(Id result_type);
 
   private:
-    Ref AddCode(Op* op);
+    Id AddCode(Op* op);
 
-    Ref AddCode(spv::Op opcode, std::optional<std::uint32_t> id = {});
+    Id AddCode(spv::Op opcode, std::optional<std::uint32_t> id = {});
 
-    Ref AddDeclaration(Op* op);
+    Id AddDeclaration(Op* op);
 
-    Ref AddAnnotation(Op* op);
+    Id AddAnnotation(Op* op);
 
     std::uint32_t bound{1};
 
@@ -262,9 +262,9 @@ class Module {
 
     std::vector<std::unique_ptr<Op>> declarations;
 
-    std::vector<Ref> global_variables;
+    std::vector<Id> global_variables;
 
-    std::vector<Ref> code;
+    std::vector<Id> code;
 
     std::vector<std::unique_ptr<Op>> code_store;
 };

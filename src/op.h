@@ -17,7 +17,7 @@ namespace Sirit {
 class Op : public Operand {
   public:
     explicit Op(spv::Op opcode, std::optional<u32> id = {},
-                Ref result_type = nullptr);
+                Id result_type = nullptr);
     ~Op();
 
     virtual void Fetch(Stream& stream) const;
@@ -41,14 +41,14 @@ class Op : public Operand {
 
     void Add(const std::string& string);
 
-    void Add(const std::vector<Ref>& ids);
+    void Add(const std::vector<Id>& ids);
 
   private:
     u16 WordCount() const;
 
     spv::Op opcode;
 
-    Ref result_type;
+    Id result_type;
 
     std::optional<u32> id;
 

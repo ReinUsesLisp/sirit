@@ -9,7 +9,7 @@
 
 namespace Sirit {
 
-Ref Module::Decorate(Ref target, spv::Decoration decoration,
+Id Module::Decorate(Id target, spv::Decoration decoration,
                      const std::vector<Literal>& literals) {
     auto op{new Op(spv::Op::OpDecorate)};
     op->Add(target);
@@ -18,7 +18,7 @@ Ref Module::Decorate(Ref target, spv::Decoration decoration,
     return AddAnnotation(op);
 }
 
-Ref Module::MemberDecorate(Ref structure_type, Literal member,
+Id Module::MemberDecorate(Id structure_type, Literal member,
                            spv::Decoration decoration,
                            const std::vector<Literal>& literals) {
     auto op{new Op(spv::Op::OpMemberDecorate)};
