@@ -4,16 +4,18 @@
  * Lesser General Public License version 2.1 or any later version.
  */
 
-#include "insts.h"
+#include "op.h"
 #include "sirit/sirit.h"
+#include <memory>
+#include <string>
 
 namespace Sirit {
 
 Id Module::Name(Id target, const std::string& name) {
-    auto op{new Op(spv::Op::OpName)};
+    auto op{std::make_unique<Op>(spv::Op::OpName)};
     op->Add(target);
     op->Add(name);
-    debug.push_back(std::unique_ptr<Op>(op));
+    debug.push_back(std::move(op));
     return target;
 }
 

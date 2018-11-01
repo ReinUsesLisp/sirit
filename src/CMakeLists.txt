@@ -12,7 +12,6 @@ add_library(sirit
     literal_string.cpp
     literal_string.h
     common_types.h
-    insts.h
     insts/type.cpp
     insts/constant.cpp
     insts/function.cpp

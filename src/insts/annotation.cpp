@@ -4,29 +4,32 @@
  * Lesser General Public License version 2.1 or any later version.
  */
 
-#include "insts.h"
+#include "common_types.h"
+#include "op.h"
 #include "sirit/sirit.h"
+#include <memory>
+#include <vector>
 
 namespace Sirit {
 
 Id Module::Decorate(Id target, spv::Decoration decoration,
-                     const std::vector<Literal>& literals) {
-    auto op{new Op(spv::Op::OpDecorate)};
+                    const std::vector<Literal>& literals) {
+    auto op{std::make_unique<Op>(spv::Op::OpDecorate)};
     op->Add(target);
-    AddEnum(op, decoration);
+    op->Add(static_cast<u32>(decoration));
     op->Add(literals);
-    return AddAnnotation(op);
+    return AddAnnotation(std::move(op));
 }
 
 Id Module::MemberDecorate(Id structure_type, Literal member,
-                           spv::Decoration decoration,
-                           const std::vector<Literal>& literals) {
-    auto op{new Op(spv::Op::OpMemberDecorate)};
+                          spv::Decoration decoration,
+                          const std::vector<Literal>& literals) {
+    auto op{std::make_unique<Op>(spv::Op::OpMemberDecorate)};
     op->Add(structure_type);
     op->Add(member);
-    AddEnum(op, decoration);
+    op->Add(static_cast<u32>(decoration));
     op->Add(literals);
-    return AddAnnotation(op);
+    return AddAnnotation(std::move(op));
 }
 
 } // namespace Sirit

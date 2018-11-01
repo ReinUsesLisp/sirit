@@ -4,42 +4,43 @@
  * Lesser General Public License version 2.1 or any later version.
  */
 
-#include "insts.h"
+#include "common_types.h"
+#include "op.h"
 #include "sirit/sirit.h"
+#include <vector>
 
 namespace Sirit {
 
 Id Module::OpLoopMerge(Id merge_block, Id continue_target,
-                        spv::LoopControlMask loop_control,
-                        const std::vector<Id>& literals) {
-    auto op{new Op(spv::Op::OpLoopMerge)};
+                       spv::LoopControlMask loop_control,
+                       const std::vector<Id>& literals) {
+    auto op{std::make_unique<Op>(spv::Op::OpLoopMerge)};
     op->Add(merge_block);
     op->Add(continue_target);
-    AddEnum(op, loop_control);
+    op->Add(static_cast<u32>(loop_control));
     op->Add(literals);
-    return AddCode(op);
+    return AddCode(std::move(op));
 }
 
 Id Module::OpSelectionMerge(Id merge_block,
-                             spv::SelectionControlMask selection_control) {
-    auto op{new Op(spv::Op::OpSelectionMerge)};
+                            spv::SelectionControlMask selection_control) {
+    auto op{std::make_unique<Op>(spv::Op::OpSelectionMerge)};
     op->Add(merge_block);
-    AddEnum(op, selection_control);
-    return AddCode(op);
+    op->Add(static_cast<u32>(selection_control));
+    return AddCode(std::move(op));
 }
 
 Id Module::OpLabel() { return AddCode(spv::Op::OpLabel, bound++); }
 
 Id Module::OpBranch(Id target_label) {
-    auto op{new Op(spv::Op::OpBranch)};
+    auto op{std::make_unique<Op>(spv::Op::OpBranch)};
     op->Add(target_label);
-    return AddCode(op);
+    return AddCode(std::move(op));
 }
 
 Id Module::OpBranchConditional(Id condition, Id true_label, Id false_label,
-                                std::uint32_t true_weight,
-                                std::uint32_t false_weight) {
-    auto op{new Op(spv::Op::OpBranchConditional)};
+                               u32 true_weight, u32 false_weight) {
+    auto op{std::make_unique<Op>(spv::Op::OpBranchConditional)};
     op->Add(condition);
     op->Add(true_label);
     op->Add(false_label);
@@ -47,7 +48,7 @@ Id Module::OpBranchConditional(Id condition, Id true_label, Id false_label,
         op->Add(true_weight);
         op->Add(false_weight);
     }
-    return AddCode(op);
+    return AddCode(std::move(op));
 }
 
 Id Module::OpReturn() { return AddCode(spv::Op::OpReturn); }

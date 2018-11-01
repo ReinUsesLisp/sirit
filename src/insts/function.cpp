@@ -4,18 +4,18 @@
  * Lesser General Public License version 2.1 or any later version.
  */
 
-#include "insts.h"
+#include "common_types.h"
+#include "op.h"
 #include "sirit/sirit.h"
 
 namespace Sirit {
 
-Id Module::OpFunction(Id result_type,
-                       spv::FunctionControlMask function_control,
-                       Id function_type) {
-    auto op{new Op{spv::Op::OpFunction, bound++, result_type}};
+Id Module::OpFunction(Id result_type, spv::FunctionControlMask function_control,
+                      Id function_type) {
+    auto op{std::make_unique<Op>(spv::Op::OpFunction, bound++, result_type)};
     op->Add(static_cast<u32>(function_control));
     op->Add(function_type);
-    return AddCode(op);
+    return AddCode(std::move(op));
 }
 
 Id Module::OpFunctionEnd() { return AddCode(spv::Op::OpFunctionEnd); }

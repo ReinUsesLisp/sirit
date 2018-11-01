@@ -84,7 +84,6 @@ void Module::AddEntryPoint(spv::ExecutionModel execution_model, Id entry_point,
 }
 
 Id Module::Emit(Id op) {
-    assert(op);
     code.push_back(op);
     return op;
 }
@@ -95,34 +94,31 @@ Id Module::AddGlobalVariable(Id variable) {
     return variable;
 }
 
-Id Module::AddCode(Op* op) {
-    assert(op);
-    code_store.push_back(std::unique_ptr<Op>(op));
-    return op;
+Id Module::AddCode(std::unique_ptr<Op> op) {
+    code_store.push_back(std::move(op));
+    return op.get();
 }
 
 Id Module::AddCode(spv::Op opcode, std::optional<u32> id) {
-    return AddCode(new Op(opcode, id));
+    return AddCode(std::make_unique<Op>(opcode, id));
 }
 
-Id Module::AddDeclaration(Op* op) {
+Id Module::AddDeclaration(std::unique_ptr<Op> op) {
     const auto& found{
         std::find_if(declarations.begin(), declarations.end(),
                      [&op](const auto& other) { return *other == *op; })};
     if (found != declarations.end()) {
-        delete op;
         return found->get();
-    } else {
-        declarations.push_back(std::unique_ptr<Op>(op));
-        bound++;
-        return op;
     }
+    const auto id = op.get();
+    declarations.push_back(std::move(op));
+    bound++;
+    return id;
 }
 
-Id Module::AddAnnotation(Op* op) {
-    assert(op);
-    annotations.push_back(std::unique_ptr<Op>(op));
-    return op;
+Id Module::AddAnnotation(std::unique_ptr<Op> op) {
+    annotations.push_back(std::move(op));
+    return op.get();
 }
 
 } // namespace Sirit

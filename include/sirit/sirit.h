@@ -233,13 +233,13 @@ class Module {
     Id OpUndef(Id result_type);
 
   private:
-    Id AddCode(Op* op);
+    Id AddCode(std::unique_ptr<Op> op);
 
     Id AddCode(spv::Op opcode, std::optional<std::uint32_t> id = {});
 
-    Id AddDeclaration(Op* op);
+    Id AddDeclaration(std::unique_ptr<Op> op);
 
-    Id AddAnnotation(Op* op);
+    Id AddAnnotation(std::unique_ptr<Op> op);
 
     std::uint32_t bound{1};
 
