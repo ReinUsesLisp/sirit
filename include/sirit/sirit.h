@@ -192,7 +192,7 @@ class Module {
 
     /// Assign a name string to a reference.
     /// @return target
-    Ref OpName(Ref target, const std::string& name);
+    Ref Name(Ref target, const std::string& name);
 
     // Memory
 
