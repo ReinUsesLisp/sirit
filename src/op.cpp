@@ -113,7 +113,7 @@ void Op::Add(const std::vector<Id>& ids) {
 }
 
 u16 Op::WordCount() const {
-    u16 count{1};
+    u16 count = 1;
     if (result_type) {
         count++;
     }

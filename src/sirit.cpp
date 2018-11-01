@@ -75,12 +75,12 @@ void Module::SetMemoryModel(spv::AddressingModel addressing_model,
 void Module::AddEntryPoint(spv::ExecutionModel execution_model, Id entry_point,
                            const std::string& name,
                            const std::vector<Id>& interfaces) {
-    auto const op{new Op(spv::Op::OpEntryPoint)};
+    auto op{std::make_unique<Op>(spv::Op::OpEntryPoint)};
     op->Add(static_cast<u32>(execution_model));
     op->Add(entry_point);
     op->Add(name);
     op->Add(interfaces);
-    entry_points.push_back(std::unique_ptr<Op>(op));
+    entry_points.push_back(std::move(op));
 }
 
 Id Module::Emit(Id op) {
@@ -95,8 +95,9 @@ Id Module::AddGlobalVariable(Id variable) {
 }
 
 Id Module::AddCode(std::unique_ptr<Op> op) {
+    const auto id = op.get();
     code_store.push_back(std::move(op));
-    return op.get();
+    return id;
 }
 
 Id Module::AddCode(spv::Op opcode, std::optional<u32> id) {
@@ -117,8 +118,9 @@ Id Module::AddDeclaration(std::unique_ptr<Op> op) {
 }
 
 Id Module::AddAnnotation(std::unique_ptr<Op> op) {
+    const auto id = op.get();
     annotations.push_back(std::move(op));
-    return op.get();
+    return id;
 }
 
 } // namespace Sirit

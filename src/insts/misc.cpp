@@ -4,14 +4,14 @@
  * Lesser General Public License version 2.1 or any later version.
  */
 
-#include "insts.h"
+#include "op.h"
 #include "sirit/sirit.h"
 #include <cassert>
 
 namespace Sirit {
 
 Id Module::OpUndef(Id result_type) {
-    return AddCode(new Op(spv::Op::OpUndef, bound++, result_type));
+    return AddCode(std::make_unique<Op>(spv::Op::OpUndef, bound++, result_type));
 }
 
 } // namespace Sirit
