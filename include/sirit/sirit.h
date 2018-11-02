@@ -27,7 +27,7 @@ using Id = const Op*;
 
 class Module {
   public:
-    explicit Module();
+    explicit Module(std::uint32_t version = spv::Version);
     ~Module();
 
     /**
@@ -238,6 +238,11 @@ class Module {
     /// Make an intermediate object whose value is undefined.
     Id OpUndef(Id result_type);
 
+    // Logical
+
+    /// Result is true if Operand is false. Result is false if Operand is true.
+    Id OpLogicalNot(Id result_type, Id operand);
+
   private:
     Id AddCode(std::unique_ptr<Op> op);
 
@@ -246,6 +251,8 @@ class Module {
     Id AddDeclaration(std::unique_ptr<Op> op);
 
     Id AddAnnotation(std::unique_ptr<Op> op);
+
+    const std::uint32_t version;
 
     std::uint32_t bound{1};
 

@@ -26,7 +26,7 @@ template <typename T> static void WriteSet(Stream& stream, const T& set) {
     }
 }
 
-Module::Module() {}
+Module::Module(u32 version) : version(version) {}
 
 Module::~Module() = default;
 
@@ -35,7 +35,7 @@ std::vector<u8> Module::Assemble() const {
     Stream stream{bytes};
 
     stream.Write(spv::MagicNumber);
-    stream.Write(spv::Version);
+    stream.Write(version);
     stream.Write(GENERATOR_MAGIC_NUMBER);
     stream.Write(bound);
     stream.Write(static_cast<u32>(0));
