@@ -11,11 +11,15 @@
 
 namespace Sirit {
 
-Id Module::OpUDiv(Id result_type, Id operand_1, Id operand_2) {
-    auto op{std::make_unique<Op>(spv::Op::OpUDiv, bound++, result_type)};
-    op->Add(operand_1);
-    op->Add(operand_2);
-    return AddCode(std::move(op));
-}
+#define DEFINE_BINARY(funcname, opcode)                                        \
+    Id Module::funcname(Id result_type, Id operand_1, Id operand_2) {          \
+        auto op{std::make_unique<Op>(opcode, bound++, result_type)};           \
+        op->Add(operand_1);                                                    \
+        op->Add(operand_2);                                                    \
+        return AddCode(std::move(op));                                         \
+    }
+
+DEFINE_BINARY(OpUDiv, spv::Op::OpUDiv)
+DEFINE_BINARY(OpIAdd, spv::Op::OpIAdd)
 
 } // namespace Sirit

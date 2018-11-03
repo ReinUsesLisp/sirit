@@ -262,10 +262,17 @@ class Module {
     /// The least-significant bits will be zero filled.
     Id OpShiftLeftLogical(Id result_type, Id base, Id shift);
 
+    /// Result is 1 if both Operand 1 and Operand 2 are 1. Result is 0 if either
+    /// Operand 1 or Operand 2 are 0.
+    Id OpBitwiseAnd(Id result_type, Id operand_1, Id operand_2);
+
     // Arithmetic
 
     /// Unsigned-integer division of Operand 1 divided by Operand 2.
     Id OpUDiv(Id result_type, Id operand_1, Id operand_2);
+
+    /// Integer addition of Operand 1 and Operand 2.
+    Id OpIAdd(Id result_type, Id operand_1, Id operand_2);
 
   private:
     Id AddCode(std::unique_ptr<Op> op);

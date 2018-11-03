@@ -35,4 +35,11 @@ Id Module::OpShiftLeftLogical(Id result_type, Id base, Id shift) {
     return AddCode(std::move(op));
 }
 
+Id Module::OpBitwiseAnd(Id result_type, Id operand_1, Id operand_2) {
+    auto op{std::make_unique<Op>(spv::Op::OpBitwiseAnd, bound++, result_type)};
+    op->Add(operand_1);
+    op->Add(operand_2);
+    return AddCode(std::move(op));
+}
+
 } // namespace Sirit
