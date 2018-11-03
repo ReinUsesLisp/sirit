@@ -229,6 +229,10 @@ class Module {
     Id OpCompositeInsert(Id result_type, Id object, Id composite,
                          const std::vector<Literal>& indexes = {});
 
+    /// Extract a part of a composite object.
+    Id OpCompositeExtract(Id result_type, Id composite,
+                          const std::vector<Literal>& indexes = {});
+
     // Annotation
 
     /// Add a decoration to target.

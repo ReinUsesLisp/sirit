@@ -11,7 +11,7 @@
 namespace Sirit {
 
 Id Module::OpVariable(Id result_type, spv::StorageClass storage_class,
-                       Id initializer) {
+                      Id initializer) {
     auto op{std::make_unique<Op>(spv::Op::OpVariable, bound++, result_type)};
     op->Add(static_cast<u32>(storage_class));
     if (initializer) {
@@ -21,7 +21,7 @@ Id Module::OpVariable(Id result_type, spv::StorageClass storage_class,
 }
 
 Id Module::OpLoad(Id result_type, Id pointer,
-                   std::optional<spv::MemoryAccessMask> memory_access) {
+                  std::optional<spv::MemoryAccessMask> memory_access) {
     auto op{std::make_unique<Op>(spv::Op::OpLoad, bound++, result_type)};
     op->Add(pointer);
     if (memory_access) {
@@ -31,7 +31,7 @@ Id Module::OpLoad(Id result_type, Id pointer,
 }
 
 Id Module::OpStore(Id pointer, Id object,
-                    std::optional<spv::MemoryAccessMask> memory_access) {
+                   std::optional<spv::MemoryAccessMask> memory_access) {
     auto op{std::make_unique<Op>(spv::Op::OpStore)};
     op->Add(pointer);
     op->Add(object);
@@ -42,7 +42,7 @@ Id Module::OpStore(Id pointer, Id object,
 }
 
 Id Module::OpAccessChain(Id result_type, Id base,
-                          const std::vector<Id>& indexes) {
+                         const std::vector<Id>& indexes) {
     assert(indexes.size() > 0);
     auto op{std::make_unique<Op>(spv::Op::OpAccessChain, bound++, result_type)};
     op->Add(base);
@@ -51,9 +51,19 @@ Id Module::OpAccessChain(Id result_type, Id base,
 }
 
 Id Module::OpCompositeInsert(Id result_type, Id object, Id composite,
-                              const std::vector<Literal>& indexes) {
-    auto op{std::make_unique<Op>(spv::Op::OpCompositeInsert, bound++, result_type)};
+                             const std::vector<Literal>& indexes) {
+    auto op{
+        std::make_unique<Op>(spv::Op::OpCompositeInsert, bound++, result_type)};
     op->Add(object);
+    op->Add(composite);
+    op->Add(indexes);
+    return AddCode(std::move(op));
+}
+
+Id Module::OpCompositeExtract(Id result_type, Id composite,
+                              const std::vector<Literal>& indexes) {
+    auto op{std::make_unique<Op>(spv::Op::OpCompositeExtract, bound++,
+                                 result_type)};
     op->Add(composite);
     op->Add(indexes);
     return AddCode(std::move(op));
