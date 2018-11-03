@@ -23,6 +23,7 @@ add_library(sirit
     insts/logical.cpp
     insts/conversion.cpp
     insts/bit.cpp
+    insts/arithmetic.cpp
 )
 target_include_directories(sirit
                            PUBLIC ../include

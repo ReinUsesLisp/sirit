@@ -262,6 +262,11 @@ class Module {
     /// The least-significant bits will be zero filled.
     Id OpShiftLeftLogical(Id result_type, Id base, Id shift);
 
+    // Arithmetic
+
+    /// Unsigned-integer division of Operand 1 divided by Operand 2.
+    Id OpUDiv(Id result_type, Id operand_1, Id operand_2);
+
   private:
     Id AddCode(std::unique_ptr<Op> op);
 
