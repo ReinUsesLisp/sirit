@@ -200,6 +200,9 @@ class Module {
     /// @return target
     Id Name(Id target, const std::string& name);
 
+    /// Assign a Result <id> to a string for use by other debug instructions.
+    Id OpString(const std::string& string);
+
     // Memory
 
     /// Allocate an object in memory, resulting in a copy to it.

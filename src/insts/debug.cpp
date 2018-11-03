@@ -19,4 +19,10 @@ Id Module::Name(Id target, const std::string& name) {
     return target;
 }
 
+Id Module::OpString(const std::string& string) {
+    auto op{std::make_unique<Op>(spv::Op::OpString, bound++)};
+    op->Add(string);
+    return AddCode(std::move(op));
+}
+
 } // namespace Sirit
