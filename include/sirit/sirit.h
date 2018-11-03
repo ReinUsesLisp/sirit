@@ -201,7 +201,10 @@ class Module {
     Id Name(Id target, const std::string& name);
 
     /// Assign a Result <id> to a string for use by other debug instructions.
-    Id OpString(const std::string& string);
+    Id String(const std::string& string);
+
+    /// Add source-level location information
+    Id OpLine(Id file, Literal line, Literal column);
 
     // Memory
 

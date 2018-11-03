@@ -19,9 +19,19 @@ Id Module::Name(Id target, const std::string& name) {
     return target;
 }
 
-Id Module::OpString(const std::string& string) {
+Id Module::String(const std::string& string) {
     auto op{std::make_unique<Op>(spv::Op::OpString, bound++)};
     op->Add(string);
+    const auto id = op.get();
+    debug.push_back(std::move(op));
+    return id;
+}
+
+Id Module::OpLine(Id file, Literal line, Literal column) {
+    auto op{std::make_unique<Op>(spv::Op::OpLine)};
+    op->Add(file);
+    op->Add(line);
+    op->Add(column);
     return AddCode(std::move(op));
 }
 
