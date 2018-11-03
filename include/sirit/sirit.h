@@ -248,6 +248,20 @@ class Module {
     /// Bit pattern-preserving type conversion.
     Id OpBitcast(Id result_type, Id operand);
 
+    // Bit
+
+    /// Shift the bits in Base right by the number of bits specified in Shift.
+    /// The most-significant bits will be zero filled.
+    Id OpShiftRightLogical(Id result_type, Id base, Id shift);
+
+    /// Shift the bits in Base right by the number of bits specified in Shift.
+    /// The most-significant bits will be filled with the sign bit from Base.
+    Id OpShiftRightArithmetic(Id result_type, Id base, Id shift);
+
+    /// Shift the bits in Base left by the number of bits specified in Shift.
+    /// The least-significant bits will be zero filled.
+    Id OpShiftLeftLogical(Id result_type, Id base, Id shift);
+
   private:
     Id AddCode(std::unique_ptr<Op> op);
 

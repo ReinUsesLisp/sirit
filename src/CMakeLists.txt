@@ -22,6 +22,7 @@ add_library(sirit
     insts/misc.cpp
     insts/logical.cpp
     insts/conversion.cpp
+    insts/bit.cpp
 )
 target_include_directories(sirit
                            PUBLIC ../include
