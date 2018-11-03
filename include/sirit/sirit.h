@@ -243,6 +243,11 @@ class Module {
     /// Result is true if Operand is false. Result is false if Operand is true.
     Id OpLogicalNot(Id result_type, Id operand);
 
+    // Conversion
+
+    /// Bit pattern-preserving type conversion.
+    Id OpBitcast(Id result_type, Id operand);
+
   private:
     Id AddCode(std::unique_ptr<Op> op);
 

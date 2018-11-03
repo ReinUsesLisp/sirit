@@ -21,6 +21,7 @@ add_library(sirit
     insts/annotation.cpp
     insts/misc.cpp
     insts/logical.cpp
+    insts/conversion.cpp
 )
 target_include_directories(sirit
                            PUBLIC ../include
