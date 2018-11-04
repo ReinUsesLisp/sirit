@@ -292,6 +292,9 @@ class Module {
     /// Unsigned-integer division of Operand 1 divided by Operand 2.
     Id OpUDiv(Id result_type, Id operand_1, Id operand_2);
 
+    /// Floating-point division of Operand 1 divided by Operand 2.
+    Id OpFDiv(Id result_type, Id operand_1, Id operand_2);
+
     /// Integer addition of Operand 1 and Operand 2.
     Id OpIAdd(Id result_type, Id operand_1, Id operand_2);
 
