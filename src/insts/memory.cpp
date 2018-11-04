@@ -69,4 +69,12 @@ Id Module::OpCompositeExtract(Id result_type, Id composite,
     return AddCode(std::move(op));
 }
 
+Id Module::OpCompositeConstruct(Id result_type, const std::vector<Id>& ids) {
+    assert(ids.size() >= 1);
+    auto op{std::make_unique<Op>(spv::Op::OpCompositeConstruct, bound++,
+                                 result_type)};
+    op->Add(ids);
+    return AddCode(std::move(op));
+}
+
 } // namespace Sirit

@@ -237,6 +237,10 @@ class Module {
     Id OpCompositeExtract(Id result_type, Id composite,
                           const std::vector<Literal>& indexes = {});
 
+    /// Construct a new composite object from a set of constituent objects that
+    /// will fully form it.
+    Id OpCompositeConstruct(Id result_type, const std::vector<Id>& ids);
+
     // Annotation
 
     /// Add a decoration to target.
