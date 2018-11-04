@@ -43,7 +43,9 @@ std::vector<u8> Module::Assemble() const {
     for (const auto capability : capabilities) {
         WriteEnum(stream, spv::Op::OpCapability, capability);
     }
-    // TODO write extensions
+    if (glsl_std_450) {
+        glsl_std_450->Write(stream);
+    }
     // TODO write ext inst imports
 
     Op memory_model_ref{spv::Op::OpMemoryModel};
@@ -121,6 +123,13 @@ Id Module::AddAnnotation(std::unique_ptr<Op> op) {
     const auto id = op.get();
     annotations.push_back(std::move(op));
     return id;
+}
+
+Id Module::GetGLSLstd450() {
+    if (!glsl_std_450) {
+        glsl_std_450 = std::make_unique<Op>(spv::Op::OpExtInstImport, bound++);
+    }
+    return glsl_std_450.get();
 }
 
 } // namespace Sirit

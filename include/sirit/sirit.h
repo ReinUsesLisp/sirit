@@ -292,6 +292,15 @@ class Module {
     /// Integer addition of Operand 1 and Operand 2.
     Id OpIAdd(Id result_type, Id operand_1, Id operand_2);
 
+    // Extensions
+
+    /// Execute an instruction in an imported set of extended instructions.
+    Id OpExtInst(Id result_type, Id set, std::uint32_t instruction,
+                 const std::vector<Id>& operands);
+
+    /// Result is x if x >= 0; otherwise result is -x.
+    Id OpFAbs(Id result_type, Id x);
+
   private:
     Id AddCode(std::unique_ptr<Op> op);
 
@@ -301,27 +310,23 @@ class Module {
 
     Id AddAnnotation(std::unique_ptr<Op> op);
 
+    Id GetGLSLstd450();
+
     const std::uint32_t version;
 
     std::uint32_t bound{1};
 
     std::set<spv::Capability> capabilities;
-
-    std::set<std::string> extensions;
-
+    std::unique_ptr<Op> glsl_std_450;
     std::set<std::unique_ptr<Op>> ext_inst_import;
 
     spv::AddressingModel addressing_model{spv::AddressingModel::Logical};
     spv::MemoryModel memory_model{spv::MemoryModel::GLSL450};
 
     std::vector<std::unique_ptr<Op>> entry_points;
-
     std::vector<std::unique_ptr<Op>> execution_mode;
-
     std::vector<std::unique_ptr<Op>> debug;
-
     std::vector<std::unique_ptr<Op>> annotations;
-
     std::vector<std::unique_ptr<Op>> declarations;
 
     std::vector<Id> global_variables;
