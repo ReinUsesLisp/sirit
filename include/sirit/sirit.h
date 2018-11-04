@@ -132,24 +132,24 @@ class Module {
     // Constant
 
     /// Returns a true scalar constant.
-    Id OpConstantTrue(Id result_type);
+    Id ConstantTrue(Id result_type);
 
     /// Returns a false scalar constant.
-    Id OpConstantFalse(Id result_type);
+    Id ConstantFalse(Id result_type);
 
     /// Returns a numeric scalar constant.
-    Id OpConstant(Id result_type, const Literal& literal);
+    Id Constant(Id result_type, const Literal& literal);
 
     /// Returns a numeric scalar constant.
-    Id OpConstantComposite(Id result_type, const std::vector<Id>& constituents);
+    Id ConstantComposite(Id result_type, const std::vector<Id>& constituents);
 
     /// Returns a sampler constant.
-    Id OpConstantSampler(Id result_type,
-                         spv::SamplerAddressingMode addressing_mode,
-                         bool normalized, spv::SamplerFilterMode filter_mode);
+    Id ConstantSampler(Id result_type,
+                       spv::SamplerAddressingMode addressing_mode,
+                       bool normalized, spv::SamplerFilterMode filter_mode);
 
     /// Returns a null constant value.
-    Id OpConstantNull(Id result_type);
+    Id ConstantNull(Id result_type);
 
     // Function
 

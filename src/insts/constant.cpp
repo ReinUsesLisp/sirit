@@ -10,34 +10,34 @@
 
 namespace Sirit {
 
-Id Module::OpConstantTrue(Id result_type) {
+Id Module::ConstantTrue(Id result_type) {
     return AddDeclaration(
         std::make_unique<Op>(spv::Op::OpConstantTrue, bound, result_type));
 }
 
-Id Module::OpConstantFalse(Id result_type) {
+Id Module::ConstantFalse(Id result_type) {
     return AddDeclaration(
         std::make_unique<Op>(spv::Op::OpConstantFalse, bound, result_type));
 }
 
-Id Module::OpConstant(Id result_type, const Literal& literal) {
+Id Module::Constant(Id result_type, const Literal& literal) {
     auto op{std::make_unique<Op>(spv::Op::OpConstant, bound, result_type)};
     op->Add(literal);
     return AddDeclaration(std::move(op));
 }
 
-Id Module::OpConstantComposite(Id result_type,
-                               const std::vector<Id>& constituents) {
+Id Module::ConstantComposite(Id result_type,
+                             const std::vector<Id>& constituents) {
     auto op{
         std::make_unique<Op>(spv::Op::OpConstantComposite, bound, result_type)};
     op->Add(constituents);
     return AddDeclaration(std::move(op));
 }
 
-Id Module::OpConstantSampler(Id result_type,
-                             spv::SamplerAddressingMode addressing_mode,
-                             bool normalized,
-                             spv::SamplerFilterMode filter_mode) {
+Id Module::ConstantSampler(Id result_type,
+                           spv::SamplerAddressingMode addressing_mode,
+                           bool normalized,
+                           spv::SamplerFilterMode filter_mode) {
     AddCapability(spv::Capability::LiteralSampler);
     AddCapability(spv::Capability::Kernel);
     auto op{
@@ -48,7 +48,7 @@ Id Module::OpConstantSampler(Id result_type,
     return AddDeclaration(std::move(op));
 }
 
-Id Module::OpConstantNull(Id result_type) {
+Id Module::ConstantNull(Id result_type) {
     return AddDeclaration(
         std::make_unique<Op>(spv::Op::OpConstantNull, bound, result_type));
 }
