@@ -200,6 +200,10 @@ class Module {
     /// @return target
     Id Name(Id target, const std::string& name);
 
+    /// Assign a name string to a member of a structure type.
+    /// @return type
+    Id MemberName(Id type, std::uint32_t member, const std::string& name);
+
     /// Assign a Result <id> to a string for use by other debug instructions.
     Id String(const std::string& string);
 

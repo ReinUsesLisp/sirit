@@ -19,6 +19,15 @@ Id Module::Name(Id target, const std::string& name) {
     return target;
 }
 
+Id Module::MemberName(Id type, u32 member, const std::string& name) {
+    auto op{std::make_unique<Op>(spv::Op::OpMemberName)};
+    op->Add(type);
+    op->Add(member);
+    op->Add(name);
+    debug.push_back(std::move(op));
+    return type;
+}
+
 Id Module::String(const std::string& string) {
     auto op{std::make_unique<Op>(spv::Op::OpString, bound++)};
     op->Add(string);
