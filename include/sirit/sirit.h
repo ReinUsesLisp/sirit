@@ -286,6 +286,9 @@ class Module {
 
     // Arithmetic
 
+    /// Floating-point subtract of Operand from zero.
+    Id OpFNegate(Id result_type, Id operand);
+
     /// Unsigned-integer division of Operand 1 divided by Operand 2.
     Id OpUDiv(Id result_type, Id operand_1, Id operand_2);
 

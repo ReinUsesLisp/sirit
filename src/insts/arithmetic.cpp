@@ -11,6 +11,13 @@
 
 namespace Sirit {
 
+#define DEFINE_UNARY(funcname, opcode)                                         \
+    Id Module::funcname(Id result_type, Id operand) {                          \
+        auto op{std::make_unique<Op>(opcode, bound++, result_type)};           \
+        op->Add(operand);                                                      \
+        return AddCode(std::move(op));                                         \
+    }
+
 #define DEFINE_BINARY(funcname, opcode)                                        \
     Id Module::funcname(Id result_type, Id operand_1, Id operand_2) {          \
         auto op{std::make_unique<Op>(opcode, bound++, result_type)};           \
@@ -18,6 +25,8 @@ namespace Sirit {
         op->Add(operand_2);                                                    \
         return AddCode(std::move(op));                                         \
     }
+
+DEFINE_UNARY(OpFNegate, spv::Op::OpFNegate);
 
 DEFINE_BINARY(OpUDiv, spv::Op::OpUDiv)
 DEFINE_BINARY(OpIAdd, spv::Op::OpIAdd)
