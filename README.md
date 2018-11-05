@@ -50,6 +50,5 @@ public:
 MyModule module;
 module.Generate();
 
-module.Optimize(2);
 std::vector<std::uint8_t> code{module.Assemble()};
 ```
