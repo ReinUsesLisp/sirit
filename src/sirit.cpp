@@ -119,10 +119,9 @@ Id Module::AddDeclaration(std::unique_ptr<Op> op) {
     return id;
 }
 
-Id Module::AddAnnotation(std::unique_ptr<Op> op) {
+void Module::AddAnnotation(std::unique_ptr<Op> op) {
     const auto id = op.get();
     annotations.push_back(std::move(op));
-    return id;
 }
 
 Id Module::GetGLSLstd450() {

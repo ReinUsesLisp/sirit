@@ -18,7 +18,8 @@ Id Module::Decorate(Id target, spv::Decoration decoration,
     op->Add(target);
     op->Add(static_cast<u32>(decoration));
     op->Add(literals);
-    return AddAnnotation(std::move(op));
+    AddAnnotation(std::move(op));
+    return target;
 }
 
 Id Module::MemberDecorate(Id structure_type, Literal member,
@@ -29,7 +30,8 @@ Id Module::MemberDecorate(Id structure_type, Literal member,
     op->Add(member);
     op->Add(static_cast<u32>(decoration));
     op->Add(literals);
-    return AddAnnotation(std::move(op));
+    AddAnnotation(std::move(op));
+    return structure_type;
 }
 
 } // namespace Sirit

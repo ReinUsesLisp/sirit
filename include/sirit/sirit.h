@@ -292,6 +292,9 @@ class Module {
     /// Unsigned-integer division of Operand 1 divided by Operand 2.
     Id OpUDiv(Id result_type, Id operand_1, Id operand_2);
 
+    /// Unsigned modulo operation of Operand 1 modulo Operand 2.
+    Id OpUMod(Id result_type, Id operand_1, Id operand_2);
+
     /// Floating-point division of Operand 1 divided by Operand 2.
     Id OpFDiv(Id result_type, Id operand_1, Id operand_2);
 
@@ -314,7 +317,7 @@ class Module {
 
     Id AddDeclaration(std::unique_ptr<Op> op);
 
-    Id AddAnnotation(std::unique_ptr<Op> op);
+    void AddAnnotation(std::unique_ptr<Op> op);
 
     Id GetGLSLstd450();
 

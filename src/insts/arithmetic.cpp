@@ -29,6 +29,7 @@ namespace Sirit {
 DEFINE_UNARY(OpFNegate, spv::Op::OpFNegate);
 
 DEFINE_BINARY(OpUDiv, spv::Op::OpUDiv)
+DEFINE_BINARY(OpUMod, spv::Op::OpUMod)
 DEFINE_BINARY(OpFDiv, spv::Op::OpFDiv)
 DEFINE_BINARY(OpIAdd, spv::Op::OpIAdd)
 
