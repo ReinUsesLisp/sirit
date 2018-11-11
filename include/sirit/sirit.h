@@ -287,19 +287,52 @@ class Module {
     // Arithmetic
 
     /// Floating-point subtract of Operand from zero.
+    Id OpSNegate(Id result_type, Id operand);
+
+    /// Floating-point subtract of Operand from zero.
     Id OpFNegate(Id result_type, Id operand);
+
+    /// Integer addition of Operand 1 and Operand 2.
+    Id OpIAdd(Id result_type, Id operand_1, Id operand_2);
+
+    /// Floating-point addition of Operand 1 and Operand 2.
+    Id OpFAdd(Id result_type, Id operand_1, Id operand_2);
+
+    /// Integer substraction of Operand 1 and Operand 2.
+    Id OpISub(Id result_type, Id operand_1, Id operand_2);
+
+    /// Floating-point substraction of Operand 1 and Operand 2.
+    Id OpFSub(Id result_type, Id operand_1, Id operand_2);
+
+    /// Integer multiplication of Operand 1 and Operand 2.
+    Id OpIMul(Id result_type, Id operand_1, Id operand_2);
+
+    /// Floating-point multiplication of Operand 1 and Operand 2.
+    Id OpFMul(Id result_type, Id operand_1, Id operand_2);
 
     /// Unsigned-integer division of Operand 1 divided by Operand 2.
     Id OpUDiv(Id result_type, Id operand_1, Id operand_2);
 
-    /// Unsigned modulo operation of Operand 1 modulo Operand 2.
-    Id OpUMod(Id result_type, Id operand_1, Id operand_2);
+    /// signed-integer division of Operand 1 divided by Operand 2.
+    Id OpSDiv(Id result_type, Id operand_1, Id operand_2);
 
     /// Floating-point division of Operand 1 divided by Operand 2.
     Id OpFDiv(Id result_type, Id operand_1, Id operand_2);
 
-    /// Integer addition of Operand 1 and Operand 2.
-    Id OpIAdd(Id result_type, Id operand_1, Id operand_2);
+    /// Unsigned modulo operation of Operand 1 modulo Operand 2.
+    Id OpUMod(Id result_type, Id operand_1, Id operand_2);
+
+    /// Signed modulo operation of Operand 1 modulo Operand 2.
+    Id OpSMod(Id result_type, Id operand_1, Id operand_2);
+
+    /// Floating-point modulo operation of Operand 1 modulo Operand 2.
+    Id OpFMod(Id result_type, Id operand_1, Id operand_2);
+
+    /// Signed reminder operation of Operand 1 modulo Operand 2.
+    Id OpSRem(Id result_type, Id operand_1, Id operand_2);
+
+    /// Floating-point reminder operation of Operand 1 modulo Operand 2.
+    Id OpFRem(Id result_type, Id operand_1, Id operand_2);
 
     // Extensions
 
