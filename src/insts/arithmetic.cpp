@@ -26,11 +26,33 @@ namespace Sirit {
         return AddCode(std::move(op));                                         \
     }
 
-DEFINE_UNARY(OpFNegate, spv::Op::OpFNegate);
+#define DEFINE_TRINARY(funcname, opcode)                                       \
+    Id Module::funcname(Id result_type, Id operand_1, Id operand_2,            \
+                        Id operand_3) {                                        \
+        auto op{std::make_unique<Op>(opcode, bound++, result_type)};           \
+        op->Add(operand_1);                                                    \
+        op->Add(operand_2);                                                    \
+        op->Add(operand_3);                                                    \
+        return AddCode(std::move(op));                                         \
+    }
 
-DEFINE_BINARY(OpUDiv, spv::Op::OpUDiv)
-DEFINE_BINARY(OpUMod, spv::Op::OpUMod)
-DEFINE_BINARY(OpFDiv, spv::Op::OpFDiv)
+DEFINE_UNARY(OpSNegate, spv::Op::OpSNegate)
+DEFINE_UNARY(OpFNegate, spv::Op::OpFNegate)
+
 DEFINE_BINARY(OpIAdd, spv::Op::OpIAdd)
+DEFINE_BINARY(OpFAdd, spv::Op::OpFAdd)
+DEFINE_BINARY(OpISub, spv::Op::OpISub)
+DEFINE_BINARY(OpFSub, spv::Op::OpFSub)
+DEFINE_BINARY(OpIMul, spv::Op::OpIMul)
+DEFINE_BINARY(OpFMul, spv::Op::OpFMul)
+DEFINE_BINARY(OpUDiv, spv::Op::OpUDiv)
+DEFINE_BINARY(OpSDiv, spv::Op::OpSDiv)
+DEFINE_BINARY(OpFDiv, spv::Op::OpFDiv)
+DEFINE_BINARY(OpUMod, spv::Op::OpUMod)
+DEFINE_BINARY(OpSMod, spv::Op::OpSMod)
+DEFINE_BINARY(OpFMod, spv::Op::OpFMod)
+DEFINE_BINARY(OpSRem, spv::Op::OpSRem)
+DEFINE_BINARY(OpFRem, spv::Op::OpFRem)
+
 
 } // namespace Sirit
