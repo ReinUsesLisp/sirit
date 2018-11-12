@@ -343,6 +343,82 @@ class Module {
     /// Result is x if x >= 0; otherwise result is -x.
     Id OpFAbs(Id result_type, Id x);
 
+    Id OpSAbs(Id result_type, Id x);
+
+    Id OpRound(Id result_type, Id x);
+
+    Id OpRoundEven(Id result_type, Id x);
+
+    Id OpTrunc(Id result_type, Id x);
+
+    Id OpFSign(Id result_type, Id x);
+
+    Id OpSSign(Id result_type, Id x);
+
+    Id OpFloor(Id result_type, Id x);
+
+    Id OpCeil(Id result_type, Id x);
+
+    Id OpFract(Id result_type, Id x);
+
+    Id OpSin(Id result_type, Id x);
+
+    Id OpCos(Id result_type, Id x);
+
+    Id OpAsin(Id result_type, Id x);
+
+    Id OpAcos(Id result_type, Id x);
+
+    Id OpPow(Id result_type, Id x, Id y);
+
+    Id OpExp(Id result_type, Id x);
+
+    Id OpLog(Id result_type, Id x);
+
+    Id OpExp2(Id result_type, Id x);
+
+    Id OpLog2(Id result_type, Id x);
+
+    Id OpSqrt(Id result_type, Id x);
+
+    Id OpInverseSqrt(Id result_type, Id x);
+
+    Id OpFMin(Id result_type, Id x, Id y);
+
+    Id OpUMin(Id result_type, Id x, Id y);
+
+    Id OpSMin(Id result_type, Id x, Id y);
+
+    Id OpFMax(Id result_type, Id x, Id y);
+
+    Id OpUMax(Id result_type, Id x, Id y);
+
+    Id OpSMax(Id result_type, Id x, Id y);
+
+    Id OpFClamp(Id result_type, Id x, Id minVal, Id maxVal);
+
+    Id OpUClamp(Id result_type, Id x, Id minVal, Id maxVal);
+
+    Id OpSClamp(Id result_type, Id x, Id minVal, Id maxVal);
+
+    Id OpFma(Id result_type, Id a, Id b, Id c);
+
+    Id OpPackHalf2x16(Id result_type, Id v);
+
+    Id OpUnpackHalf2x16(Id result_type, Id v);
+
+    Id OpFindILsb(Id result_type, Id Value);
+
+    Id OpFindSMsb(Id result_type, Id Value);
+
+    Id OpFindUMsb(Id result_type, Id Value);
+
+    Id OpInterpolateAtCentroid(Id result_type, Id interpolant);
+
+    Id OpInterpolateAtSample(Id result_type, Id interpolant, Id sample);
+
+    Id OpInterpolateAtOffset(Id result_type, Id interpolant, Id offset);
+
   private:
     Id AddCode(std::unique_ptr<Op> op);
 
