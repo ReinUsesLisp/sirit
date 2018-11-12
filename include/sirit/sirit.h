@@ -321,6 +321,22 @@ class Module {
 
     // Conversion
 
+    Id OpConvertFToU(Id result_type, Id operand);
+
+    Id OpConvertFToS(Id result_type, Id operand);
+
+    Id OpConvertSToF(Id result_type, Id operand);
+
+    Id OpConvertUToF(Id result_type, Id operand);
+
+    Id OpUConvert(Id result_type, Id operand);
+
+    Id OpSConvert(Id result_type, Id operand);
+
+    Id OpFConvert(Id result_type, Id operand);
+
+    Id OpQuantizeToF16(Id result_type, Id operand);
+
     /// Bit pattern-preserving type conversion.
     Id OpBitcast(Id result_type, Id operand);
 
