@@ -258,8 +258,66 @@ class Module {
 
     // Logical
 
+    Id OpIsNan(Id result_type, Id operand);
+
+    Id OpIsInf(Id result_type, Id operand);
+
+    Id OpLogicalEqual(Id result_type, Id operand_1, Id operand_2);
+
+    Id OpLogicalNotEqual(Id result_type, Id operand_1, Id operand_2);
+
+    Id OpLogicalOr(Id result_type, Id operand_1, Id operand_2);
+
+    Id OpLogicalAnd(Id result_type, Id operand_1, Id operand_2);
+
     /// Result is true if Operand is false. Result is false if Operand is true.
     Id OpLogicalNot(Id result_type, Id operand);
+
+    Id OpSelect(Id result_type, Id condition, Id operand_1, Id operand_2);
+
+    Id OpIEqual(Id result_type, Id operand_1, Id operand_2);
+
+    Id OpINotEqual(Id result_type, Id operand_1, Id operand_2);
+
+    Id OpUGreaterThan(Id result_type, Id operand_1, Id operand_2);
+
+    Id OpSGreaterThan(Id result_type, Id operand_1, Id operand_2);
+
+    Id OpUGreaterThanEqual(Id result_type, Id operand_1, Id operand_2);
+
+    Id OpSGreaterThanEqual(Id result_type, Id operand_1, Id operand_2);
+
+    Id OpULessThan(Id result_type, Id operand_1, Id operand_2);
+
+    Id OpSLessThan(Id result_type, Id operand_1, Id operand_2);
+
+    Id OpULessThanEqual(Id result_type, Id operand_1, Id operand_2);
+
+    Id OpSLessThanEqual(Id result_type, Id operand_1, Id operand_2);
+
+    Id OpFOrdEqual(Id result_type, Id operand_1, Id operand_2);
+
+    Id OpFUnordEqual(Id result_type, Id operand_1, Id operand_2);
+
+    Id OpFOrdNotEqual(Id result_type, Id operand_1, Id operand_2);
+
+    Id OpFUnordNotEqual(Id result_type, Id operand_1, Id operand_2);
+
+    Id OpFOrdLessThan(Id result_type, Id operand_1, Id operand_2);
+
+    Id OpFUnordLessThan(Id result_type, Id operand_1, Id operand_2);
+
+    Id OpFOrdGreaterThan(Id result_type, Id operand_1, Id operand_2);
+
+    Id OpFUnordGreaterThan(Id result_type, Id operand_1, Id operand_2);
+
+    Id OpFOrdLessThanEqual(Id result_type, Id operand_1, Id operand_2);
+
+    Id OpFUnordLessThanEqual(Id result_type, Id operand_1, Id operand_2);
+
+    Id OpFOrdGreaterThanEqual(Id result_type, Id operand_1, Id operand_2);
+
+    Id OpFUnordGreaterThanEqual(Id result_type, Id operand_1, Id operand_2);
 
     // Conversion
 
