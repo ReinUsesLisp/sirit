@@ -280,9 +280,29 @@ class Module {
     /// The least-significant bits will be zero filled.
     Id OpShiftLeftLogical(Id result_type, Id base, Id shift);
 
+    /// Does a bitwise Or between operands 1 and 2.
+    Id OpBitwiseOr(Id result_type, Id operand_1, Id operand_2);
+
+    /// Does a bitwise Xor between operands 1 and 2.
+    Id OpBitwiseXor(Id result_type, Id operand_1, Id operand_2);
+
     /// Result is 1 if both Operand 1 and Operand 2 are 1. Result is 0 if either
     /// Operand 1 or Operand 2 are 0.
     Id OpBitwiseAnd(Id result_type, Id operand_1, Id operand_2);
+
+    /// Does a bitwise Not on the operand.
+    Id OpNot(Id result_type, Id operand);
+
+    Id OpBitFieldInsert(Id result_type, Id base, Id insert, Id offset,
+                        Id count);
+
+    Id OpBitFieldSExtract(Id result_type, Id base, Id offset, Id count);
+
+    Id OpBitFieldUExtract(Id result_type, Id base, Id offset, Id count);
+
+    Id OpBitReverse(Id result_type, Id base);
+
+    Id OpBitCount(Id result_type, Id base);
 
     // Arithmetic
 
