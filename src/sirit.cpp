@@ -127,6 +127,7 @@ void Module::AddAnnotation(std::unique_ptr<Op> op) {
 Id Module::GetGLSLstd450() {
     if (!glsl_std_450) {
         glsl_std_450 = std::make_unique<Op>(spv::Op::OpExtInstImport, bound++);
+        glsl_std_450->Add("GLSL.std.450");
     }
     return glsl_std_450.get();
 }
