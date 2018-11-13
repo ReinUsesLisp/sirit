@@ -513,6 +513,86 @@ class Module {
 
     Id OpInterpolateAtOffset(Id result_type, Id interpolant, Id offset);
 
+    // Image
+
+    Id OpSampledImage(Id result_type, Id image, Id sampler);
+
+    Id OpImageSampleImplicitLod(
+        Id result_type, Id sampled_image, Id coordinate,
+        std::optional<spv::ImageOperandsMask> image_operands = {},
+        const std::vector<Id>& operands = {});
+
+    Id OpImageSampleExplicitLod(Id result_type, Id sampled_image, Id coordinate,
+                                spv::ImageOperandsMask image_operands, Id lod,
+                                const std::vector<Id>& operands = {});
+
+    Id OpImageSampleDrefImplicitLod(
+        Id result_type, Id sampled_image, Id coordinate, Id dref,
+        std::optional<spv::ImageOperandsMask> image_operands = {},
+        const std::vector<Id>& operands = {});
+
+    Id OpImageSampleDrefExplicitLod(Id result_type, Id sampled_image,
+                                    Id coordinate, Id dref,
+                                    spv::ImageOperandsMask image_operands,
+                                    Id lod,
+                                    const std::vector<Id>& operands = {});
+
+    Id OpImageSampleProjImplicitLod(
+        Id result_type, Id sampled_image, Id coordinate,
+        std::optional<spv::ImageOperandsMask> image_operands = {},
+        const std::vector<Id>& operands = {});
+
+    Id OpImageSampleProjExplicitLod(Id result_type, Id sampled_image,
+                                    Id coordinate,
+                                    spv::ImageOperandsMask image_operands,
+                                    Id lod,
+                                    const std::vector<Id>& operands = {});
+
+    Id OpImageSampleProjDrefImplicitLod(
+        Id result_type, Id sampled_image, Id coordinate, Id dref,
+        std::optional<spv::ImageOperandsMask> image_operands = {},
+        const std::vector<Id>& operands = {});
+
+    Id OpImageSampleProjDrefExplicitLod(Id result_type, Id sampled_image,
+                                        Id coordinate, Id dref,
+                                        spv::ImageOperandsMask image_operands,
+                                        Id lod,
+                                        const std::vector<Id>& operands = {});
+
+    Id OpImageFetch(Id result_type, Id sampled_image, Id coordinate,
+                    std::optional<spv::ImageOperandsMask> image_operands = {},
+                    const std::vector<Id>& operands = {});
+
+    Id OpImageGather(Id result_type, Id sampled_image, Id coordinate,
+                     Id component,
+                     std::optional<spv::ImageOperandsMask> image_operands = {},
+                     const std::vector<Id>& operands = {});
+
+    Id
+    OpImageDrefGather(Id result_type, Id sampled_image, Id coordinate, Id dref,
+                      std::optional<spv::ImageOperandsMask> image_operands = {},
+                      const std::vector<Id>& operands = {});
+
+    Id OpImageRead(Id result_type, Id sampled_image, Id coordinate,
+                   std::optional<spv::ImageOperandsMask> image_operands = {},
+                   const std::vector<Id>& operands = {});
+
+    Id OpImageWrite(Id image, Id coordinate, Id texel,
+                    std::optional<spv::ImageOperandsMask> image_operands = {},
+                    const std::vector<Id>& operands = {});
+
+    Id OpImage(Id result_type, Id sampled_image);
+
+    Id OpImageQuerySizeLod(Id result_type, Id image, Id level_of_detail);
+
+    Id OpImageQuerySize(Id result_type, Id image);
+
+    Id OpImageQueryLod(Id result_type, Id image, Id coordinate);
+
+    Id OpImageQueryLevels(Id result_type, Id image);
+
+    Id OpImageQuerySamples(Id result_type, Id image);
+
   private:
     Id AddCode(std::unique_ptr<Op> op);
 

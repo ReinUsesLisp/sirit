@@ -25,6 +25,7 @@ add_library(sirit
     insts/bit.cpp
     insts/arithmetic.cpp
     insts/extension.cpp
+    insts/image.cpp
 )
 target_include_directories(sirit
                            PUBLIC ../include
