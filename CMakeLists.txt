@@ -86,7 +86,7 @@ endif()
 enable_testing(true)
 
 # SPIR-V headers
-add_subdirectory(externals/SPIRV-Headers)
+add_subdirectory(externals/SPIRV-Headers EXCLUDE_FROM_ALL)
 
 # Sirit project files
 add_subdirectory(src)
