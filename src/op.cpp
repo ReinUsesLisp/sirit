@@ -87,7 +87,7 @@ void Op::Add(const Literal& literal) {
         case 5:
             return LiteralNumber::Create(std::get<5>(literal));
         default:
-            assert(!"invalid literal type");
+            assert(!"Invalid literal type");
             abort();
         }
     }();
