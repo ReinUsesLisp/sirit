@@ -12,20 +12,20 @@ add_library(sirit
     literal_string.cpp
     literal_string.h
     common_types.h
-    insts/type.cpp
-    insts/constant.cpp
-    insts/function.cpp
-    insts/flow.cpp
-    insts/debug.cpp
-    insts/memory.cpp
-    insts/annotation.cpp
-    insts/misc.cpp
-    insts/logical.cpp
-    insts/conversion.cpp
-    insts/bit.cpp
-    insts/arithmetic.cpp
-    insts/extension.cpp
-    insts/image.cpp
+    instructions/type.cpp
+    instructions/constant.cpp
+    instructions/function.cpp
+    instructions/flow.cpp
+    instructions/debug.cpp
+    instructions/memory.cpp
+    instructions/annotation.cpp
+    instructions/misc.cpp
+    instructions/logical.cpp
+    instructions/conversion.cpp
+    instructions/bit.cpp
+    instructions/arithmetic.cpp
+    instructions/extension.cpp
+    instructions/image.cpp
 )
 target_include_directories(sirit
                            PUBLIC ../include
