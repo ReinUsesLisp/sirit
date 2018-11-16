@@ -1,7 +1,7 @@
 /* This file is part of the sirit project.
  * Copyright (c) 2018 ReinUsesLisp
  * This software may be used and distributed according to the terms of the GNU
- * Lesser General Public License version 2.1 or any later version.
+ * Lesser General Public License version 3 or any later version.
  */
 
 #include <sirit/sirit.h>
