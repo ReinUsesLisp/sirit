@@ -13,13 +13,6 @@
 
 namespace Sirit {
 
-template <typename T>
-static void WriteEnum(Stream& stream, spv::Op opcode, T value) {
-    Op op{opcode};
-    op.Add(static_cast<u32>(value));
-    op.Write(stream);
-}
-
 template <typename T> static void WriteSet(Stream& stream, const T& set) {
     for (const auto& item : set) {
         item->Write(stream);
@@ -41,7 +34,9 @@ std::vector<u8> Module::Assemble() const {
     stream.Write(static_cast<u32>(0));
 
     for (const auto capability : capabilities) {
-        WriteEnum(stream, spv::Op::OpCapability, capability);
+        Op op(spv::Op::OpCapability);
+        op.Add(static_cast<u32>(capability));
+        op.Write(stream);
     }
     if (glsl_std_450) {
         glsl_std_450->Write(stream);
