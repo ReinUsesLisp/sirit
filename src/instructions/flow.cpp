@@ -59,4 +59,9 @@ Id Module::OpReturnValue(Id value) {
     return AddCode(std::move(op));
 }
 
+Id Module::OpKill() {
+    AddCapability(spv::Capability::Shader);
+    return AddCode(std::make_unique<Op>(spv::Op::OpKill));
+}
+
 } // namespace Sirit

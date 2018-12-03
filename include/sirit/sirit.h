@@ -194,6 +194,9 @@ class Module {
     /// Return a value from a function.
     Id OpReturnValue(Id value);
 
+    /// Fragment-shader discard.
+    Id OpKill();
+
     // Debug
 
     /// Assign a name string to a reference.
