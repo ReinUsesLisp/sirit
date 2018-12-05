@@ -50,6 +50,10 @@ class Module {
                        const std::string& name,
                        const std::vector<Id>& interfaces = {});
 
+    /// Declare an execution mode for an entry point.
+    void AddExecutionMode(Id entry_point, spv::ExecutionMode mode,
+                          const std::vector<Literal>& literals = {});
+
     /**
      * Adds an instruction to module's code
      * @param op Instruction to insert into code. Types and constants must not
@@ -619,7 +623,7 @@ class Module {
     spv::MemoryModel memory_model{spv::MemoryModel::GLSL450};
 
     std::vector<std::unique_ptr<Op>> entry_points;
-    std::vector<std::unique_ptr<Op>> execution_mode;
+    std::vector<std::unique_ptr<Op>> execution_modes;
     std::vector<std::unique_ptr<Op>> debug;
     std::vector<std::unique_ptr<Op>> annotations;
     std::vector<std::unique_ptr<Op>> declarations;

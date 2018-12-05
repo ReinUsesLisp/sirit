@@ -49,7 +49,7 @@ std::vector<u8> Module::Assemble() const {
     memory_model_ref.Write(stream);
 
     WriteSet(stream, entry_points);
-    // TODO write execution mode
+    WriteSet(stream, execution_modes);
     WriteSet(stream, debug);
     WriteSet(stream, annotations);
     WriteSet(stream, declarations);
@@ -78,6 +78,15 @@ void Module::AddEntryPoint(spv::ExecutionModel execution_model, Id entry_point,
     op->Add(name);
     op->Add(interfaces);
     entry_points.push_back(std::move(op));
+}
+
+void Module::AddExecutionMode(Id entry_point, spv::ExecutionMode mode,
+    const std::vector<Literal>& literals) {
+    auto op{std::make_unique<Op>(spv::Op::OpExecutionMode)};
+    op->Add(entry_point);
+    op->Add(static_cast<u32>(mode));
+    op->Add(literals);
+    execution_modes.push_back(std::move(op));
 }
 
 Id Module::Emit(Id op) {
