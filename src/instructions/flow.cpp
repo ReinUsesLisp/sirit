@@ -7,6 +7,7 @@
 #include "common_types.h"
 #include "op.h"
 #include "sirit/sirit.h"
+#include <cassert>
 #include <vector>
 
 namespace Sirit {
@@ -47,6 +48,21 @@ Id Module::OpBranchConditional(Id condition, Id true_label, Id false_label,
     if (true_weight != 0 || false_weight != 0) {
         op->Add(true_weight);
         op->Add(false_weight);
+    }
+    return AddCode(std::move(op));
+}
+
+Id Module::OpSwitch(Id selector, Id default_label,
+                    const std::vector<Literal>& literals,
+                    const std::vector<Id>& labels) {
+    const std::size_t size = literals.size();
+    assert(literals.size() == labels.size());
+    auto op{std::make_unique<Op>(spv::Op::OpSwitch)};
+    op->Add(selector);
+    op->Add(default_label);
+    for (std::size_t i = 0; i < size; ++i) {
+        op->Add(literals[i]);
+        op->Add(labels[i]);
     }
     return AddCode(std::move(op));
 }

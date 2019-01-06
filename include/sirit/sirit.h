@@ -192,6 +192,11 @@ class Module {
                            std::uint32_t true_weight = 0,
                            std::uint32_t false_weight = 0);
 
+    /// Multi-way branch to one of the operand label.
+    Id OpSwitch(Id selector, Id default_label,
+                const std::vector<Literal>& literals,
+                const std::vector<Id>& labels);
+
     /// Returns with no value from a function with void return type.
     Id OpReturn();
 
