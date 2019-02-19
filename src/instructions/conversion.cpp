@@ -17,6 +17,7 @@ namespace Sirit {
         op->Add(operand);                                                      \
         return AddCode(std::move(op));                                         \
     }
+
 DEFINE_UNARY(OpConvertFToU)
 DEFINE_UNARY(OpConvertFToS)
 DEFINE_UNARY(OpConvertSToF)
