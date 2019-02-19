@@ -8,6 +8,7 @@
 
 #include "operand.h"
 #include "stream.h"
+#include <cstring>
 #include <typeindex>
 
 namespace Sirit {
@@ -26,18 +27,15 @@ class LiteralNumber : public Operand {
         static_assert(sizeof(T) == 4 || sizeof(T) == 8);
 
         LiteralNumber* number = new LiteralNumber(std::type_index(typeid(T)));
-        if (number->is_32 = sizeof(T) == 4; number->is_32) {
-            number->raw = *reinterpret_cast<u32*>(&value);
-        } else {
-            number->raw = *reinterpret_cast<u64*>(&value);
-        }
+        number->is_32 = sizeof(T) == 4;
+        std::memcpy(&number->raw, &value, sizeof(T));
         return number;
     }
 
   private:
-    const std::type_index type;
-    bool is_32;
-    u64 raw;
+    std::type_index type;
+    bool is_32{};
+    u64 raw{};
 };
 
 } // namespace Sirit
