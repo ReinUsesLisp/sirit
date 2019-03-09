@@ -11,6 +11,7 @@
 #include <optional>
 #include <set>
 #include <spirv/unified1/spirv.hpp11>
+#include <string>
 #include <variant>
 #include <vector>
 
@@ -37,6 +38,9 @@ class Module {
      * @return A stream of bytes representing a SPIR-V module.
      */
     std::vector<std::uint8_t> Assemble() const;
+
+    /// Adds a SPIR-V extension.
+    void AddExtension(const std::string& extension_name);
 
     /// Adds a module capability.
     void AddCapability(spv::Capability capability);
@@ -620,6 +624,7 @@ class Module {
 
     std::uint32_t bound{1};
 
+    std::set<std::string> extensions;
     std::set<spv::Capability> capabilities;
     std::unique_ptr<Op> glsl_std_450;
     std::set<std::unique_ptr<Op>> ext_inst_import;

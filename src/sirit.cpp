@@ -38,10 +38,16 @@ std::vector<u8> Module::Assemble() const {
         op.Add(static_cast<u32>(capability));
         op.Write(stream);
     }
+
+    for (const auto& extension_name : extensions) {
+        Op op(spv::Op::OpExtension);
+        op.Add(extension_name);
+        op.Write(stream);
+    }
+
     if (glsl_std_450) {
         glsl_std_450->Write(stream);
     }
-    // TODO write ext inst imports
 
     Op memory_model_ref{spv::Op::OpMemoryModel};
     memory_model_ref.Add(static_cast<u32>(addressing_model));
@@ -57,6 +63,10 @@ std::vector<u8> Module::Assemble() const {
     WriteSet(stream, code);
 
     return bytes;
+}
+
+void Module::AddExtension(const std::string& extension_name) {
+    extensions.insert(extension_name);
 }
 
 void Module::AddCapability(spv::Capability capability) {
