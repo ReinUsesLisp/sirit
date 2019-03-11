@@ -4,16 +4,15 @@
  * Lesser General Public License version 3 or any later version.
  */
 
+#include <memory>
+#include <spirv/unified1/GLSL.std.450.h>
 #include "common_types.h"
 #include "op.h"
 #include "sirit/sirit.h"
-#include <memory>
-#include <spirv/unified1/GLSL.std.450.h>
 
 namespace Sirit {
 
-Id Module::OpExtInst(Id result_type, Id set, u32 instruction,
-                     const std::vector<Id>& operands) {
+Id Module::OpExtInst(Id result_type, Id set, u32 instruction, const std::vector<Id>& operands) {
     auto op{std::make_unique<Op>(spv::Op::OpExtInst, bound++, result_type)};
     op->Add(set);
     op->Add(instruction);
@@ -21,22 +20,19 @@ Id Module::OpExtInst(Id result_type, Id set, u32 instruction,
     return AddCode(std::move(op));
 }
 
-#define DEFINE_UNARY(funcname, opcode)                                         \
-    Id Module::funcname(Id result_type, Id operand) {                          \
-        return OpExtInst(result_type, GetGLSLstd450(), opcode, {operand});     \
+#define DEFINE_UNARY(funcname, opcode)                                                             \
+    Id Module::funcname(Id result_type, Id operand) {                                              \
+        return OpExtInst(result_type, GetGLSLstd450(), opcode, {operand});                         \
     }
 
-#define DEFINE_BINARY(funcname, opcode)                                        \
-    Id Module::funcname(Id result_type, Id operand_1, Id operand_2) {          \
-        return OpExtInst(result_type, GetGLSLstd450(), opcode,                 \
-                         {operand_1, operand_2});                              \
+#define DEFINE_BINARY(funcname, opcode)                                                            \
+    Id Module::funcname(Id result_type, Id operand_1, Id operand_2) {                              \
+        return OpExtInst(result_type, GetGLSLstd450(), opcode, {operand_1, operand_2});            \
     }
 
-#define DEFINE_TRINARY(funcname, opcode)                                       \
-    Id Module::funcname(Id result_type, Id operand_1, Id operand_2,            \
-                        Id operand_3) {                                        \
-        return OpExtInst(result_type, GetGLSLstd450(), opcode,                 \
-                         {operand_1, operand_2, operand_3});                   \
+#define DEFINE_TRINARY(funcname, opcode)                                                           \
+    Id Module::funcname(Id result_type, Id operand_1, Id operand_2, Id operand_3) {                \
+        return OpExtInst(result_type, GetGLSLstd450(), opcode, {operand_1, operand_2, operand_3}); \
     }
 
 DEFINE_UNARY(OpFAbs, GLSLstd450FAbs)

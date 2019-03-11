@@ -4,16 +4,17 @@
  * Lesser General Public License version 3 or any later version.
  */
 
-#include "sirit/sirit.h"
-#include "common_types.h"
-#include "op.h"
-#include "stream.h"
 #include <algorithm>
 #include <cassert>
+#include "common_types.h"
+#include "op.h"
+#include "sirit/sirit.h"
+#include "stream.h"
 
 namespace Sirit {
 
-template <typename T> static void WriteSet(Stream& stream, const T& set) {
+template <typename T>
+static void WriteSet(Stream& stream, const T& set) {
     for (const auto& item : set) {
         item->Write(stream);
     }
@@ -73,15 +74,13 @@ void Module::AddCapability(spv::Capability capability) {
     capabilities.insert(capability);
 }
 
-void Module::SetMemoryModel(spv::AddressingModel addressing_model,
-                            spv::MemoryModel memory_model) {
+void Module::SetMemoryModel(spv::AddressingModel addressing_model, spv::MemoryModel memory_model) {
     this->addressing_model = addressing_model;
     this->memory_model = memory_model;
 }
 
 void Module::AddEntryPoint(spv::ExecutionModel execution_model, Id entry_point,
-                           const std::string& name,
-                           const std::vector<Id>& interfaces) {
+                           const std::string& name, const std::vector<Id>& interfaces) {
     auto op{std::make_unique<Op>(spv::Op::OpEntryPoint)};
     op->Add(static_cast<u32>(execution_model));
     op->Add(entry_point);
@@ -91,7 +90,7 @@ void Module::AddEntryPoint(spv::ExecutionModel execution_model, Id entry_point,
 }
 
 void Module::AddExecutionMode(Id entry_point, spv::ExecutionMode mode,
-    const std::vector<Literal>& literals) {
+                              const std::vector<Literal>& literals) {
     auto op{std::make_unique<Op>(spv::Op::OpExecutionMode)};
     op->Add(entry_point);
     op->Add(static_cast<u32>(mode));
@@ -121,9 +120,8 @@ Id Module::AddCode(spv::Op opcode, std::optional<u32> id) {
 }
 
 Id Module::AddDeclaration(std::unique_ptr<Op> op) {
-    const auto& found{
-        std::find_if(declarations.begin(), declarations.end(),
-                     [&op](const auto& other) { return *other == *op; })};
+    const auto& found{std::find_if(declarations.begin(), declarations.end(),
+                                   [&op](const auto& other) { return *other == *op; })};
     if (found != declarations.end()) {
         return found->get();
     }

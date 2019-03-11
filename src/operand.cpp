@@ -4,8 +4,8 @@
  * Lesser General Public License version 3 or any later version.
  */
 
-#include "operand.h"
 #include <cassert>
+#include "operand.h"
 
 namespace Sirit {
 
@@ -22,12 +22,16 @@ u16 Operand::GetWordCount() const {
     return 0;
 }
 
-bool Operand::operator==(const Operand& other) const { return false; }
+bool Operand::operator==(const Operand& other) const {
+    return false;
+}
 
 bool Operand::operator!=(const Operand& other) const {
     return !(*this == other);
 }
 
-OperandType Operand::GetType() const { return operand_type; }
+OperandType Operand::GetType() const {
+    return operand_type;
+}
 
 } // namespace Sirit

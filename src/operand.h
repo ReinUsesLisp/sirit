@@ -13,7 +13,7 @@ namespace Sirit {
 enum class OperandType { Invalid, Op, Number, String };
 
 class Operand {
-  public:
+public:
     Operand();
     virtual ~Operand();
 
@@ -25,7 +25,7 @@ class Operand {
 
     OperandType GetType() const;
 
-  protected:
+protected:
     OperandType operand_type{};
 };
 

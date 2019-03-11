@@ -6,15 +6,15 @@
 
 #pragma once
 
-#include "operand.h"
-#include "stream.h"
 #include <cstring>
 #include <typeindex>
+#include "operand.h"
+#include "stream.h"
 
 namespace Sirit {
 
 class LiteralNumber : public Operand {
-  public:
+public:
     LiteralNumber(std::type_index type);
     ~LiteralNumber();
 
@@ -23,7 +23,8 @@ class LiteralNumber : public Operand {
 
     virtual bool operator==(const Operand& other) const;
 
-    template <typename T> static LiteralNumber* Create(T value) {
+    template <typename T>
+    static LiteralNumber* Create(T value) {
         static_assert(sizeof(T) == 4 || sizeof(T) == 8);
 
         LiteralNumber* number = new LiteralNumber(std::type_index(typeid(T)));
@@ -32,7 +33,7 @@ class LiteralNumber : public Operand {
         return number;
     }
 
-  private:
+private:
     std::type_index type;
     bool is_32{};
     u64 raw{};

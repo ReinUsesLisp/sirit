@@ -26,7 +26,9 @@ void Op::Fetch(Stream& stream) const {
     stream.Write(id.value());
 }
 
-u16 Op::GetWordCount() const { return 1; }
+u16 Op::GetWordCount() const {
+    return 1;
+}
 
 bool Op::operator==(const Operand& other) const {
     if (operand_type != other.GetType()) {
@@ -100,11 +102,17 @@ void Op::Add(const std::vector<Literal>& literals) {
     }
 }
 
-void Op::Add(const Operand* operand) { operands.push_back(operand); }
+void Op::Add(const Operand* operand) {
+    operands.push_back(operand);
+}
 
-void Op::Add(u32 integer) { Sink(LiteralNumber::Create<u32>(integer)); }
+void Op::Add(u32 integer) {
+    Sink(LiteralNumber::Create<u32>(integer));
+}
 
-void Op::Add(const std::string& string) { Sink(new LiteralString(string)); }
+void Op::Add(const std::string& string) {
+    Sink(new LiteralString(string));
+}
 
 void Op::Add(const std::vector<Id>& ids) {
     for (Id op : ids) {

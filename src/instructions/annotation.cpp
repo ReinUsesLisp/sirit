@@ -4,16 +4,15 @@
  * Lesser General Public License version 3 or any later version.
  */
 
+#include <memory>
+#include <vector>
 #include "common_types.h"
 #include "op.h"
 #include "sirit/sirit.h"
-#include <memory>
-#include <vector>
 
 namespace Sirit {
 
-Id Module::Decorate(Id target, spv::Decoration decoration,
-                    const std::vector<Literal>& literals) {
+Id Module::Decorate(Id target, spv::Decoration decoration, const std::vector<Literal>& literals) {
     auto op{std::make_unique<Op>(spv::Op::OpDecorate)};
     op->Add(target);
     op->Add(static_cast<u32>(decoration));
@@ -22,8 +21,7 @@ Id Module::Decorate(Id target, spv::Decoration decoration,
     return target;
 }
 
-Id Module::MemberDecorate(Id structure_type, Literal member,
-                          spv::Decoration decoration,
+Id Module::MemberDecorate(Id structure_type, Literal member, spv::Decoration decoration,
                           const std::vector<Literal>& literals) {
     auto op{std::make_unique<Op>(spv::Op::OpMemberDecorate)};
     op->Add(structure_type);

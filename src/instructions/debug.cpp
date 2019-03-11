@@ -4,10 +4,10 @@
  * Lesser General Public License version 3 or any later version.
  */
 
-#include "op.h"
-#include "sirit/sirit.h"
 #include <memory>
 #include <string>
+#include "op.h"
+#include "sirit/sirit.h"
 
 namespace Sirit {
 

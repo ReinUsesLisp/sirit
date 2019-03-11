@@ -10,79 +10,77 @@
 
 namespace Sirit {
 
-static void
-AddImageOperands(Op* op, std::optional<spv::ImageOperandsMask> image_operands,
-                 const std::vector<Id>& operands) {
+static void AddImageOperands(Op* op, std::optional<spv::ImageOperandsMask> image_operands,
+                             const std::vector<Id>& operands) {
     if (!image_operands)
         return;
     op->Add(static_cast<u32>(*image_operands));
     op->Add(operands);
 }
 
-#define DEFINE_IMAGE_OP(opcode)                                                \
-    Id Module::opcode(Id result_type, Id sampled_image, Id coordinate,         \
-                      std::optional<spv::ImageOperandsMask> image_operands,    \
-                      const std::vector<Id>& operands) {                       \
-        auto op{std::make_unique<Op>(spv::Op::opcode, bound++, result_type)};  \
-        op->Add(sampled_image);                                                \
-        op->Add(coordinate);                                                   \
-        AddImageOperands(op.get(), image_operands, operands);                  \
-        return AddCode(std::move(op));                                         \
+#define DEFINE_IMAGE_OP(opcode)                                                                    \
+    Id Module::opcode(Id result_type, Id sampled_image, Id coordinate,                             \
+                      std::optional<spv::ImageOperandsMask> image_operands,                        \
+                      const std::vector<Id>& operands) {                                           \
+        auto op{std::make_unique<Op>(spv::Op::opcode, bound++, result_type)};                      \
+        op->Add(sampled_image);                                                                    \
+        op->Add(coordinate);                                                                       \
+        AddImageOperands(op.get(), image_operands, operands);                                      \
+        return AddCode(std::move(op));                                                             \
     }
 
-#define DEFINE_IMAGE_EXP_OP(opcode)                                            \
-    Id Module::opcode(Id result_type, Id sampled_image, Id coordinate,         \
-                      spv::ImageOperandsMask image_operands, Id lod,           \
-                      const std::vector<Id>& operands) {                       \
-        auto op{std::make_unique<Op>(spv::Op::opcode, bound++, result_type)};  \
-        op->Add(sampled_image);                                                \
-        op->Add(coordinate);                                                   \
-        op->Add(static_cast<u32>(image_operands));                             \
-        op->Add(lod);                                                          \
-        op->Add(operands);                                                     \
-        return AddCode(std::move(op));                                         \
+#define DEFINE_IMAGE_EXP_OP(opcode)                                                                \
+    Id Module::opcode(Id result_type, Id sampled_image, Id coordinate,                             \
+                      spv::ImageOperandsMask image_operands, Id lod,                               \
+                      const std::vector<Id>& operands) {                                           \
+        auto op{std::make_unique<Op>(spv::Op::opcode, bound++, result_type)};                      \
+        op->Add(sampled_image);                                                                    \
+        op->Add(coordinate);                                                                       \
+        op->Add(static_cast<u32>(image_operands));                                                 \
+        op->Add(lod);                                                                              \
+        op->Add(operands);                                                                         \
+        return AddCode(std::move(op));                                                             \
     }
 
-#define DEFINE_IMAGE_EXTRA_OP(opcode)                                          \
-    Id Module::opcode(Id result_type, Id sampled_image, Id coordinate,         \
-                      Id extra,                                                \
-                      std::optional<spv::ImageOperandsMask> image_operands,    \
-                      const std::vector<Id>& operands) {                       \
-        auto op{std::make_unique<Op>(spv::Op::opcode, bound++, result_type)};  \
-        op->Add(sampled_image);                                                \
-        op->Add(coordinate);                                                   \
-        op->Add(extra);                                                        \
-        AddImageOperands(op.get(), image_operands, operands);                  \
-        return AddCode(std::move(op));                                         \
+#define DEFINE_IMAGE_EXTRA_OP(opcode)                                                              \
+    Id Module::opcode(Id result_type, Id sampled_image, Id coordinate, Id extra,                   \
+                      std::optional<spv::ImageOperandsMask> image_operands,                        \
+                      const std::vector<Id>& operands) {                                           \
+        auto op{std::make_unique<Op>(spv::Op::opcode, bound++, result_type)};                      \
+        op->Add(sampled_image);                                                                    \
+        op->Add(coordinate);                                                                       \
+        op->Add(extra);                                                                            \
+        AddImageOperands(op.get(), image_operands, operands);                                      \
+        return AddCode(std::move(op));                                                             \
     }
 
-#define DEFINE_IMAGE_EXTRA_EXP_OP(opcode)                                      \
-    Id Module::opcode(Id result_type, Id sampled_image, Id coordinate,         \
-                      Id extra, spv::ImageOperandsMask image_operands, Id lod, \
-                      const std::vector<Id>& operands) {                       \
-        auto op{std::make_unique<Op>(spv::Op::opcode, bound++, result_type)};  \
-        op->Add(sampled_image);                                                \
-        op->Add(coordinate);                                                   \
-        op->Add(extra);                                                        \
-        op->Add(static_cast<u32>(image_operands));                             \
-        op->Add(lod);                                                          \
-        op->Add(operands);                                                     \
-        return AddCode(std::move(op));                                         \
+#define DEFINE_IMAGE_EXTRA_EXP_OP(opcode)                                                          \
+    Id Module::opcode(Id result_type, Id sampled_image, Id coordinate, Id extra,                   \
+                      spv::ImageOperandsMask image_operands, Id lod,                               \
+                      const std::vector<Id>& operands) {                                           \
+        auto op{std::make_unique<Op>(spv::Op::opcode, bound++, result_type)};                      \
+        op->Add(sampled_image);                                                                    \
+        op->Add(coordinate);                                                                       \
+        op->Add(extra);                                                                            \
+        op->Add(static_cast<u32>(image_operands));                                                 \
+        op->Add(lod);                                                                              \
+        op->Add(operands);                                                                         \
+        return AddCode(std::move(op));                                                             \
     }
 
-#define DEFINE_IMAGE_QUERY_OP(opcode)                                          \
-    Id Module::opcode(Id result_type, Id image) {                              \
-        auto op{std::make_unique<Op>(spv::Op::opcode, bound++, result_type)};  \
-        op->Add(image);                                                        \
-        return AddCode(std::move(op));                                         \
+#define DEFINE_IMAGE_QUERY_OP(opcode)                                                              \
+    Id Module::opcode(Id result_type, Id image) {                                                  \
+        auto op{std::make_unique<Op>(spv::Op::opcode, bound++, result_type)};                      \
+        op->Add(image);                                                                            \
+        return AddCode(std::move(op));                                                             \
     }
 
-#define DEFINE_IMAGE_QUERY_BIN_OP(opcode)                                      \
-    Id Module::opcode(Id result_type, Id image, Id extra) {                    \
-        auto op{std::make_unique<Op>(spv::Op::opcode, bound++, result_type)};  \
-        op->Add(image);                                                        \
-        op->Add(extra);                                                        \
-        return AddCode(std::move(op));                                         \
+#define DEFINE_IMAGE_QUERY_BIN_OP(opcode)                                                          \
+    Id Module::opcode(Id result_type, Id image, Id extra) {                                        \
+        auto op{std::make_unique<Op>(spv::Op::opcode, bound++, result_type)};                      \
+        op->Add(image);                                                                            \
+        op->Add(extra);                                                                            \
+        return AddCode(std::move(op));                                                             \
     }
 
 DEFINE_IMAGE_OP(OpImageSampleImplicitLod)
@@ -104,8 +102,7 @@ DEFINE_IMAGE_QUERY_OP(OpImageQueryLevels)
 DEFINE_IMAGE_QUERY_OP(OpImageQuerySamples)
 
 Id Module::OpSampledImage(Id result_type, Id image, Id sampler) {
-    auto op{
-        std::make_unique<Op>(spv::Op::OpSampledImage, bound++, result_type)};
+    auto op{std::make_unique<Op>(spv::Op::OpSampledImage, bound++, result_type)};
     op->Add(image);
     op->Add(sampler);
     return AddCode(std::move(op));

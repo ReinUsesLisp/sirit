@@ -6,18 +6,17 @@
 
 #pragma once
 
+#include <optional>
 #include "common_types.h"
 #include "operand.h"
 #include "sirit/sirit.h"
 #include "stream.h"
-#include <optional>
 
 namespace Sirit {
 
 class Op : public Operand {
-  public:
-    explicit Op(spv::Op opcode, std::optional<u32> id = {},
-                Id result_type = nullptr);
+public:
+    explicit Op(spv::Op opcode, std::optional<u32> id = {}, Id result_type = nullptr);
     ~Op();
 
     virtual void Fetch(Stream& stream) const;
@@ -43,7 +42,7 @@ class Op : public Operand {
 
     void Add(const std::vector<Id>& ids);
 
-  private:
+private:
     u16 WordCount() const;
 
     spv::Op opcode;

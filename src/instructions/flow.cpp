@@ -4,16 +4,15 @@
  * Lesser General Public License version 3 or any later version.
  */
 
+#include <cassert>
+#include <vector>
 #include "common_types.h"
 #include "op.h"
 #include "sirit/sirit.h"
-#include <cassert>
-#include <vector>
 
 namespace Sirit {
 
-Id Module::OpLoopMerge(Id merge_block, Id continue_target,
-                       spv::LoopControlMask loop_control,
+Id Module::OpLoopMerge(Id merge_block, Id continue_target, spv::LoopControlMask loop_control,
                        const std::vector<Id>& literals) {
     auto op{std::make_unique<Op>(spv::Op::OpLoopMerge)};
     op->Add(merge_block);
@@ -23,15 +22,16 @@ Id Module::OpLoopMerge(Id merge_block, Id continue_target,
     return AddCode(std::move(op));
 }
 
-Id Module::OpSelectionMerge(Id merge_block,
-                            spv::SelectionControlMask selection_control) {
+Id Module::OpSelectionMerge(Id merge_block, spv::SelectionControlMask selection_control) {
     auto op{std::make_unique<Op>(spv::Op::OpSelectionMerge)};
     op->Add(merge_block);
     op->Add(static_cast<u32>(selection_control));
     return AddCode(std::move(op));
 }
 
-Id Module::OpLabel() { return AddCode(spv::Op::OpLabel, bound++); }
+Id Module::OpLabel() {
+    return AddCode(spv::Op::OpLabel, bound++);
+}
 
 Id Module::OpBranch(Id target_label) {
     auto op{std::make_unique<Op>(spv::Op::OpBranch)};
@@ -39,8 +39,8 @@ Id Module::OpBranch(Id target_label) {
     return AddCode(std::move(op));
 }
 
-Id Module::OpBranchConditional(Id condition, Id true_label, Id false_label,
-                               u32 true_weight, u32 false_weight) {
+Id Module::OpBranchConditional(Id condition, Id true_label, Id false_label, u32 true_weight,
+                               u32 false_weight) {
     auto op{std::make_unique<Op>(spv::Op::OpBranchConditional)};
     op->Add(condition);
     op->Add(true_label);
@@ -52,8 +52,7 @@ Id Module::OpBranchConditional(Id condition, Id true_label, Id false_label,
     return AddCode(std::move(op));
 }
 
-Id Module::OpSwitch(Id selector, Id default_label,
-                    const std::vector<Literal>& literals,
+Id Module::OpSwitch(Id selector, Id default_label, const std::vector<Literal>& literals,
                     const std::vector<Id>& labels) {
     const std::size_t size = literals.size();
     assert(literals.size() == labels.size());
@@ -67,7 +66,9 @@ Id Module::OpSwitch(Id selector, Id default_label,
     return AddCode(std::move(op));
 }
 
-Id Module::OpReturn() { return AddCode(spv::Op::OpReturn); }
+Id Module::OpReturn() {
+    return AddCode(spv::Op::OpReturn);
+}
 
 Id Module::OpReturnValue(Id value) {
     auto op{std::make_unique<Op>(spv::Op::OpReturnValue)};

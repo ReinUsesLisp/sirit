@@ -6,14 +6,14 @@
 
 #pragma once
 
-#include "common_types.h"
 #include <string>
 #include <vector>
+#include "common_types.h"
 
 namespace Sirit {
 
 class Stream {
-  public:
+public:
     explicit Stream(std::vector<u8>& bytes);
     ~Stream();
 
@@ -27,7 +27,7 @@ class Stream {
 
     void Write(u8 value);
 
-  private:
+private:
     std::vector<u8>& bytes;
 };
 

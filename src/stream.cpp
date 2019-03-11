@@ -41,6 +41,8 @@ void Stream::Write(u16 value) {
     Write(mem[1]);
 }
 
-void Stream::Write(u8 value) { bytes.push_back(value); }
+void Stream::Write(u8 value) {
+    bytes.push_back(value);
+}
 
 } // namespace Sirit

@@ -4,36 +4,35 @@
  * Lesser General Public License version 3 or any later version.
  */
 
+#include <memory>
 #include "common_types.h"
 #include "op.h"
 #include "sirit/sirit.h"
-#include <memory>
 
 namespace Sirit {
 
-#define DEFINE_UNARY(funcname, opcode)                                         \
-    Id Module::funcname(Id result_type, Id operand) {                          \
-        auto op{std::make_unique<Op>(opcode, bound++, result_type)};           \
-        op->Add(operand);                                                      \
-        return AddCode(std::move(op));                                         \
+#define DEFINE_UNARY(funcname, opcode)                                                             \
+    Id Module::funcname(Id result_type, Id operand) {                                              \
+        auto op{std::make_unique<Op>(opcode, bound++, result_type)};                               \
+        op->Add(operand);                                                                          \
+        return AddCode(std::move(op));                                                             \
     }
 
-#define DEFINE_BINARY(funcname, opcode)                                        \
-    Id Module::funcname(Id result_type, Id operand_1, Id operand_2) {          \
-        auto op{std::make_unique<Op>(opcode, bound++, result_type)};           \
-        op->Add(operand_1);                                                    \
-        op->Add(operand_2);                                                    \
-        return AddCode(std::move(op));                                         \
+#define DEFINE_BINARY(funcname, opcode)                                                            \
+    Id Module::funcname(Id result_type, Id operand_1, Id operand_2) {                              \
+        auto op{std::make_unique<Op>(opcode, bound++, result_type)};                               \
+        op->Add(operand_1);                                                                        \
+        op->Add(operand_2);                                                                        \
+        return AddCode(std::move(op));                                                             \
     }
 
-#define DEFINE_TRINARY(funcname, opcode)                                       \
-    Id Module::funcname(Id result_type, Id operand_1, Id operand_2,            \
-                        Id operand_3) {                                        \
-        auto op{std::make_unique<Op>(opcode, bound++, result_type)};           \
-        op->Add(operand_1);                                                    \
-        op->Add(operand_2);                                                    \
-        op->Add(operand_3);                                                    \
-        return AddCode(std::move(op));                                         \
+#define DEFINE_TRINARY(funcname, opcode)                                                           \
+    Id Module::funcname(Id result_type, Id operand_1, Id operand_2, Id operand_3) {                \
+        auto op{std::make_unique<Op>(opcode, bound++, result_type)};                               \
+        op->Add(operand_1);                                                                        \
+        op->Add(operand_2);                                                                        \
+        op->Add(operand_3);                                                                        \
+        return AddCode(std::move(op));                                                             \
     }
 
 DEFINE_UNARY(OpIsNan, spv::Op::OpIsNan)

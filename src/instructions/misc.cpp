@@ -4,9 +4,9 @@
  * Lesser General Public License version 3 or any later version.
  */
 
+#include <cassert>
 #include "op.h"
 #include "sirit/sirit.h"
-#include <cassert>
 
 namespace Sirit {
 

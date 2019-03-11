@@ -4,8 +4,8 @@
  * Lesser General Public License version 3 or any later version.
  */
 
-#include "literal_number.h"
 #include <cassert>
+#include "literal_number.h"
 
 namespace Sirit {
 
@@ -23,7 +23,9 @@ void LiteralNumber::Fetch(Stream& stream) const {
     }
 }
 
-u16 LiteralNumber::GetWordCount() const { return is_32 ? 1 : 2; }
+u16 LiteralNumber::GetWordCount() const {
+    return is_32 ? 1 : 2;
+}
 
 bool LiteralNumber::operator==(const Operand& other) const {
     if (operand_type == other.GetType()) {

@@ -10,10 +10,10 @@
 #include <memory>
 #include <optional>
 #include <set>
-#include <spirv/unified1/spirv.hpp11>
 #include <string>
 #include <variant>
 #include <vector>
+#include <spirv/unified1/spirv.hpp11>
 
 namespace Sirit {
 
@@ -22,12 +22,12 @@ constexpr std::uint32_t GENERATOR_MAGIC_NUMBER = 0;
 class Op;
 class Operand;
 
-using Literal = std::variant<std::uint32_t, std::uint64_t, std::int32_t,
-                             std::int64_t, float, double>;
+using Literal =
+    std::variant<std::uint32_t, std::uint64_t, std::int32_t, std::int64_t, float, double>;
 using Id = const Op*;
 
 class Module {
-  public:
+public:
     explicit Module(std::uint32_t version = spv::Version);
     ~Module();
 
@@ -46,12 +46,10 @@ class Module {
     void AddCapability(spv::Capability capability);
 
     /// Sets module memory model.
-    void SetMemoryModel(spv::AddressingModel addressing_model,
-                        spv::MemoryModel memory_model);
+    void SetMemoryModel(spv::AddressingModel addressing_model, spv::MemoryModel memory_model);
 
     /// Adds an entry point.
-    void AddEntryPoint(spv::ExecutionModel execution_model, Id entry_point,
-                       const std::string& name,
+    void AddEntryPoint(spv::ExecutionModel execution_model, Id entry_point, const std::string& name,
                        const std::vector<Id>& interfaces = {});
 
     /// Declare an execution mode for an entry point.
@@ -94,8 +92,8 @@ class Module {
     Id OpTypeMatrix(Id column_type, int column_count);
 
     /// Returns type image.
-    Id OpTypeImage(Id sampled_type, spv::Dim dim, int depth, bool arrayed,
-                   bool ms, int sampled, spv::ImageFormat image_format,
+    Id OpTypeImage(Id sampled_type, spv::Dim dim, int depth, bool arrayed, bool ms, int sampled,
+                   spv::ImageFormat image_format,
                    std::optional<spv::AccessQualifier> access_qualifier = {});
 
     /// Returns type sampler.
@@ -152,9 +150,8 @@ class Module {
     Id ConstantComposite(Id result_type, const std::vector<Id>& constituents);
 
     /// Returns a sampler constant.
-    Id ConstantSampler(Id result_type,
-                       spv::SamplerAddressingMode addressing_mode,
-                       bool normalized, spv::SamplerFilterMode filter_mode);
+    Id ConstantSampler(Id result_type, spv::SamplerAddressingMode addressing_mode, bool normalized,
+                       spv::SamplerFilterMode filter_mode);
 
     /// Returns a null constant value.
     Id ConstantNull(Id result_type);
@@ -162,26 +159,22 @@ class Module {
     // Function
 
     /// Declares a function.
-    Id OpFunction(Id result_type, spv::FunctionControlMask function_control,
-                  Id function_type);
+    Id OpFunction(Id result_type, spv::FunctionControlMask function_control, Id function_type);
 
     /// Ends a function.
     Id OpFunctionEnd();
 
     /// Call a function.
-    Id OpFunctionCall(Id result_type, Id function,
-                      const std::vector<Id>& arguments = {});
+    Id OpFunctionCall(Id result_type, Id function, const std::vector<Id>& arguments = {});
 
     // Flow
 
     /// Declare a structured loop.
-    Id OpLoopMerge(Id merge_block, Id continue_target,
-                   spv::LoopControlMask loop_control,
+    Id OpLoopMerge(Id merge_block, Id continue_target, spv::LoopControlMask loop_control,
                    const std::vector<Id>& literals = {});
 
     /// Declare a structured selection.
-    Id OpSelectionMerge(Id merge_block,
-                        spv::SelectionControlMask selection_control);
+    Id OpSelectionMerge(Id merge_block, spv::SelectionControlMask selection_control);
 
     /// The block label instruction: Any reference to a block is through this
     /// ref.
@@ -193,12 +186,10 @@ class Module {
     /// If condition is true branch to true_label, otherwise branch to
     /// false_label.
     Id OpBranchConditional(Id condition, Id true_label, Id false_label,
-                           std::uint32_t true_weight = 0,
-                           std::uint32_t false_weight = 0);
+                           std::uint32_t true_weight = 0, std::uint32_t false_weight = 0);
 
     /// Multi-way branch to one of the operand label.
-    Id OpSwitch(Id selector, Id default_label,
-                const std::vector<Literal>& literals,
+    Id OpSwitch(Id selector, Id default_label, const std::vector<Literal>& literals,
                 const std::vector<Id>& labels);
 
     /// Returns with no value from a function with void return type.
@@ -229,29 +220,24 @@ class Module {
     // Memory
 
     /// Allocate an object in memory, resulting in a copy to it.
-    Id OpVariable(Id result_type, spv::StorageClass storage_class,
-                  Id initializer = nullptr);
+    Id OpVariable(Id result_type, spv::StorageClass storage_class, Id initializer = nullptr);
 
     /// Load through a pointer.
-    Id OpLoad(Id result_type, Id pointer,
-              std::optional<spv::MemoryAccessMask> memory_access = {});
+    Id OpLoad(Id result_type, Id pointer, std::optional<spv::MemoryAccessMask> memory_access = {});
 
     /// Store through a pointer.
-    Id OpStore(Id pointer, Id object,
-               std::optional<spv::MemoryAccessMask> memory_access = {});
+    Id OpStore(Id pointer, Id object, std::optional<spv::MemoryAccessMask> memory_access = {});
 
     /// Create a pointer into a composite object that can be used with OpLoad
     /// and OpStore.
-    Id OpAccessChain(Id result_type, Id base,
-                     const std::vector<Id>& indexes = {});
+    Id OpAccessChain(Id result_type, Id base, const std::vector<Id>& indexes = {});
 
     /// Make a copy of a composite object, while modifying one part of it.
     Id OpCompositeInsert(Id result_type, Id object, Id composite,
                          const std::vector<Literal>& indexes = {});
 
     /// Extract a part of a composite object.
-    Id OpCompositeExtract(Id result_type, Id composite,
-                          const std::vector<Literal>& indexes = {});
+    Id OpCompositeExtract(Id result_type, Id composite, const std::vector<Literal>& indexes = {});
 
     /// Construct a new composite object from a set of constituent objects that
     /// will fully form it.
@@ -260,11 +246,9 @@ class Module {
     // Annotation
 
     /// Add a decoration to target.
-    Id Decorate(Id target, spv::Decoration decoration,
-                const std::vector<Literal>& literals = {});
+    Id Decorate(Id target, spv::Decoration decoration, const std::vector<Literal>& literals = {});
 
-    Id MemberDecorate(Id structure_type, Literal member,
-                      spv::Decoration decoration,
+    Id MemberDecorate(Id structure_type, Literal member, spv::Decoration decoration,
                       const std::vector<Literal>& literals = {});
 
     // Misc
@@ -383,8 +367,7 @@ class Module {
     /// Does a bitwise Not on the operand.
     Id OpNot(Id result_type, Id operand);
 
-    Id OpBitFieldInsert(Id result_type, Id base, Id insert, Id offset,
-                        Id count);
+    Id OpBitFieldInsert(Id result_type, Id base, Id insert, Id offset, Id count);
 
     Id OpBitFieldSExtract(Id result_type, Id base, Id offset, Id count);
 
@@ -533,61 +516,49 @@ class Module {
 
     Id OpSampledImage(Id result_type, Id image, Id sampler);
 
-    Id OpImageSampleImplicitLod(
-        Id result_type, Id sampled_image, Id coordinate,
-        std::optional<spv::ImageOperandsMask> image_operands = {},
-        const std::vector<Id>& operands = {});
+    Id OpImageSampleImplicitLod(Id result_type, Id sampled_image, Id coordinate,
+                                std::optional<spv::ImageOperandsMask> image_operands = {},
+                                const std::vector<Id>& operands = {});
 
     Id OpImageSampleExplicitLod(Id result_type, Id sampled_image, Id coordinate,
                                 spv::ImageOperandsMask image_operands, Id lod,
                                 const std::vector<Id>& operands = {});
 
-    Id OpImageSampleDrefImplicitLod(
-        Id result_type, Id sampled_image, Id coordinate, Id dref,
-        std::optional<spv::ImageOperandsMask> image_operands = {},
-        const std::vector<Id>& operands = {});
-
-    Id OpImageSampleDrefExplicitLod(Id result_type, Id sampled_image,
-                                    Id coordinate, Id dref,
-                                    spv::ImageOperandsMask image_operands,
-                                    Id lod,
+    Id OpImageSampleDrefImplicitLod(Id result_type, Id sampled_image, Id coordinate, Id dref,
+                                    std::optional<spv::ImageOperandsMask> image_operands = {},
                                     const std::vector<Id>& operands = {});
 
-    Id OpImageSampleProjImplicitLod(
-        Id result_type, Id sampled_image, Id coordinate,
-        std::optional<spv::ImageOperandsMask> image_operands = {},
-        const std::vector<Id>& operands = {});
-
-    Id OpImageSampleProjExplicitLod(Id result_type, Id sampled_image,
-                                    Id coordinate,
-                                    spv::ImageOperandsMask image_operands,
-                                    Id lod,
+    Id OpImageSampleDrefExplicitLod(Id result_type, Id sampled_image, Id coordinate, Id dref,
+                                    spv::ImageOperandsMask image_operands, Id lod,
                                     const std::vector<Id>& operands = {});
 
-    Id OpImageSampleProjDrefImplicitLod(
-        Id result_type, Id sampled_image, Id coordinate, Id dref,
-        std::optional<spv::ImageOperandsMask> image_operands = {},
-        const std::vector<Id>& operands = {});
+    Id OpImageSampleProjImplicitLod(Id result_type, Id sampled_image, Id coordinate,
+                                    std::optional<spv::ImageOperandsMask> image_operands = {},
+                                    const std::vector<Id>& operands = {});
 
-    Id OpImageSampleProjDrefExplicitLod(Id result_type, Id sampled_image,
-                                        Id coordinate, Id dref,
-                                        spv::ImageOperandsMask image_operands,
-                                        Id lod,
+    Id OpImageSampleProjExplicitLod(Id result_type, Id sampled_image, Id coordinate,
+                                    spv::ImageOperandsMask image_operands, Id lod,
+                                    const std::vector<Id>& operands = {});
+
+    Id OpImageSampleProjDrefImplicitLod(Id result_type, Id sampled_image, Id coordinate, Id dref,
+                                        std::optional<spv::ImageOperandsMask> image_operands = {},
+                                        const std::vector<Id>& operands = {});
+
+    Id OpImageSampleProjDrefExplicitLod(Id result_type, Id sampled_image, Id coordinate, Id dref,
+                                        spv::ImageOperandsMask image_operands, Id lod,
                                         const std::vector<Id>& operands = {});
 
     Id OpImageFetch(Id result_type, Id sampled_image, Id coordinate,
                     std::optional<spv::ImageOperandsMask> image_operands = {},
                     const std::vector<Id>& operands = {});
 
-    Id OpImageGather(Id result_type, Id sampled_image, Id coordinate,
-                     Id component,
+    Id OpImageGather(Id result_type, Id sampled_image, Id coordinate, Id component,
                      std::optional<spv::ImageOperandsMask> image_operands = {},
                      const std::vector<Id>& operands = {});
 
-    Id
-    OpImageDrefGather(Id result_type, Id sampled_image, Id coordinate, Id dref,
-                      std::optional<spv::ImageOperandsMask> image_operands = {},
-                      const std::vector<Id>& operands = {});
+    Id OpImageDrefGather(Id result_type, Id sampled_image, Id coordinate, Id dref,
+                         std::optional<spv::ImageOperandsMask> image_operands = {},
+                         const std::vector<Id>& operands = {});
 
     Id OpImageRead(Id result_type, Id sampled_image, Id coordinate,
                    std::optional<spv::ImageOperandsMask> image_operands = {},
@@ -609,7 +580,7 @@ class Module {
 
     Id OpImageQuerySamples(Id result_type, Id image);
 
-  private:
+private:
     Id AddCode(std::unique_ptr<Op> op);
 
     Id AddCode(spv::Op opcode, std::optional<std::uint32_t> id = {});

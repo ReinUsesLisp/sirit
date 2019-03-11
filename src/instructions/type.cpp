@@ -4,8 +4,8 @@
  * Lesser General Public License version 3 or any later version.
  */
 
-#include <memory>
 #include <cassert>
+#include <memory>
 #include <optional>
 
 #include "op.h"
@@ -63,9 +63,9 @@ Id Module::OpTypeMatrix(Id column_type, int column_count) {
     return AddDeclaration(std::move(op));
 }
 
-Id Module::OpTypeImage(Id sampled_type, spv::Dim dim, int depth, bool arrayed,
-                        bool ms, int sampled, spv::ImageFormat image_format,
-                        std::optional<spv::AccessQualifier> access_qualifier) {
+Id Module::OpTypeImage(Id sampled_type, spv::Dim dim, int depth, bool arrayed, bool ms, int sampled,
+                       spv::ImageFormat image_format,
+                       std::optional<spv::AccessQualifier> access_qualifier) {
     switch (dim) {
     case spv::Dim::Dim1D:
         AddCapability(spv::Capability::Sampled1D);
