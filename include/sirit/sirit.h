@@ -176,9 +176,13 @@ public:
     /// Declare a structured selection.
     Id OpSelectionMerge(Id merge_block, spv::SelectionControlMask selection_control);
 
-    /// The block label instruction: Any reference to a block is through this
-    /// ref.
+    /// The block label instruction: Any reference to a block is through this ref.
     Id OpLabel();
+
+    /// The block label instruction: Any reference to a block is through this ref.
+    Id OpLabel(const std::string label_name) {
+        return Name(OpLabel(), label_name);
+    }
 
     /// Unconditional jump to label.
     Id OpBranch(Id target_label);
