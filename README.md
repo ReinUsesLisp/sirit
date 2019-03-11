@@ -10,7 +10,6 @@ What it does for you:
 * Sort declaration opcodes
 * Handle types and constant duplicates
 * Emit SPIR-V opcodes  
-* Add capabilities automatically
 
 What does not do for you:
 * Avoid ID duplicates (emitting the same instruction twice)
@@ -35,11 +34,11 @@ public:
         AddCapability(spv::Capability::Shader);
         SetMemoryModel(spv::AddressingModel::Logical, spv::MemoryModel::GLSL450);
         
-        auto main_type{TypeFunction(TypeVoid())};
-        auto main_func{Emit(Function(TypeVoid(), spv::FunctionControlMask::MaskNone, main_type))};
-        Emit(Label());
-        Emit(Return());
-        Emit(FunctionEnd());
+        auto main_type{OpTypeFunction(TypeVoid())};
+        auto main_func{Emit(OpFunction(TypeVoid(), spv::FunctionControlMask::MaskNone, main_type))};
+        Emit(OpLabel());
+        Emit(OpReturn());
+        Emit(OpFunctionEnd());
 
         AddEntryPoint(spv::ExecutionModel::Vertex, main_func, "main");
     }

@@ -77,7 +77,6 @@ Id Module::OpReturnValue(Id value) {
 }
 
 Id Module::OpKill() {
-    AddCapability(spv::Capability::Shader);
     return AddCode(std::make_unique<Op>(spv::Op::OpKill));
 }
 

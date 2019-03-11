@@ -32,8 +32,6 @@ Id Module::ConstantComposite(Id result_type, const std::vector<Id>& constituents
 
 Id Module::ConstantSampler(Id result_type, spv::SamplerAddressingMode addressing_mode,
                            bool normalized, spv::SamplerFilterMode filter_mode) {
-    AddCapability(spv::Capability::LiteralSampler);
-    AddCapability(spv::Capability::Kernel);
     auto op{std::make_unique<Op>(spv::Op::OpConstantSampler, bound, result_type)};
     op->Add(static_cast<u32>(addressing_mode));
     op->Add(normalized ? 1 : 0);
