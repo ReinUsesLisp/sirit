@@ -340,83 +340,128 @@ public:
 
     // Logical
 
+    /// Result is true if x is an IEEE NaN, otherwise result is false.
     Id OpIsNan(Id result_type, Id operand);
 
+    /// Result is true if x is an IEEE Inf, otherwise result is false.
     Id OpIsInf(Id result_type, Id operand);
 
+    /// Result is true if Operand 1 and Operand 2 have the same value. Result is false if Operand 1
+    /// and Operand 2 have different values.
     Id OpLogicalEqual(Id result_type, Id operand_1, Id operand_2);
 
+    /// Result is true if Operand 1 and Operand 2 have different values. Result is false if Operand
+    /// 1 and Operand 2 have the same value.
     Id OpLogicalNotEqual(Id result_type, Id operand_1, Id operand_2);
 
+    /// Result is true if either Operand 1 or Operand 2 is true. Result is false if both Operand 1
+    /// and Operand 2 are false.
     Id OpLogicalOr(Id result_type, Id operand_1, Id operand_2);
 
+    /// Result is true if both Operand 1 and Operand 2 are true. Result is false if either Operand 1
+    /// or Operand 2 are false.
     Id OpLogicalAnd(Id result_type, Id operand_1, Id operand_2);
 
     /// Result is true if Operand is false. Result is false if Operand is true.
     Id OpLogicalNot(Id result_type, Id operand);
 
+    /// Select components from two objects.
     Id OpSelect(Id result_type, Id condition, Id operand_1, Id operand_2);
 
+    /// Integer comparison for equality.
     Id OpIEqual(Id result_type, Id operand_1, Id operand_2);
 
+    /// Integer comparison for inequality.
     Id OpINotEqual(Id result_type, Id operand_1, Id operand_2);
 
+    /// Unsigned-integer comparison if Operand 1 is greater than Operand 2.
     Id OpUGreaterThan(Id result_type, Id operand_1, Id operand_2);
 
+    /// Signed-integer comparison if Operand 1 is greater than Operand 2.
     Id OpSGreaterThan(Id result_type, Id operand_1, Id operand_2);
 
+    /// Unsigned-integer comparison if Operand 1 is greater than or equal to Operand 2.
     Id OpUGreaterThanEqual(Id result_type, Id operand_1, Id operand_2);
 
+    /// Signed-integer comparison if Operand 1 is greater than or equal to Operand 2.
     Id OpSGreaterThanEqual(Id result_type, Id operand_1, Id operand_2);
 
+    /// Unsigned-integer comparison if Operand 1 is less than Operand 2.
     Id OpULessThan(Id result_type, Id operand_1, Id operand_2);
 
+    /// Signed-integer comparison if Operand 1 is less than Operand 2.
     Id OpSLessThan(Id result_type, Id operand_1, Id operand_2);
 
+    /// Unsigned-integer comparison if Operand 1 is less than or equal to Operand 2.
     Id OpULessThanEqual(Id result_type, Id operand_1, Id operand_2);
 
+    /// Signed-integer comparison if Operand 1 is less than or equal to Operand 2.
     Id OpSLessThanEqual(Id result_type, Id operand_1, Id operand_2);
 
+    /// Floating-point comparison for being ordered and equal.
     Id OpFOrdEqual(Id result_type, Id operand_1, Id operand_2);
 
+    /// Floating-point comparison for being unordered or equal.
     Id OpFUnordEqual(Id result_type, Id operand_1, Id operand_2);
 
+    /// Floating-point comparison for being ordered and not equal.
     Id OpFOrdNotEqual(Id result_type, Id operand_1, Id operand_2);
 
+    /// Floating-point comparison for being unordered or not equal.
     Id OpFUnordNotEqual(Id result_type, Id operand_1, Id operand_2);
 
+    /// Floating-point comparison if operands are ordered and Operand 1 is less than Operand 2.
     Id OpFOrdLessThan(Id result_type, Id operand_1, Id operand_2);
 
+    /// Floating-point comparison if operands are unordered or Operand 1 is less than Operand 2.
     Id OpFUnordLessThan(Id result_type, Id operand_1, Id operand_2);
 
+    /// Floating-point comparison if operands are ordered and Operand 1 is greater than Operand 2.
     Id OpFOrdGreaterThan(Id result_type, Id operand_1, Id operand_2);
 
+    /// Floating-point comparison if operands are unordered or Operand 1 is greater than Operand 2.
     Id OpFUnordGreaterThan(Id result_type, Id operand_1, Id operand_2);
 
+    /// Floating-point comparison if operands are ordered and Operand 1 is less than or equal to
+    /// Operand 2.
     Id OpFOrdLessThanEqual(Id result_type, Id operand_1, Id operand_2);
 
+    /// Floating-point comparison if operands are unordered or Operand 1 is less than or equal to
+    /// Operand 2.
     Id OpFUnordLessThanEqual(Id result_type, Id operand_1, Id operand_2);
 
+    /// Floating-point comparison if operands are ordered and Operand 1 is greater than or equal to
+    /// Operand 2.
     Id OpFOrdGreaterThanEqual(Id result_type, Id operand_1, Id operand_2);
 
+    /// Floating-point comparison if operands are unordered or Operand 1 is greater than or equal to
+    /// Operand 2.
     Id OpFUnordGreaterThanEqual(Id result_type, Id operand_1, Id operand_2);
 
     // Conversion
 
+    /// Convert (value preserving) from floating point to unsigned integer, with round toward 0.0.
     Id OpConvertFToU(Id result_type, Id operand);
 
+    /// Convert (value preserving) from floating point to signed integer, with round toward 0.0.
     Id OpConvertFToS(Id result_type, Id operand);
 
+    /// Convert (value preserving) from signed integer to floating point.
     Id OpConvertSToF(Id result_type, Id operand);
 
+    /// Convert (value preserving) from unsigned integer to floating point.
     Id OpConvertUToF(Id result_type, Id operand);
 
+    /// Convert (value preserving) unsigned width. This is either a truncate or a zero extend.
     Id OpUConvert(Id result_type, Id operand);
 
+    /// Convert (value preserving) signed width. This is either a truncate or a sign extend.
     Id OpSConvert(Id result_type, Id operand);
 
+    /// Convert (value preserving) floating-point width.
     Id OpFConvert(Id result_type, Id operand);
 
+    /// Quantize a floating-point value to what is expressible by a 16-bit floating-point value.
     Id OpQuantizeToF16(Id result_type, Id operand);
 
     /// Bit pattern-preserving type conversion.
@@ -449,14 +494,19 @@ public:
     /// Does a bitwise Not on the operand.
     Id OpNot(Id result_type, Id operand);
 
+    /// Make a copy of an object, with a modified bit field that comes from another object.
     Id OpBitFieldInsert(Id result_type, Id base, Id insert, Id offset, Id count);
 
+    /// Extract a bit field from an object, with sign extension.
     Id OpBitFieldSExtract(Id result_type, Id base, Id offset, Id count);
 
+    /// Extract a bit field from an object, without sign extension.
     Id OpBitFieldUExtract(Id result_type, Id base, Id offset, Id count);
 
+    /// Reverse the bits in an object.
     Id OpBitReverse(Id result_type, Id base);
 
+    /// Count the number of set bits in an object.
     Id OpBitCount(Id result_type, Id base);
 
     // Arithmetic
@@ -515,6 +565,7 @@ public:
     Id OpExtInst(Id result_type, Id set, std::uint32_t instruction,
                  const std::vector<Id>& operands);
 
+    /// Execute an instruction in an imported set of extended instructions.
     template <typename... Ts>
     Id OpExtInst(Id result_type, Id set, std::uint32_t instruction, Ts&&... operands) {
         return OpExtInst(result_type, set, instruction, {operands...});
@@ -523,148 +574,337 @@ public:
     /// Result is x if x >= 0; otherwise result is -x.
     Id OpFAbs(Id result_type, Id x);
 
+    /// Result is x if x >= 0; otherwise result is -x.
     Id OpSAbs(Id result_type, Id x);
 
+    /// Result is the value equal to the nearest whole number to x. The fraction 0.5 will round in a
+    /// direction chosen by the implementation, presumably the direction that is fastest.
     Id OpRound(Id result_type, Id x);
 
+    /// Result is the value equal to the nearest whole number to x. A fractional part of 0.5 will
+    /// round toward the nearest even whole number.
     Id OpRoundEven(Id result_type, Id x);
 
+    /// Result is the value equal to the nearest whole number to x whose absolute value is not
+    /// larger than the absolute value of x.
     Id OpTrunc(Id result_type, Id x);
 
+    /// Result is 1.0 if x > 0, 0.0 if x = 0, or -1.0 if x < 0.
     Id OpFSign(Id result_type, Id x);
 
+    /// Result is 1 if x > 0, 0 if x = 0, or -1 if x < 0, where x is interpreted as a signed
+    /// integer.
     Id OpSSign(Id result_type, Id x);
 
+    /// Result is the value equal to the nearest whole number that is less than or equal to x.
     Id OpFloor(Id result_type, Id x);
 
+    /// Result is the value equal to the nearest whole number that is greater than or equal to x.
     Id OpCeil(Id result_type, Id x);
 
+    /// Result is x - floor x.
     Id OpFract(Id result_type, Id x);
 
+    /// The standard trigonometric sine of x radians.
     Id OpSin(Id result_type, Id x);
 
+    /// The standard trigonometric cosine of x radians.
     Id OpCos(Id result_type, Id x);
 
+    /// Arc sine. Result is an angle, in radians, whose sine is x. The range of result values is
+    /// [-pi / 2, pi / 2]. Result is undefined if abs x > 1.
     Id OpAsin(Id result_type, Id x);
 
+    /// Arc cosine. Result is an angle, in radians, whose cosine is x. The range of result values is
+    /// [0, pi]. Result is undefined if abs x > 1.
     Id OpAcos(Id result_type, Id x);
 
+    /// Result is x raised to the y power. Result is undefined if x < 0. Result is undefined if x =
+    /// 0 and y <= 0.
     Id OpPow(Id result_type, Id x, Id y);
 
+    /// Result is the natural exponentiation of x.
     Id OpExp(Id result_type, Id x);
 
+    /// Result is the natural logarithm of x.  Result is undefined if x <= 0.
     Id OpLog(Id result_type, Id x);
 
+    /// Result is 2 raised to the x power.
     Id OpExp2(Id result_type, Id x);
 
+    /// Result is the base-2 logarithm of x. Result is undefined if x <= 0.
     Id OpLog2(Id result_type, Id x);
 
+    /// Result is the square root of x. Result is undefined if x < 0.
     Id OpSqrt(Id result_type, Id x);
 
+    /// Result is the reciprocal of sqrt x. Result is undefined if x <= 0.
     Id OpInverseSqrt(Id result_type, Id x);
 
+    /// Result is y if y < x; otherwise result is x. Which operand is the result is undefined if one
+    /// of the operands is a NaN.
     Id OpFMin(Id result_type, Id x, Id y);
 
+    /// Result is y if y < x; otherwise result is x, where x and y are interpreted as unsigned
+    /// integers.
     Id OpUMin(Id result_type, Id x, Id y);
 
+    /// Result is y if y < x; otherwise result is x, where x and y are interpreted as signed
+    /// integers.
     Id OpSMin(Id result_type, Id x, Id y);
 
+    /// Result is y if x < y; otherwise result is x. Which operand is the result is undefined if one
+    /// of the operands is a NaN.
     Id OpFMax(Id result_type, Id x, Id y);
 
+    /// Result is y if x < y; otherwise result is x, where x and y are interpreted as unsigned
+    /// integers.
     Id OpUMax(Id result_type, Id x, Id y);
 
+    /// Result is y if x < y; otherwise result is x, where x and y are interpreted as signed
+    /// integers.
     Id OpSMax(Id result_type, Id x, Id y);
 
-    Id OpFClamp(Id result_type, Id x, Id minVal, Id maxVal);
+    /// Result is min(max(x, minVal), maxVal). Result is undefined if minVal > maxVal.The semantics
+    /// used by min() and max() are those of FMin and FMax.
+    Id OpFClamp(Id result_type, Id x, Id min_val, Id max_val);
 
-    Id OpUClamp(Id result_type, Id x, Id minVal, Id maxVal);
+    /// Result is min(max(x, minVal), maxVal), where x, minVal and maxVal are interpreted as
+    /// unsigned integers. Result is undefined if minVal > maxVal.
+    Id OpUClamp(Id result_type, Id x, Id min_val, Id max_val);
 
-    Id OpSClamp(Id result_type, Id x, Id minVal, Id maxVal);
+    /// Result is min(max(x, minVal), maxVal), where x, minVal and maxVal are interpreted as signed
+    /// integers. Result is undefined if minVal > maxVal.
+    Id OpSClamp(Id result_type, Id x, Id min_val, Id max_val);
 
+    /// Computes a * b + c.
     Id OpFma(Id result_type, Id a, Id b, Id c);
 
+    /// Result is the unsigned integer obtained by converting the components of a two-component
+    /// floating-point vector to the 16-bit OpTypeFloat, and then packing these two 16-bit integers
+    /// into a 32-bit unsigned integer.
     Id OpPackHalf2x16(Id result_type, Id v);
 
+    /// Result is the two-component floating-point vector with components obtained by unpacking a
+    /// 32-bit unsigned integer into a pair of 16-bit values.
     Id OpUnpackHalf2x16(Id result_type, Id v);
 
-    Id OpFindILsb(Id result_type, Id Value);
+    /// Integer least-significant bit.
+    Id OpFindILsb(Id result_type, Id value);
 
-    Id OpFindSMsb(Id result_type, Id Value);
+    /// Signed-integer most-significant bit, with value interpreted as a signed integer.
+    Id OpFindSMsb(Id result_type, Id value);
 
-    Id OpFindUMsb(Id result_type, Id Value);
+    /// Unsigned-integer most-significant bit.
+    Id OpFindUMsb(Id result_type, Id value);
 
+    /// Result is the value of the input interpolant sampled at a location inside both the pixel and
+    /// the primitive being processed.
     Id OpInterpolateAtCentroid(Id result_type, Id interpolant);
 
+    /// Result is the value of the input interpolant variable at the location of sample number
+    /// sample.
     Id OpInterpolateAtSample(Id result_type, Id interpolant, Id sample);
 
+    /// Result is the value of the input interpolant variable sampled at an offset from the center
+    /// of the pixel specified by offset.
     Id OpInterpolateAtOffset(Id result_type, Id interpolant, Id offset);
 
     // Image
 
+    /// Create a sampled image, containing both a sampler and an image.
     Id OpSampledImage(Id result_type, Id image, Id sampler);
 
+    /// Sample an image with an implicit level of detail.
     Id OpImageSampleImplicitLod(Id result_type, Id sampled_image, Id coordinate,
                                 std::optional<spv::ImageOperandsMask> image_operands = {},
                                 const std::vector<Id>& operands = {});
 
+    /// Sample an image with an implicit level of detail.
+    template <typename... Ts>
+    Id OpImageSampleImplicitLod(Id result_type, Id sampled_image, Id coordinate,
+                                spv::ImageOperandsMask image_operands, Ts&&... operands) {
+        return OpImageSampleImplicitLod(result_type, sampled_image, coordinate, image_operands,
+                                        {operands...});
+    }
+
+    /// Sample an image using an explicit level of detail.
     Id OpImageSampleExplicitLod(Id result_type, Id sampled_image, Id coordinate,
                                 spv::ImageOperandsMask image_operands, Id lod,
                                 const std::vector<Id>& operands = {});
 
+    /// Sample an image using an explicit level of detail.
+    template <typename... Ts>
+    Id OpImageSampleExplicitLod(Id result_type, Id sampled_image, Id coordinate,
+                                spv::ImageOperandsMask image_operands, Id lod, Ts&&... operands) {
+        return OpImageSampleExplicitLod(result_type, sampled_image, coordinate, image_operands, lod,
+                                        {operands...});
+    }
+
+    /// Sample an image doing depth-comparison with an implicit level of detail.
     Id OpImageSampleDrefImplicitLod(Id result_type, Id sampled_image, Id coordinate, Id dref,
                                     std::optional<spv::ImageOperandsMask> image_operands = {},
                                     const std::vector<Id>& operands = {});
 
+    /// Sample an image doing depth-comparison with an implicit level of detail.
+    template <typename... Ts>
+    Id OpImageSampleDrefImplicitLod(Id result_type, Id sampled_image, Id coordinate, Id dref,
+                                    spv::ImageOperandsMask image_operands, Ts&&... operands) {
+        return OpImageSampleDrefImplicitLod(result_type, sampled_image, coordinate, dref,
+                                            image_operands, {operands...});
+    }
+
+    /// Sample an image doing depth-comparison using an explicit level of detail.
     Id OpImageSampleDrefExplicitLod(Id result_type, Id sampled_image, Id coordinate, Id dref,
                                     spv::ImageOperandsMask image_operands, Id lod,
                                     const std::vector<Id>& operands = {});
 
+    /// Sample an image doing depth-comparison using an explicit level of detail.
+    template <typename... Ts>
+    Id OpImageSampleDrefExplicitLod(Id result_type, Id sampled_image, Id coordinate, Id dref,
+                                    spv::ImageOperandsMask image_operands, Id lod,
+                                    Ts&&... operands) {
+        return OpImageSampleDrefExplicitLod(result_type, sampled_image, coordinate, dref,
+                                            image_operands, lod, {operands...});
+    }
+
+    /// Sample an image with with a project coordinate and an implicit level of detail.
     Id OpImageSampleProjImplicitLod(Id result_type, Id sampled_image, Id coordinate,
                                     std::optional<spv::ImageOperandsMask> image_operands = {},
                                     const std::vector<Id>& operands = {});
 
+    /// Sample an image with with a project coordinate and an implicit level of detail.
+    template <typename... Ts>
+    Id OpImageSampleProjImplicitLod(Id result_type, Id sampled_image, Id coordinate,
+                                    spv::ImageOperandsMask image_operands, Ts&&... operands) {
+        return OpImageSampleProjImplicitLod(result_type, sampled_image, coordinate, image_operands,
+                                            {operands...});
+    }
+
+    /// Sample an image with a project coordinate using an explicit level of detail.
     Id OpImageSampleProjExplicitLod(Id result_type, Id sampled_image, Id coordinate,
                                     spv::ImageOperandsMask image_operands, Id lod,
                                     const std::vector<Id>& operands = {});
 
+    /// Sample an image with a project coordinate using an explicit level of detail.
+    template <typename... Ts>
+    Id OpImageSampleProjExplicitLod(Id result_type, Id sampled_image, Id coordinate,
+                                    spv::ImageOperandsMask image_operands, Id lod,
+                                    Ts&&... operands) {
+        return OpImageSampleProjExplicitLod(result_type, sampled_image, coordinate, image_operands,
+                                            lod, {operands...});
+    }
+
+    /// Sample an image with a project coordinate, doing depth-comparison, with an implicit level of
+    /// detail.
     Id OpImageSampleProjDrefImplicitLod(Id result_type, Id sampled_image, Id coordinate, Id dref,
                                         std::optional<spv::ImageOperandsMask> image_operands = {},
                                         const std::vector<Id>& operands = {});
 
+    /// Sample an image with a project coordinate, doing depth-comparison, with an implicit level of
+    /// detail.
+    template <typename... Ts>
+    Id OpImageSampleProjDrefImplicitLod(Id result_type, Id sampled_image, Id coordinate, Id dref,
+                                        spv::ImageOperandsMask image_operands, Ts&&... operands) {
+        return OpImageSampleProjDrefImplicitLod(result_type, sampled_image, coordinate, dref,
+                                                image_operands, {operands...});
+    }
+
+    /// Sample an image with a project coordinate, doing depth-comparison, using an explicit level
+    /// of detail.
     Id OpImageSampleProjDrefExplicitLod(Id result_type, Id sampled_image, Id coordinate, Id dref,
                                         spv::ImageOperandsMask image_operands, Id lod,
                                         const std::vector<Id>& operands = {});
 
+    /// Sample an image with a project coordinate, doing depth-comparison, using an explicit level
+    /// of detail.
+    template <typename... Ts>
+    Id OpImageSampleProjDrefExplicitLod(Id result_type, Id sampled_image, Id coordinate, Id dref,
+                                        spv::ImageOperandsMask image_operands, Id lod,
+                                        Ts&&... operands) {
+        return OpImageSampleProjDrefExplicitLod(result_type, sampled_image, coordinate, dref,
+                                                image_operands, lod, {operands...});
+    }
+
+    /// Fetch a single texel from an image whose Sampled operand is 1.
     Id OpImageFetch(Id result_type, Id sampled_image, Id coordinate,
                     std::optional<spv::ImageOperandsMask> image_operands = {},
                     const std::vector<Id>& operands = {});
 
+    /// Fetch a single texel from an image whose Sampled operand is 1.
+    template <typename... Ts>
+    Id OpImageFetch(Id result_type, Id sampled_image, Id coordinate,
+                    spv::ImageOperandsMask image_operands, Ts&&... operands) {
+        return OpImageFetch(result_type, sampled_image, coordinate, image_operands, {operands...});
+    }
+
+    /// Gathers the requested component from four texels.
     Id OpImageGather(Id result_type, Id sampled_image, Id coordinate, Id component,
                      std::optional<spv::ImageOperandsMask> image_operands = {},
                      const std::vector<Id>& operands = {});
 
+    /// Gathers the requested component from four texels.
+    template <typename... Ts>
+    Id OpImageGather(Id result_type, Id sampled_image, Id coordinate, Id component,
+                     spv::ImageOperandsMask image_operands, Ts&&... operands) {
+        return OpImageGather(result_type, sampled_image, coordinate, component, image_operands,
+                             {operands...});
+    }
+
+    /// Gathers the requested depth-comparison from four texels.
     Id OpImageDrefGather(Id result_type, Id sampled_image, Id coordinate, Id dref,
                          std::optional<spv::ImageOperandsMask> image_operands = {},
                          const std::vector<Id>& operands = {});
 
+    /// Gathers the requested depth-comparison from four texels.
+    template <typename... Ts>
+    Id OpImageDrefGather(Id result_type, Id sampled_image, Id coordinate, Id dref,
+                         spv::ImageOperandsMask image_operands, Ts&&... operands) {
+        return OpImageDrefGather(result_type, sampled_image, coordinate, dref, image_operands,
+                                 {operands...});
+    }
+
+    /// Read a texel from an image without a sampler.
     Id OpImageRead(Id result_type, Id sampled_image, Id coordinate,
                    std::optional<spv::ImageOperandsMask> image_operands = {},
                    const std::vector<Id>& operands = {});
 
+    /// Read a texel from an image without a sampler.
+    template <typename... Ts>
+    Id OpImageRead(Id result_type, Id sampled_image, Id coordinate,
+                   spv::ImageOperandsMask image_operands, Ts&&... operands) {
+        return OpImageRead(result_type, sampled_image, coordinate, image_operands, {operands...});
+    }
+
+    /// Write a texel to an image without a sampler.
     Id OpImageWrite(Id image, Id coordinate, Id texel,
                     std::optional<spv::ImageOperandsMask> image_operands = {},
                     const std::vector<Id>& operands = {});
 
+    /// Write a texel to an image without a sampler.
+    template <typename... Ts>
+    Id OpImageWrite(Id image, Id coordinate, Id texel, spv::ImageOperandsMask image_operands,
+                    Ts&&... operands) {
+        return OpImageWrite(image, coordinate, texel, image_operands, {operands...});
+    }
+
+    /// Extract the image from a sampled image.
     Id OpImage(Id result_type, Id sampled_image);
 
+    /// Query the dimensions of Image for mipmap level for Level of Detail.
     Id OpImageQuerySizeLod(Id result_type, Id image, Id level_of_detail);
 
+    /// Query the dimensions of Image, with no level of detail.
     Id OpImageQuerySize(Id result_type, Id image);
 
+    /// Query the mipmap level and the level of detail for a hypothetical sampling of Image at
+    /// Coordinate using an implicit level of detail.
     Id OpImageQueryLod(Id result_type, Id image, Id coordinate);
 
+    /// Query the number of mipmap levels accessible through Image.
     Id OpImageQueryLevels(Id result_type, Id image);
 
+    /// Query the number of samples available per texel fetch in a multisample image.
     Id OpImageQuerySamples(Id result_type, Id image);
 
 private:
