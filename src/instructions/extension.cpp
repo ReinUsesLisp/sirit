@@ -22,17 +22,17 @@ Id Module::OpExtInst(Id result_type, Id set, u32 instruction, const std::vector<
 
 #define DEFINE_UNARY(funcname, opcode)                                                             \
     Id Module::funcname(Id result_type, Id operand) {                                              \
-        return OpExtInst(result_type, GetGLSLstd450(), opcode, {operand});                         \
+        return OpExtInst(result_type, GetGLSLstd450(), opcode, operand);                           \
     }
 
 #define DEFINE_BINARY(funcname, opcode)                                                            \
     Id Module::funcname(Id result_type, Id operand_1, Id operand_2) {                              \
-        return OpExtInst(result_type, GetGLSLstd450(), opcode, {operand_1, operand_2});            \
+        return OpExtInst(result_type, GetGLSLstd450(), opcode, operand_1, operand_2);              \
     }
 
 #define DEFINE_TRINARY(funcname, opcode)                                                           \
     Id Module::funcname(Id result_type, Id operand_1, Id operand_2, Id operand_3) {                \
-        return OpExtInst(result_type, GetGLSLstd450(), opcode, {operand_1, operand_2, operand_3}); \
+        return OpExtInst(result_type, GetGLSLstd450(), opcode, operand_1, operand_2, operand_3);   \
     }
 
 DEFINE_UNARY(OpFAbs, GLSLstd450FAbs)

@@ -9,8 +9,8 @@
 #include <cstdint>
 #include <memory>
 #include <optional>
-#include <set>
 #include <string>
+#include <unordered_set>
 #include <variant>
 #include <vector>
 #include <spirv/unified1/spirv.hpp11>
@@ -52,9 +52,22 @@ public:
     void AddEntryPoint(spv::ExecutionModel execution_model, Id entry_point, const std::string& name,
                        const std::vector<Id>& interfaces = {});
 
+    /// Adds an entry point.
+    template <typename... Ts>
+    void AddEntryPoint(spv::ExecutionModel execution_model, Id entry_point, const std::string& name,
+                       Ts&&... interfaces) {
+        AddEntryPoint(execution_model, entry_point, name, {interfaces...});
+    }
+
     /// Declare an execution mode for an entry point.
     void AddExecutionMode(Id entry_point, spv::ExecutionMode mode,
                           const std::vector<Literal>& literals = {});
+
+    /// Declare an execution mode for an entry point.
+    template <typename... Ts>
+    void AddExecutionMode(Id entry_point, spv::ExecutionMode mode, Ts&&... literals) {
+        AddExecutionMode(entry_point, mode, {literals...});
+    }
 
     /**
      * Adds an instruction to module's code
@@ -111,6 +124,12 @@ public:
     /// Returns type struct.
     Id OpTypeStruct(const std::vector<Id>& members = {});
 
+    /// Returns type struct.
+    template <typename... Ts>
+    Id OpTypeStruct(Ts&&... members) {
+        return OpTypeStruct({members...});
+    }
+
     /// Returns type opaque.
     Id OpTypeOpaque(const std::string& name);
 
@@ -119,6 +138,12 @@ public:
 
     /// Returns type function.
     Id OpTypeFunction(Id return_type, const std::vector<Id>& arguments = {});
+
+    /// Returns type function.
+    template <typename... Ts>
+    Id OpTypeFunction(Id return_type, Ts&&... arguments) {
+        return OpTypeFunction(return_type, {arguments...});
+    }
 
     /// Returns type event.
     Id OpTypeEvent();
@@ -149,6 +174,12 @@ public:
     /// Returns a numeric scalar constant.
     Id ConstantComposite(Id result_type, const std::vector<Id>& constituents);
 
+    /// Returns a numeric scalar constant.
+    template <typename... Ts>
+    Id ConstantComposite(Id result_type, Ts&&... constituents) {
+        return ConstantComposite(result_type, {constituents...});
+    }
+
     /// Returns a sampler constant.
     Id ConstantSampler(Id result_type, spv::SamplerAddressingMode addressing_mode, bool normalized,
                        spv::SamplerFilterMode filter_mode);
@@ -167,11 +198,24 @@ public:
     /// Call a function.
     Id OpFunctionCall(Id result_type, Id function, const std::vector<Id>& arguments = {});
 
+    /// Call a function.
+    template <typename... Ts>
+    Id OpFunctionCall(Id result_type, Id function, Ts&&... arguments) {
+        return OpFunctionCall(result_type, function, {arguments...});
+    }
+
     // Flow
 
     /// Declare a structured loop.
     Id OpLoopMerge(Id merge_block, Id continue_target, spv::LoopControlMask loop_control,
                    const std::vector<Id>& literals = {});
+
+    /// Declare a structured loop.
+    template <typename... Ts>
+    Id OpLoopMerge(Id merge_block, Id continue_target, spv::LoopControlMask loop_control,
+                   Ts&&... literals) {
+        return OpLoopMerge(merge_block, continue_target, loop_control, {literals...});
+    }
 
     /// Declare a structured selection.
     Id OpSelectionMerge(Id merge_block, spv::SelectionControlMask selection_control);
@@ -232,28 +276,62 @@ public:
     /// Store through a pointer.
     Id OpStore(Id pointer, Id object, std::optional<spv::MemoryAccessMask> memory_access = {});
 
-    /// Create a pointer into a composite object that can be used with OpLoad
-    /// and OpStore.
+    /// Create a pointer into a composite object that can be used with OpLoad and OpStore.
     Id OpAccessChain(Id result_type, Id base, const std::vector<Id>& indexes = {});
+
+    /// Create a pointer into a composite object that can be used with OpLoad and OpStore.
+    template <typename... Ts>
+    Id OpAccessChain(Id result_type, Id base, Ts&&... indexes) {
+        return OpAccessChain(result_type, base, {indexes...});
+    }
 
     /// Make a copy of a composite object, while modifying one part of it.
     Id OpCompositeInsert(Id result_type, Id object, Id composite,
                          const std::vector<Literal>& indexes = {});
 
+    /// Make a copy of a composite object, while modifying one part of it.
+    template <typename... Ts>
+    Id OpCompositeInsert(Id result_type, Id object, Id composite, Ts&&... indexes) {
+        return OpCompositeInsert(result_type, object, composite, {indexes...});
+    }
+
     /// Extract a part of a composite object.
     Id OpCompositeExtract(Id result_type, Id composite, const std::vector<Literal>& indexes = {});
 
-    /// Construct a new composite object from a set of constituent objects that
-    /// will fully form it.
+    /// Extract a part of a composite object.
+    template <typename... Ts>
+    Id OpCompositeExtract(Id result_type, Id composite, Ts&&... indexes) {
+        return OpCompositeExtract(result_type, composite, {indexes...});
+    }
+
+    /// Construct a new composite object from a set of constituent objects that will fully form it.
     Id OpCompositeConstruct(Id result_type, const std::vector<Id>& ids);
+
+    /// Construct a new composite object from a set of constituent objects that will fully form it.
+    template <typename... Ts>
+    Id OpCompositeConstruct(Id result_type, Ts&&... ids) {
+        return OpCompositeConstruct(result_type, {ids...});
+    }
 
     // Annotation
 
     /// Add a decoration to target.
     Id Decorate(Id target, spv::Decoration decoration, const std::vector<Literal>& literals = {});
 
+    /// Add a decoration to target.
+    template <typename... Ts>
+    Id Decorate(Id target, spv::Decoration decoration, Ts&&... literals) {
+        return Decorate(target, decoration, {literals...});
+    }
+
     Id MemberDecorate(Id structure_type, Literal member, spv::Decoration decoration,
                       const std::vector<Literal>& literals = {});
+
+    template <typename... Ts>
+    Id MemberDecorate(Id structure_type, Literal member, spv::Decoration decoration,
+                      Ts&&... literals) {
+        return MemberDecorate(structure_type, member, decoration, {literals...});
+    }
 
     // Misc
 
@@ -437,6 +515,11 @@ public:
     Id OpExtInst(Id result_type, Id set, std::uint32_t instruction,
                  const std::vector<Id>& operands);
 
+    template <typename... Ts>
+    Id OpExtInst(Id result_type, Id set, std::uint32_t instruction, Ts&&... operands) {
+        return OpExtInst(result_type, set, instruction, {operands...});
+    }
+
     /// Result is x if x >= 0; otherwise result is -x.
     Id OpFAbs(Id result_type, Id x);
 
@@ -595,14 +678,13 @@ private:
 
     Id GetGLSLstd450();
 
-    const std::uint32_t version;
-
+    std::uint32_t version{};
     std::uint32_t bound{1};
 
-    std::set<std::string> extensions;
-    std::set<spv::Capability> capabilities;
+    std::unordered_set<std::string> extensions;
+    std::unordered_set<spv::Capability> capabilities;
+    std::unordered_set<std::unique_ptr<Op>> ext_inst_import;
     std::unique_ptr<Op> glsl_std_450;
-    std::set<std::unique_ptr<Op>> ext_inst_import;
 
     spv::AddressingModel addressing_model{spv::AddressingModel::Logical};
     spv::MemoryModel memory_model{spv::MemoryModel::GLSL450};
