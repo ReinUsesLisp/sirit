@@ -99,6 +99,7 @@ void Module::AddExecutionMode(Id entry_point, spv::ExecutionMode mode,
 }
 
 Id Module::Emit(Id op) {
+    assert(op != nullptr);
     code.push_back(op);
     return op;
 }
