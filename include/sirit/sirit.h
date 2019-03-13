@@ -87,78 +87,78 @@ public:
     // Types
 
     /// Returns type void.
-    Id OpTypeVoid();
+    Id TypeVoid();
 
     /// Returns type bool.
-    Id OpTypeBool();
+    Id TypeBool();
 
     /// Returns type integer.
-    Id OpTypeInt(int width, bool is_signed);
+    Id TypeInt(int width, bool is_signed);
 
     /// Returns type float.
-    Id OpTypeFloat(int width);
+    Id TypeFloat(int width);
 
     /// Returns type vector.
-    Id OpTypeVector(Id component_type, int component_count);
+    Id TypeVector(Id component_type, int component_count);
 
     /// Returns type matrix.
-    Id OpTypeMatrix(Id column_type, int column_count);
+    Id TypeMatrix(Id column_type, int column_count);
 
     /// Returns type image.
-    Id OpTypeImage(Id sampled_type, spv::Dim dim, int depth, bool arrayed, bool ms, int sampled,
-                   spv::ImageFormat image_format,
-                   std::optional<spv::AccessQualifier> access_qualifier = {});
+    Id TypeImage(Id sampled_type, spv::Dim dim, int depth, bool arrayed, bool ms, int sampled,
+                 spv::ImageFormat image_format,
+                 std::optional<spv::AccessQualifier> access_qualifier = {});
 
     /// Returns type sampler.
-    Id OpTypeSampler();
+    Id TypeSampler();
 
     /// Returns type sampled image.
-    Id OpTypeSampledImage(Id image_type);
+    Id TypeSampledImage(Id image_type);
 
     /// Returns type array.
-    Id OpTypeArray(Id element_type, Id length);
+    Id TypeArray(Id element_type, Id length);
 
     /// Returns type runtime array.
-    Id OpTypeRuntimeArray(Id element_type);
+    Id TypeRuntimeArray(Id element_type);
 
     /// Returns type struct.
-    Id OpTypeStruct(const std::vector<Id>& members = {});
+    Id TypeStruct(const std::vector<Id>& members = {});
 
     /// Returns type struct.
     template <typename... Ts>
-    Id OpTypeStruct(Ts&&... members) {
-        return OpTypeStruct({members...});
+    Id TypeStruct(Ts&&... members) {
+        return TypeStruct({members...});
     }
 
     /// Returns type opaque.
-    Id OpTypeOpaque(const std::string& name);
+    Id TypeOpaque(const std::string& name);
 
     /// Returns type pointer.
-    Id OpTypePointer(spv::StorageClass storage_class, Id type);
+    Id TypePointer(spv::StorageClass storage_class, Id type);
 
     /// Returns type function.
-    Id OpTypeFunction(Id return_type, const std::vector<Id>& arguments = {});
+    Id TypeFunction(Id return_type, const std::vector<Id>& arguments = {});
 
     /// Returns type function.
     template <typename... Ts>
-    Id OpTypeFunction(Id return_type, Ts&&... arguments) {
+    Id TypeFunction(Id return_type, Ts&&... arguments) {
         return OpTypeFunction(return_type, {arguments...});
     }
 
     /// Returns type event.
-    Id OpTypeEvent();
+    Id TypeEvent();
 
     /// Returns type device event.
-    Id OpTypeDeviceEvent();
+    Id TypeDeviceEvent();
 
     /// Returns type reserve id.
-    Id OpTypeReserveId();
+    Id TypeReserveId();
 
     /// Returns type queue.
-    Id OpTypeQueue();
+    Id TypeQueue();
 
     /// Returns type pipe.
-    Id OpTypePipe(spv::AccessQualifier access_qualifier);
+    Id TypePipe(spv::AccessQualifier access_qualifier);
 
     // Constant
 

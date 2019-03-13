@@ -34,7 +34,7 @@ public:
         AddCapability(spv::Capability::Shader);
         SetMemoryModel(spv::AddressingModel::Logical, spv::MemoryModel::GLSL450);
         
-        auto main_type{OpTypeFunction(TypeVoid())};
+        auto main_type{TypeFunction(TypeVoid())};
         auto main_func{Emit(OpFunction(TypeVoid(), spv::FunctionControlMask::MaskNone, main_type))};
         Emit(OpLabel());
         Emit(OpReturn());
