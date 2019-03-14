@@ -133,7 +133,6 @@ Id Module::AddDeclaration(std::unique_ptr<Op> op) {
 }
 
 void Module::AddAnnotation(std::unique_ptr<Op> op) {
-    const auto id = op.get();
     annotations.push_back(std::move(op));
 }
 
