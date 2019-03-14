@@ -38,7 +38,7 @@ public:
 
     void Add(u32 integer);
 
-    void Add(const std::string& string);
+    void Add(std::string string);
 
     void Add(const std::vector<Id>& ids);
 
