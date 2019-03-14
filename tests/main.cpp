@@ -19,19 +19,19 @@ public:
         AddCapability(spv::Capability::Shader);
         SetMemoryModel(spv::AddressingModel::Logical, spv::MemoryModel::GLSL450);
 
-        const auto t_void = Name(OpTypeVoid(), "void");
-        const auto t_uint = Name(OpTypeInt(32, false), "uint");
-        const auto t_float = Name(OpTypeFloat(32), "float");
+        const auto t_void = Name(TypeVoid(), "void");
+        const auto t_uint = Name(TypeInt(32, false), "uint");
+        const auto t_float = Name(TypeFloat(32), "float");
 
-        const auto float4 = Name(OpTypeVector(t_float, 4), "float4");
-        const auto in_float = Name(OpTypePointer(spv::StorageClass::Input, t_float), "in_float");
-        const auto in_float4 = Name(OpTypePointer(spv::StorageClass::Input, float4), "in_float4");
+        const auto float4 = Name(TypeVector(t_float, 4), "float4");
+        const auto in_float = Name(TypePointer(spv::StorageClass::Input, t_float), "in_float");
+        const auto in_float4 = Name(TypePointer(spv::StorageClass::Input, float4), "in_float4");
         const auto out_float4 =
-            Name(OpTypePointer(spv::StorageClass::Output, float4), "out_float4");
+            Name(TypePointer(spv::StorageClass::Output, float4), "out_float4");
 
-        const auto gl_per_vertex = Name(OpTypeStruct(float4), "gl_PerVertex");
+        const auto gl_per_vertex = Name(TypeStruct(float4), "gl_PerVertex");
         const auto gl_per_vertex_ptr =
-            Name(OpTypePointer(spv::StorageClass::Output, gl_per_vertex), "out_gl_PerVertex");
+            Name(TypePointer(spv::StorageClass::Output, gl_per_vertex), "out_gl_PerVertex");
 
         const auto in_pos = Name(OpVariable(in_float4, spv::StorageClass::Input), "in_pos");
         const auto per_vertex =
@@ -47,7 +47,7 @@ public:
         AddGlobalVariable(per_vertex);
 
         const auto main_func = Emit(
-            Name(OpFunction(t_void, spv::FunctionControlMask::MaskNone, OpTypeFunction(t_void)),
+            Name(OpFunction(t_void, spv::FunctionControlMask::MaskNone, TypeFunction(t_void)),
                  "main"));
         Emit(OpLabel());
 
