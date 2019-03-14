@@ -24,21 +24,18 @@ void Stream::Write(std::string string) {
 }
 
 void Stream::Write(u64 value) {
-    const auto mem{reinterpret_cast<u32*>(&value)};
-    Write(mem[0]);
-    Write(mem[1]);
+    const auto* const mem = reinterpret_cast<const u8*>(&value);
+    bytes.insert(bytes.end(), mem, mem + sizeof(u64));
 }
 
 void Stream::Write(u32 value) {
-    const auto mem{reinterpret_cast<u16*>(&value)};
-    Write(mem[0]);
-    Write(mem[1]);
+    const auto* const mem = reinterpret_cast<const u8*>(&value);
+    bytes.insert(bytes.end(), mem, mem + sizeof(u32));
 }
 
 void Stream::Write(u16 value) {
-    const auto mem{reinterpret_cast<u8*>(&value)};
-    Write(mem[0]);
-    Write(mem[1]);
+    const auto* const mem{reinterpret_cast<const u8*>(&value)};
+    bytes.insert(bytes.end(), mem, mem + sizeof(u16));
 }
 
 void Stream::Write(u8 value) {
