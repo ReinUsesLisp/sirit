@@ -115,9 +115,7 @@ void Op::Add(const std::string& string) {
 }
 
 void Op::Add(const std::vector<Id>& ids) {
-    for (Id op : ids) {
-        Add(op);
-    }
+    operands.insert(operands.end(), ids.begin(), ids.end());
 }
 
 u16 Op::WordCount() const {
