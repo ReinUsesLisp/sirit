@@ -15,12 +15,12 @@ namespace Sirit {
 class LiteralString : public Operand {
 public:
     LiteralString(const std::string& string);
-    ~LiteralString();
+    ~LiteralString() override;
 
-    virtual void Fetch(Stream& stream) const;
-    virtual u16 GetWordCount() const;
+    void Fetch(Stream& stream) const override;
+    u16 GetWordCount() const override;
 
-    virtual bool operator==(const Operand& other) const;
+    bool operator==(const Operand& other) const override;
 
 private:
     const std::string string;

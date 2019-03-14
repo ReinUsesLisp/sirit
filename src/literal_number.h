@@ -16,12 +16,12 @@ namespace Sirit {
 class LiteralNumber : public Operand {
 public:
     LiteralNumber(std::type_index type);
-    ~LiteralNumber();
+    ~LiteralNumber() override;
 
-    virtual void Fetch(Stream& stream) const;
-    virtual u16 GetWordCount() const;
+    void Fetch(Stream& stream) const override;
+    u16 GetWordCount() const override;
 
-    virtual bool operator==(const Operand& other) const;
+    bool operator==(const Operand& other) const override;
 
     template <typename T>
     static LiteralNumber* Create(T value) {
