@@ -40,7 +40,7 @@ public:
     std::vector<std::uint8_t> Assemble() const;
 
     /// Adds a SPIR-V extension.
-    void AddExtension(const std::string& extension_name);
+    void AddExtension(std::string extension_name);
 
     /// Adds a module capability.
     void AddCapability(spv::Capability capability);
@@ -49,14 +49,14 @@ public:
     void SetMemoryModel(spv::AddressingModel addressing_model, spv::MemoryModel memory_model);
 
     /// Adds an entry point.
-    void AddEntryPoint(spv::ExecutionModel execution_model, Id entry_point, const std::string& name,
+    void AddEntryPoint(spv::ExecutionModel execution_model, Id entry_point, std::string name,
                        const std::vector<Id>& interfaces = {});
 
     /// Adds an entry point.
     template <typename... Ts>
-    void AddEntryPoint(spv::ExecutionModel execution_model, Id entry_point, const std::string& name,
+    void AddEntryPoint(spv::ExecutionModel execution_model, Id entry_point, std::string name,
                        Ts&&... interfaces) {
-        AddEntryPoint(execution_model, entry_point, name, {interfaces...});
+        AddEntryPoint(execution_model, std::move(entry_point), name, {interfaces...});
     }
 
     /// Declare an execution mode for an entry point.
@@ -131,7 +131,7 @@ public:
     }
 
     /// Returns type opaque.
-    Id TypeOpaque(const std::string& name);
+    Id TypeOpaque(std::string name);
 
     /// Returns type pointer.
     Id TypePointer(spv::StorageClass storage_class, Id type);
@@ -224,8 +224,8 @@ public:
     Id OpLabel();
 
     /// The block label instruction: Any reference to a block is through this ref.
-    Id OpLabel(const std::string& label_name) {
-        return Name(OpLabel(), label_name);
+    Id OpLabel(std::string label_name) {
+        return Name(OpLabel(), std::move(label_name));
     }
 
     /// Unconditional jump to label.
@@ -253,14 +253,14 @@ public:
 
     /// Assign a name string to a reference.
     /// @return target
-    Id Name(Id target, const std::string& name);
+    Id Name(Id target, std::string name);
 
     /// Assign a name string to a member of a structure type.
     /// @return type
-    Id MemberName(Id type, std::uint32_t member, const std::string& name);
+    Id MemberName(Id type, std::uint32_t member, std::string name);
 
     /// Assign a Result <id> to a string for use by other debug instructions.
-    Id String(const std::string& string);
+    Id String(std::string string);
 
     /// Add source-level location information
     Id OpLine(Id file, Literal line, Literal column);

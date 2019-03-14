@@ -11,26 +11,26 @@
 
 namespace Sirit {
 
-Id Module::Name(Id target, const std::string& name) {
+Id Module::Name(Id target, std::string name) {
     auto op{std::make_unique<Op>(spv::Op::OpName)};
     op->Add(target);
-    op->Add(name);
+    op->Add(std::move(name));
     debug.push_back(std::move(op));
     return target;
 }
 
-Id Module::MemberName(Id type, u32 member, const std::string& name) {
+Id Module::MemberName(Id type, u32 member, std::string name) {
     auto op{std::make_unique<Op>(spv::Op::OpMemberName)};
     op->Add(type);
     op->Add(member);
-    op->Add(name);
+    op->Add(std::move(name));
     debug.push_back(std::move(op));
     return type;
 }
 
-Id Module::String(const std::string& string) {
+Id Module::String(std::string string) {
     auto op{std::make_unique<Op>(spv::Op::OpString, bound++)};
-    op->Add(string);
+    op->Add(std::move(string));
     const auto id = op.get();
     debug.push_back(std::move(op));
     return id;

@@ -96,9 +96,9 @@ Id Module::TypeStruct(const std::vector<Id>& members) {
     return AddDeclaration(std::move(op));
 }
 
-Id Module::TypeOpaque(const std::string& name) {
+Id Module::TypeOpaque(std::string name) {
     auto op{std::make_unique<Op>(spv::Op::OpTypeOpaque, bound)};
-    op->Add(name);
+    op->Add(std::move(name));
     return AddDeclaration(std::move(op));
 }
 

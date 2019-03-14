@@ -66,8 +66,8 @@ std::vector<u8> Module::Assemble() const {
     return bytes;
 }
 
-void Module::AddExtension(const std::string& extension_name) {
-    extensions.insert(extension_name);
+void Module::AddExtension(std::string extension_name) {
+    extensions.insert(std::move(extension_name));
 }
 
 void Module::AddCapability(spv::Capability capability) {
@@ -80,11 +80,11 @@ void Module::SetMemoryModel(spv::AddressingModel addressing_model, spv::MemoryMo
 }
 
 void Module::AddEntryPoint(spv::ExecutionModel execution_model, Id entry_point,
-                           const std::string& name, const std::vector<Id>& interfaces) {
+                           std::string name, const std::vector<Id>& interfaces) {
     auto op{std::make_unique<Op>(spv::Op::OpEntryPoint)};
     op->Add(static_cast<u32>(execution_model));
     op->Add(entry_point);
-    op->Add(name);
+    op->Add(std::move(name));
     op->Add(interfaces);
     entry_points.push_back(std::move(op));
 }

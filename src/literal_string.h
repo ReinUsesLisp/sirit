@@ -14,7 +14,7 @@ namespace Sirit {
 
 class LiteralString : public Operand {
 public:
-    LiteralString(const std::string& string);
+    LiteralString(std::string string);
     ~LiteralString() override;
 
     void Fetch(Stream& stream) const override;

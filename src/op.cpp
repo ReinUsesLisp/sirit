@@ -110,8 +110,8 @@ void Op::Add(u32 integer) {
     Sink(LiteralNumber::Create<u32>(integer));
 }
 
-void Op::Add(const std::string& string) {
-    Sink(new LiteralString(string));
+void Op::Add(std::string string) {
+    Sink(new LiteralString(std::move(string)));
 }
 
 void Op::Add(const std::vector<Id>& ids) {
