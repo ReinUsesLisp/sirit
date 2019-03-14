@@ -46,7 +46,7 @@ public:
     void AddCapability(spv::Capability capability);
 
     /// Sets module memory model.
-    void SetMemoryModel(spv::AddressingModel addressing_model, spv::MemoryModel memory_model);
+    void SetMemoryModel(spv::AddressingModel addressing_model_, spv::MemoryModel memory_model_);
 
     /// Adds an entry point.
     void AddEntryPoint(spv::ExecutionModel execution_model, Id entry_point, std::string name,

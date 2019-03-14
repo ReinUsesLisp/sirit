@@ -67,8 +67,8 @@ void Op::Sink(Operand* operand) {
     operand_store.push_back(std::unique_ptr<Operand>(operand));
 }
 
-void Op::Sink(const std::vector<Operand*>& operands) {
-    for (auto* operand : operands) {
+void Op::Sink(const std::vector<Operand*>& operands_) {
+    for (auto* operand : operands_) {
         Sink(operand);
     }
 }
