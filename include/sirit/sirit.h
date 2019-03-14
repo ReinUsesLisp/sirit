@@ -224,7 +224,7 @@ public:
     Id OpLabel();
 
     /// The block label instruction: Any reference to a block is through this ref.
-    Id OpLabel(const std::string label_name) {
+    Id OpLabel(const std::string& label_name) {
         return Name(OpLabel(), label_name);
     }
 
