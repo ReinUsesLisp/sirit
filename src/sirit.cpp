@@ -74,9 +74,9 @@ void Module::AddCapability(spv::Capability capability) {
     capabilities.insert(capability);
 }
 
-void Module::SetMemoryModel(spv::AddressingModel addressing_model, spv::MemoryModel memory_model) {
-    this->addressing_model = addressing_model;
-    this->memory_model = memory_model;
+void Module::SetMemoryModel(spv::AddressingModel addressing_model_, spv::MemoryModel memory_model_) {
+    this->addressing_model = addressing_model_;
+    this->memory_model = memory_model_;
 }
 
 void Module::AddEntryPoint(spv::ExecutionModel execution_model, Id entry_point,

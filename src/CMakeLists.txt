@@ -27,6 +27,9 @@ add_library(sirit
     instructions/extension.cpp
     instructions/image.cpp
 )
+
+target_compile_options(sirit PRIVATE ${SIRIT_CXX_FLAGS})
+
 target_include_directories(sirit
                            PUBLIC ../include
                            PRIVATE . ${SPIRV-Headers_SOURCE_DIR}/include

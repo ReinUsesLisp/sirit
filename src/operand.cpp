@@ -13,7 +13,7 @@ Operand::Operand() = default;
 
 Operand::~Operand() = default;
 
-void Operand::Fetch(Stream& stream) const {
+void Operand::Fetch([[maybe_unused]] Stream& stream) const {
     assert(!"Fetching unimplemented operand");
 }
 
@@ -22,7 +22,7 @@ u16 Operand::GetWordCount() const {
     return 0;
 }
 
-bool Operand::operator==(const Operand& other) const {
+bool Operand::operator==([[maybe_unused]] const Operand& other) const {
     return false;
 }
 

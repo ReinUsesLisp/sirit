@@ -28,7 +28,7 @@ public:
 
     void Sink(Operand* operand);
 
-    void Sink(const std::vector<Operand*>& operands);
+    void Sink(const std::vector<Operand*>& operands_);
 
     void Add(const Literal& literal);
 
