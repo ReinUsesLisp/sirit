@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <string>
+#include <string_view>
 #include <vector>
 #include "common_types.h"
 
@@ -17,7 +17,7 @@ public:
     explicit Stream(std::vector<u8>& bytes);
     ~Stream();
 
-    void Write(std::string string);
+    void Write(std::string_view string);
 
     void Write(u64 value);
 

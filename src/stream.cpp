@@ -12,9 +12,9 @@ Stream::Stream(std::vector<u8>& bytes) : bytes(bytes) {}
 
 Stream::~Stream() = default;
 
-void Stream::Write(std::string string) {
+void Stream::Write(std::string_view string) {
     const auto size{string.size()};
-    const auto data{reinterpret_cast<u8*>(string.data())};
+    const auto data{reinterpret_cast<const u8*>(string.data())};
     for (std::size_t i = 0; i < size; i++) {
         Write(data[i]);
     }
