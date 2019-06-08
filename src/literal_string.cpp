@@ -4,6 +4,7 @@
  * Lesser General Public License version 3 or any later version.
  */
 
+#include <functional>
 #include <string>
 #include "common_types.h"
 #include "literal_string.h"
@@ -34,6 +35,10 @@ bool LiteralString::operator==(const Operand& other) const {
         return dynamic_cast<const LiteralString&>(other).string == string;
     }
     return false;
+}
+
+std::size_t LiteralString::Hash() const {
+    return Operand::Hash() ^ std::hash<std::string>{}(string);
 }
 
 } // namespace Sirit

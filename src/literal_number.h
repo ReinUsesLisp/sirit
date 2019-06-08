@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <cstddef>
 #include <cstring>
 #include <typeindex>
 #include "operand.h"
@@ -22,6 +23,8 @@ public:
     u16 GetWordCount() const override;
 
     bool operator==(const Operand& other) const override;
+
+    std::size_t Hash() const override;
 
     template <typename T>
     static LiteralNumber* Create(T value) {

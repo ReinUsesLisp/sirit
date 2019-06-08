@@ -30,6 +30,10 @@ bool Operand::operator!=(const Operand& other) const {
     return !(*this == other);
 }
 
+std::size_t Operand::Hash() const {
+    return static_cast<std::size_t>(operand_type) << 30;
+}
+
 OperandType Operand::GetType() const {
     return operand_type;
 }

@@ -35,4 +35,8 @@ bool LiteralNumber::operator==(const Operand& other) const {
     return false;
 }
 
+std::size_t LiteralNumber::Hash() const {
+    return static_cast<std::size_t>(raw) ^ Operand::Hash();
+}
+
 } // namespace Sirit

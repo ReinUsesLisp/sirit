@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <cstddef>
 #include <string>
 #include "operand.h"
 #include "stream.h"
@@ -22,8 +23,10 @@ public:
 
     bool operator==(const Operand& other) const override;
 
+    std::size_t Hash() const override;
+
 private:
-    const std::string string;
+    std::string string;
 };
 
 } // namespace Sirit

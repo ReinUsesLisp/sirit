@@ -933,7 +933,8 @@ private:
     std::vector<std::unique_ptr<Op>> execution_modes;
     std::vector<std::unique_ptr<Op>> debug;
     std::vector<std::unique_ptr<Op>> annotations;
-    std::vector<std::unique_ptr<Op>> declarations;
+    std::unordered_set<std::unique_ptr<Op>> declarations;
+    std::vector<Id> sorted_declarations;
 
     std::vector<Id> global_variables;
 

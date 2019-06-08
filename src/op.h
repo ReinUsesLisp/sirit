@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <cstddef>
 #include <optional>
 #include "common_types.h"
 #include "operand.h"
@@ -23,6 +24,8 @@ public:
     u16 GetWordCount() const override;
 
     bool operator==(const Operand& other) const override;
+
+    std::size_t Hash() const override;
 
     void Write(Stream& stream) const;
 
