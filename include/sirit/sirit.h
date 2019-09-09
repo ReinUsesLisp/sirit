@@ -920,15 +920,6 @@ public:
     Id OpImageQuerySamples(Id result_type, Id image);
 
 private:
-    struct HashOp {
-        std::size_t operator()(const std::unique_ptr<Op>& op) const noexcept;
-    };
-
-    struct EqualOp {
-        bool operator()(const std::unique_ptr<Op>& lhs, const std::unique_ptr<Op>& rhs) const
-            noexcept;
-    };
-
     Id AddCode(std::unique_ptr<Op> op);
 
     Id AddCode(spv::Op opcode, std::optional<std::uint32_t> id = {});
@@ -954,7 +945,7 @@ private:
     std::vector<std::unique_ptr<Op>> execution_modes;
     std::vector<std::unique_ptr<Op>> debug;
     std::vector<std::unique_ptr<Op>> annotations;
-    std::unordered_set<std::unique_ptr<Op>, HashOp, EqualOp> declarations;
+    std::unordered_set<std::unique_ptr<Op>> declarations;
     std::vector<Id> sorted_declarations;
 
     std::vector<Id> global_variables;
