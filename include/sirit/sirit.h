@@ -346,6 +346,12 @@ public:
 
     // Logical
 
+    /// Result is true if any component of Vector is true, otherwise result is false.
+    Id OpAny(Id result_type, Id vector);
+
+    /// Result is true if all components of Vector are true, otherwise result is false.
+    Id OpAll(Id result_type, Id vector);
+
     /// Result is true if x is an IEEE NaN, otherwise result is false.
     Id OpIsNan(Id result_type, Id operand);
 
