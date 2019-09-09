@@ -6,8 +6,6 @@
 
 #pragma once
 
-#include <cstddef>
-#include "common_types.h"
 #include "stream.h"
 
 namespace Sirit {
@@ -25,8 +23,6 @@ public:
     virtual bool operator==(const Operand& other) const;
     bool operator!=(const Operand& other) const;
 
-    virtual std::size_t Hash() const;
-
     OperandType GetType() const;
 
 protected:
@@ -34,14 +30,3 @@ protected:
 };
 
 } // namespace Sirit
-
-namespace std {
-
-template <>
-struct hash<Sirit::Operand> {
-    std::size_t operator()(const Sirit::Operand& operand) const noexcept {
-        return operand.Hash();
-    }
-};
-
-} // namespace std

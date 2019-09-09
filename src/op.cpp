@@ -5,7 +5,6 @@
  */
 
 #include <cassert>
-#include <climits>
 
 #include "common_types.h"
 #include "literal_number.h"
@@ -46,21 +45,6 @@ bool Op::operator==(const Operand& other) const {
         return true;
     }
     return false;
-}
-
-std::size_t Op::Hash() const {
-    std::size_t hash = Operand::Hash();
-    hash ^= static_cast<std::size_t>(opcode) << 20;
-    if (result_type) {
-        hash ^= result_type->Hash() << 16;
-    }
-    hash ^= static_cast<std::size_t>(id.value_or(0)) << 8;
-    std::size_t wrap = 32;
-    for (const auto operand : operands) {
-        wrap = (wrap + 7) % (sizeof(std::size_t) * CHAR_BIT);
-        hash ^= operand->Hash() << wrap;
-    }
-    return hash;
 }
 
 void Op::Write(Stream& stream) const {

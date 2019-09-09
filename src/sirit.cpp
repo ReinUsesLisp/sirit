@@ -59,7 +59,7 @@ std::vector<u8> Module::Assemble() const {
     WriteSet(stream, execution_modes);
     WriteSet(stream, debug);
     WriteSet(stream, annotations);
-    WriteSet(stream, sorted_declarations);
+    WriteSet(stream, declarations);
     WriteSet(stream, global_variables);
     WriteSet(stream, code);
 
@@ -74,14 +74,13 @@ void Module::AddCapability(spv::Capability capability) {
     capabilities.insert(capability);
 }
 
-void Module::SetMemoryModel(spv::AddressingModel addressing_model_,
-                            spv::MemoryModel memory_model_) {
+void Module::SetMemoryModel(spv::AddressingModel addressing_model_, spv::MemoryModel memory_model_) {
     this->addressing_model = addressing_model_;
     this->memory_model = memory_model_;
 }
 
-void Module::AddEntryPoint(spv::ExecutionModel execution_model, Id entry_point, std::string name,
-                           const std::vector<Id>& interfaces) {
+void Module::AddEntryPoint(spv::ExecutionModel execution_model, Id entry_point,
+                           std::string name, const std::vector<Id>& interfaces) {
     auto op{std::make_unique<Op>(spv::Op::OpEntryPoint)};
     op->Add(static_cast<u32>(execution_model));
     op->Add(entry_point);
@@ -122,12 +121,14 @@ Id Module::AddCode(spv::Op opcode, std::optional<u32> id) {
 }
 
 Id Module::AddDeclaration(std::unique_ptr<Op> op) {
-    const auto [it, is_inserted] = declarations.emplace(std::move(op));
-    const Id id = it->get();
-    if (is_inserted) {
-        sorted_declarations.push_back(id);
-        ++bound;
+    const auto& found{std::find_if(declarations.begin(), declarations.end(),
+                                   [&op](const auto& other) { return *other == *op; })};
+    if (found != declarations.end()) {
+        return found->get();
     }
+    const auto id = op.get();
+    declarations.push_back(std::move(op));
+    bound++;
     return id;
 }
 
