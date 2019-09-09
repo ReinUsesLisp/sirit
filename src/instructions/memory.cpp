@@ -46,6 +46,21 @@ Id Module::OpAccessChain(Id result_type, Id base, const std::vector<Id>& indexes
     return AddCode(std::move(op));
 }
 
+Id Module::OpVectorExtractDynamic(Id result_type, Id vector, Id index) {
+    auto op{std::make_unique<Op>(spv::Op::OpVectorExtractDynamic, bound++, result_type)};
+    op->Add(vector);
+    op->Add(index);
+    return AddCode(std::move(op));
+}
+
+Id Module::OpVectorInsertDynamic(Id result_type, Id vector, Id component, Id index) {
+    auto op{std::make_unique<Op>(spv::Op::OpVectorInsertDynamic, bound++, result_type)};
+    op->Add(vector);
+    op->Add(component);
+    op->Add(index);
+    return AddCode(std::move(op));
+}
+
 Id Module::OpCompositeInsert(Id result_type, Id object, Id composite,
                              const std::vector<Literal>& indexes) {
     auto op{std::make_unique<Op>(spv::Op::OpCompositeInsert, bound++, result_type)};

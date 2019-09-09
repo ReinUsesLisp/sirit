@@ -285,6 +285,12 @@ public:
         return OpAccessChain(result_type, base, {indexes...});
     }
 
+    /// Extract a single, dynamically selected, component of a vector.
+    Id OpVectorExtractDynamic(Id result_type, Id vector, Id index);
+
+    /// Make a copy of a vector, with a single, variably selected, component modified.
+    Id OpVectorInsertDynamic(Id result_type, Id vector, Id component, Id index);
+
     /// Make a copy of a composite object, while modifying one part of it.
     Id OpCompositeInsert(Id result_type, Id object, Id composite,
                          const std::vector<Literal>& indexes = {});
