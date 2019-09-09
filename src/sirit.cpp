@@ -20,6 +20,15 @@ static void WriteSet(Stream& stream, const T& set) {
     }
 }
 
+std::size_t Module::HashOp::operator()(const std::unique_ptr<Op>& op) const noexcept {
+    return op->Hash();
+}
+
+bool Module::EqualOp::operator()(const std::unique_ptr<Op>& lhs,
+                                 const std::unique_ptr<Op>& rhs) const noexcept {
+    return *lhs == *rhs;
+}
+
 Module::Module(u32 version) : version(version) {}
 
 Module::~Module() = default;
