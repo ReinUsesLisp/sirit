@@ -4,6 +4,7 @@
  * 3-Clause BSD License
  */
 
+#include <algorithm>
 #include <cassert>
 
 #include "common_types.h"
@@ -63,6 +64,7 @@ void Op::Write(Stream& stream) const {
 }
 
 void Op::Sink(Operand* operand) {
+    assert(operand);
     Add(static_cast<const Operand*>(operand));
     operand_store.push_back(std::unique_ptr<Operand>(operand));
 }
@@ -103,6 +105,7 @@ void Op::Add(const std::vector<Literal>& literals) {
 }
 
 void Op::Add(const Operand* operand) {
+    assert(operand);
     operands.push_back(operand);
 }
 
@@ -115,6 +118,7 @@ void Op::Add(std::string string) {
 }
 
 void Op::Add(const std::vector<Id>& ids) {
+    assert(std::all_of(ids.begin(), ids.end(), [](auto id) { return id; }));
     operands.insert(operands.end(), ids.begin(), ids.end());
 }
 
