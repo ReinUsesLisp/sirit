@@ -30,7 +30,7 @@ Id Module::OpSelectionMerge(Id merge_block, spv::SelectionControlMask selection_
 }
 
 Id Module::OpLabel() {
-    return AddCode(spv::Op::OpLabel, bound++);
+    return code_store.emplace_back(std::make_unique<Op>(spv::Op::OpLabel, bound++)).get();
 }
 
 Id Module::OpBranch(Id target_label) {

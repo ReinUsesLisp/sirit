@@ -70,12 +70,26 @@ public:
     }
 
     /**
-     * Adds an instruction to module's code
-     * @param op Instruction to insert into code. Types and constants must not
-     * be emitted.
-     * @return Returns op.
+     * Adds an existing label to the code
+     * @param label Label to insert into code.
+     * @return Returns label.
      */
-    Id Emit(Id op);
+    Id AddLabel(Id label);
+
+    /**
+     * Adds a label to the code
+     * @return Returns the created label.
+     */
+    Id AddLabel() {
+        return AddLabel(OpLabel());
+    }
+
+    /**
+     * Adds a local variable to the code
+     * @param variable Variable to insert into code.
+     * @return Returns variable.
+     */
+    Id AddLocalVariable(Id label);
 
     /**
      * Adds a global variable

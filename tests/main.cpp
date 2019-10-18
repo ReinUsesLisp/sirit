@@ -46,30 +46,30 @@ public:
         AddGlobalVariable(in_pos);
         AddGlobalVariable(per_vertex);
 
-        const auto main_func = Emit(
+        const auto main_func = 
             Name(OpFunction(t_void, spv::FunctionControlMask::MaskNone, TypeFunction(t_void)),
-                 "main"));
-        Emit(OpLabel());
+                 "main");
+        AddLabel();
 
-        const auto ptr_pos_x = Emit(OpAccessChain(in_float, in_pos, Constant(t_uint, 0u)));
-        const auto ptr_pos_y = Emit(OpAccessChain(in_float, in_pos, Constant(t_uint, 1u)));
+        const auto ptr_pos_x = OpAccessChain(in_float, in_pos, Constant(t_uint, 0u));
+        const auto ptr_pos_y = OpAccessChain(in_float, in_pos, Constant(t_uint, 1u));
 
-        const auto pos_x = Emit(OpLoad(t_float, ptr_pos_x));
-        const auto pos_y = Emit(OpLoad(t_float, ptr_pos_y));
+        const auto pos_x = OpLoad(t_float, ptr_pos_x);
+        const auto pos_y = OpLoad(t_float, ptr_pos_y);
 
-        auto tmp_position = Emit(OpUndef(float4));
+        auto tmp_position = OpUndef(float4);
         Decorate(tmp_position, spv::Decoration::FPRoundingMode,
                  static_cast<u32>(spv::FPRoundingMode::RTE));
-        tmp_position = Emit(OpCompositeInsert(float4, pos_x, tmp_position, 0));
-        tmp_position = Emit(OpCompositeInsert(float4, pos_y, tmp_position, 1));
-        tmp_position = Emit(OpCompositeInsert(float4, Constant(t_float, 0.f), tmp_position, 2));
-        tmp_position = Emit(OpCompositeInsert(float4, Constant(t_float, 1.f), tmp_position, 3));
+        tmp_position = OpCompositeInsert(float4, pos_x, tmp_position, 0);
+        tmp_position = OpCompositeInsert(float4, pos_y, tmp_position, 1);
+        tmp_position = OpCompositeInsert(float4, Constant(t_float, 0.f), tmp_position, 2);
+        tmp_position = OpCompositeInsert(float4, Constant(t_float, 1.f), tmp_position, 3);
 
-        const auto gl_position = Emit(OpAccessChain(out_float4, per_vertex, Constant(t_uint, 0u)));
-        Emit(OpStore(gl_position, tmp_position));
+        const auto gl_position = OpAccessChain(out_float4, per_vertex, Constant(t_uint, 0u));
+        OpStore(gl_position, tmp_position);
 
-        Emit(OpReturn());
-        Emit(OpFunctionEnd());
+        OpReturn();
+        OpFunctionEnd();
 
         AddEntryPoint(spv::ExecutionModel::Vertex, main_func, "main", in_pos, per_vertex);
     }

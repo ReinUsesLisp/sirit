@@ -16,7 +16,7 @@ Id Module::OpVariable(Id result_type, spv::StorageClass storage_class, Id initia
     if (initializer) {
         op->Add(initializer);
     }
-    return AddCode(std::move(op));
+    return code_store.emplace_back(std::move(op)).get();
 }
 
 Id Module::OpLoad(Id result_type, Id pointer, std::optional<spv::MemoryAccessMask> memory_access) {

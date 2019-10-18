@@ -98,22 +98,24 @@ void Module::AddExecutionMode(Id entry_point, spv::ExecutionMode mode,
     execution_modes.push_back(std::move(op));
 }
 
-Id Module::Emit(Id op) {
-    assert(op != nullptr);
-    code.push_back(op);
-    return op;
+Id Module::AddLabel(Id label) {
+    assert(label != nullptr);
+    return code.emplace_back(label);
+}
+
+Id Module::AddLocalVariable(Id variable) {
+    assert(variable != nullptr);
+    return code.emplace_back(variable);
 }
 
 Id Module::AddGlobalVariable(Id variable) {
     assert(variable);
-    global_variables.push_back(variable);
-    return variable;
+    return global_variables.emplace_back(variable);
 }
 
 Id Module::AddCode(std::unique_ptr<Op> op) {
-    const auto id = op.get();
-    code_store.push_back(std::move(op));
-    return id;
+    const Id id = code_store.emplace_back(std::move(op)).get();
+    return code.emplace_back(id);
 }
 
 Id Module::AddCode(spv::Op opcode, std::optional<u32> id) {
