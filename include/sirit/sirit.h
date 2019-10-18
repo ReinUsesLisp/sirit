@@ -37,7 +37,7 @@ public:
      * externally.
      * @return A stream of bytes representing a SPIR-V module.
      */
-    std::vector<std::uint8_t> Assemble() const;
+    std::vector<std::uint32_t> Assemble() const;
 
     /// Adds a SPIR-V extension.
     void AddExtension(std::string extension_name);

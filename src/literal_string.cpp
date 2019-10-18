@@ -17,12 +17,7 @@ LiteralString::LiteralString(std::string string) : string{std::move(string)} {
 LiteralString::~LiteralString() = default;
 
 void LiteralString::Fetch(Stream& stream) const {
-    for (std::size_t i = 0; i < string.size(); i++) {
-        stream.Write(static_cast<u8>(string[i]));
-    }
-    for (std::size_t i = 0; i < 4 - (string.size() % 4); i++) {
-        stream.Write(static_cast<u8>(0));
-    }
+    stream.Write(string);
 }
 
 u16 LiteralString::GetWordCount() const {

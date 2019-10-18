@@ -79,10 +79,10 @@ int main(int argc, char** argv) {
     MyModule module;
     module.Generate();
 
-    std::vector<std::uint8_t> code{module.Assemble()};
+    std::vector<std::uint32_t> code{module.Assemble()};
 
     FILE* file = fopen("sirit.spv", "wb");
-    fwrite(code.data(), 1, code.size(), file);
+    fwrite(code.data(), sizeof(std::uint32_t), code.size(), file);
     fclose(file);
 
     return 0;

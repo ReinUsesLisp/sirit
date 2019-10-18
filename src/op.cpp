@@ -49,8 +49,7 @@ bool Op::operator==(const Operand& other) const {
 }
 
 void Op::Write(Stream& stream) const {
-    stream.Write(static_cast<u16>(opcode));
-    stream.Write(WordCount());
+    stream.Write(static_cast<u16>(opcode), WordCount());
 
     if (result_type) {
         result_type->Fetch(stream);

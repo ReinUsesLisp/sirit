@@ -8,36 +8,42 @@
 
 namespace Sirit {
 
-Stream::Stream(std::vector<u8>& bytes) : bytes(bytes) {}
+Stream::Stream(std::vector<u32>& words) : words(words) {}
 
 Stream::~Stream() = default;
 
 void Stream::Write(std::string_view string) {
-    bytes.insert(bytes.end(), string.begin(), string.end());
+    constexpr std::size_t word_size = 4;
+    const auto size = string.size();
+    auto read = [string, size](std::size_t offset) { return offset < size ? string[offset] : 0; };
 
-    const auto size{string.size()};
-    for (std::size_t i = 0; i < 4 - size % 4; i++) {
-        Write(static_cast<u8>(0));
+    words.reserve(words.size() + size / word_size + 1);
+    for (std::size_t i = 0; i < size; i += word_size) {
+        Write(read(i), read(i + 1), read(i + 2), read(i + 3));
+    }
+    if (size % word_size == 0) {
+        Write(u32(0));
     }
 }
 
 void Stream::Write(u64 value) {
-    const auto* const mem = reinterpret_cast<const u8*>(&value);
-    bytes.insert(bytes.end(), mem, mem + sizeof(u64));
+    const u32 dword[] = {static_cast<u32>(value), static_cast<u32>(value >> 32)};
+    words.insert(std::begin(words), std::cbegin(dword), std::cend(dword));
 }
 
 void Stream::Write(u32 value) {
-    const auto* const mem = reinterpret_cast<const u8*>(&value);
-    bytes.insert(bytes.end(), mem, mem + sizeof(u32));
+    words.push_back(value);
 }
 
-void Stream::Write(u16 value) {
-    const auto* const mem{reinterpret_cast<const u8*>(&value)};
-    bytes.insert(bytes.end(), mem, mem + sizeof(u16));
+void Stream::Write(u16 first, u16 second) {
+    const u32 word = static_cast<u32>(first) | static_cast<u32>(second) << 16;
+    Write(word);
 }
 
-void Stream::Write(u8 value) {
-    bytes.push_back(value);
+void Stream::Write(u8 first, u8 second, u8 third, u8 fourth) {
+    const u32 word = static_cast<u32>(first) | static_cast<u32>(second) << 8 |
+                     static_cast<u32>(third) << 16 | static_cast<u32>(fourth) << 24;
+    Write(word);
 }
 
 } // namespace Sirit

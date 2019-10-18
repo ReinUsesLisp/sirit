@@ -24,8 +24,8 @@ Module::Module(u32 version) : version(version) {}
 
 Module::~Module() = default;
 
-std::vector<u8> Module::Assemble() const {
-    std::vector<u8> bytes;
+std::vector<u32> Module::Assemble() const {
+    std::vector<u32> bytes;
     Stream stream{bytes};
 
     stream.Write(spv::MagicNumber);

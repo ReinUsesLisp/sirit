@@ -14,7 +14,7 @@ namespace Sirit {
 
 class Stream {
 public:
-    explicit Stream(std::vector<u8>& bytes);
+    explicit Stream(std::vector<u32>& words);
     ~Stream();
 
     void Write(std::string_view string);
@@ -23,12 +23,12 @@ public:
 
     void Write(u32 value);
 
-    void Write(u16 value);
+    void Write(u16 first, u16 second);
 
-    void Write(u8 value);
+    void Write(u8 first, u8 second, u8 third, u8 fourth);
 
 private:
-    std::vector<u8>& bytes;
+    std::vector<u32>& words;
 };
 
 } // namespace Sirit
