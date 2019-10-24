@@ -35,8 +35,8 @@ namespace Sirit {
         return AddCode(std::move(op));                                                             \
     }
 
-DEFINE_UNARY(OpAny, spv::Op::OpAny);
-DEFINE_UNARY(OpAll, spv::Op::OpAll);
+DEFINE_UNARY(OpAny, spv::Op::OpAny)
+DEFINE_UNARY(OpAll, spv::Op::OpAll)
 DEFINE_UNARY(OpIsNan, spv::Op::OpIsNan)
 DEFINE_UNARY(OpIsInf, spv::Op::OpIsInf)
 DEFINE_BINARY(OpLogicalEqual, spv::Op::OpLogicalEqual)
