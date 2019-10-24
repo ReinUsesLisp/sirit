@@ -35,10 +35,10 @@ public:
         SetMemoryModel(spv::AddressingModel::Logical, spv::MemoryModel::GLSL450);
         
         auto main_type{TypeFunction(TypeVoid())};
-        auto main_func{Emit(OpFunction(TypeVoid(), spv::FunctionControlMask::MaskNone, main_type))};
-        Emit(OpLabel());
-        Emit(OpReturn());
-        Emit(OpFunctionEnd());
+        auto main_func{OpFunction(TypeVoid(), spv::FunctionControlMask::MaskNone, main_type)};
+        AddLabel(OpLabel());
+        OpReturn();
+        OpFunctionEnd();
 
         AddEntryPoint(spv::ExecutionModel::Vertex, main_func, "main");
     }
@@ -49,5 +49,5 @@ public:
 MyModule module;
 module.Generate();
 
-std::vector<std::uint8_t> code{module.Assemble()};
+std::vector<std::uint32_t> code{module.Assemble()};
 ```
