@@ -3,18 +3,18 @@ Sirit
 A runtime SPIR-V assembler. It aims to ease dynamic SPIR-V code generation
 without calling external applications (like Khronos' `spirv-as`)  
 
-Its design aims to move code that does not belong to the application in the
-library without, limitting its functionality.
+Its design aims to move code that does not belong in the application to the
+library, without limiting its functionality.
 
-What it does for you:
+What Sirit does for you:
 * Sort declaration opcodes
 * Handle types and constant duplicates
 * Emit SPIR-V opcodes  
 
-What does not do for you:
-* Avoid ID duplicates (emitting the same instruction twice)
+What Sirit won't do for you:
+* Avoid ID duplicates (e.g. emitting the same label twice)
 * Dump code to disk
-* Handle code blocks/branches
+* Handle control flow
 * Compile from a higher level language
   
   
