@@ -358,6 +358,12 @@ public:
     /// Make an intermediate object whose value is undefined.
     Id OpUndef(Id result_type);
 
+    /// Emits the current values of all output variables to the current output primitive.
+    Id OpEmitVertex();
+
+    /// Finish the current primitive and start a new one. No vertex is emitted.
+    Id OpEndPrimitive();
+
     // Logical
 
     /// Result is true if any component of Vector is true, otherwise result is false.

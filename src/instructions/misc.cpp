@@ -14,4 +14,12 @@ Id Module::OpUndef(Id result_type) {
     return AddCode(std::make_unique<Op>(spv::Op::OpUndef, bound++, result_type));
 }
 
+Id Module::OpEmitVertex() {
+    return AddCode(std::make_unique<Op>(spv::Op::OpEmitVertex));
+}
+
+Id Module::OpEndPrimitive() {
+    return AddCode(std::make_unique<Op>(spv::Op::OpEndPrimitive));
+}
+
 } // namespace Sirit
