@@ -35,7 +35,7 @@ bool Op::operator==(const Operand& other) const {
     if (operand_type != other.GetType()) {
         return false;
     }
-    const Op& op = dynamic_cast<const Op&>(other);
+    const auto& op = static_cast<const Op&>(other);
     if (op.opcode == opcode && result_type == op.result_type &&
         operands.size() == op.operands.size()) {
         for (std::size_t i = 0; i < operands.size(); i++) {

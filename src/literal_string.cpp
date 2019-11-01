@@ -26,7 +26,7 @@ u16 LiteralString::GetWordCount() const {
 
 bool LiteralString::operator==(const Operand& other) const {
     if (operand_type == other.GetType()) {
-        return dynamic_cast<const LiteralString&>(other).string == string;
+        return static_cast<const LiteralString&>(other).string == string;
     }
     return false;
 }
