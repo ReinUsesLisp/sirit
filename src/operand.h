@@ -14,7 +14,7 @@ enum class OperandType { Invalid, Op, Number, String };
 
 class Operand {
 public:
-    Operand();
+    explicit Operand(OperandType operand_type);
     virtual ~Operand();
 
     virtual void Fetch(Stream& stream) const;
@@ -25,7 +25,7 @@ public:
 
     OperandType GetType() const;
 
-protected:
+private:
     OperandType operand_type{};
 };
 

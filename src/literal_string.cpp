@@ -10,9 +10,8 @@
 
 namespace Sirit {
 
-LiteralString::LiteralString(std::string string) : string{std::move(string)} {
-    operand_type = OperandType::String;
-}
+LiteralString::LiteralString(std::string string)
+    : Operand{OperandType::String}, string{std::move(string)} {}
 
 LiteralString::~LiteralString() = default;
 
@@ -25,7 +24,7 @@ u16 LiteralString::GetWordCount() const {
 }
 
 bool LiteralString::operator==(const Operand& other) const {
-    if (operand_type == other.GetType()) {
+    if (GetType() == other.GetType()) {
         return static_cast<const LiteralString&>(other).string == string;
     }
     return false;

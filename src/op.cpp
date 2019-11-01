@@ -16,9 +16,7 @@
 namespace Sirit {
 
 Op::Op(spv::Op opcode, std::optional<u32> id, Id result_type)
-    : opcode(opcode), result_type(result_type), id(id) {
-    operand_type = OperandType::Op;
-}
+    : Operand{OperandType::Op}, opcode(opcode), result_type(result_type), id(id) {}
 
 Op::~Op() = default;
 
@@ -32,7 +30,7 @@ u16 Op::GetWordCount() const {
 }
 
 bool Op::operator==(const Operand& other) const {
-    if (operand_type != other.GetType()) {
+    if (GetType() != other.GetType()) {
         return false;
     }
     const auto& op = static_cast<const Op&>(other);
