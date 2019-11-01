@@ -19,15 +19,15 @@ void LiteralString::Fetch(Stream& stream) const {
     stream.Write(string);
 }
 
-u16 LiteralString::GetWordCount() const {
+u16 LiteralString::GetWordCount() const noexcept {
     return static_cast<u16>(string.size() / 4 + 1);
 }
 
-bool LiteralString::operator==(const Operand& other) const {
-    if (GetType() == other.GetType()) {
-        return static_cast<const LiteralString&>(other).string == string;
+bool LiteralString::operator==(const Operand& other) const noexcept {
+    if (!EqualType(other)) {
+        return false;
     }
-    return false;
+    return static_cast<const LiteralString&>(other).string == string;
 }
 
 } // namespace Sirit

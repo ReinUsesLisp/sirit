@@ -13,25 +13,4 @@ Operand::Operand(OperandType operand_type) : operand_type{operand_type} {}
 
 Operand::~Operand() = default;
 
-void Operand::Fetch([[maybe_unused]] Stream& stream) const {
-    assert(!"Fetching unimplemented operand");
-}
-
-u16 Operand::GetWordCount() const {
-    assert(!"Fetching unimplemented operand");
-    return 0;
-}
-
-bool Operand::operator==([[maybe_unused]] const Operand& other) const {
-    return false;
-}
-
-bool Operand::operator!=(const Operand& other) const {
-    return !(*this == other);
-}
-
-OperandType Operand::GetType() const {
-    return operand_type;
-}
-
 } // namespace Sirit

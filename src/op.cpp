@@ -25,12 +25,12 @@ void Op::Fetch(Stream& stream) const {
     stream.Write(id.value());
 }
 
-u16 Op::GetWordCount() const {
+u16 Op::GetWordCount() const noexcept {
     return 1;
 }
 
-bool Op::operator==(const Operand& other) const {
-    if (GetType() != other.GetType()) {
+bool Op::operator==(const Operand& other) const noexcept {
+    if (!EqualType(other)) {
         return false;
     }
     const auto& op = static_cast<const Op&>(other);

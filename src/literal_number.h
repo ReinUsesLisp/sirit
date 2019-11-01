@@ -13,15 +13,16 @@
 
 namespace Sirit {
 
-class LiteralNumber : public Operand {
+class LiteralNumber final : public Operand {
 public:
     explicit LiteralNumber(u64 raw, bool is_32);
     ~LiteralNumber() override;
 
     void Fetch(Stream& stream) const override;
-    u16 GetWordCount() const override;
 
-    bool operator==(const Operand& other) const override;
+    u16 GetWordCount() const noexcept override;
+
+    bool operator==(const Operand& other) const noexcept override;
 
     template <typename T>
     static std::unique_ptr<LiteralNumber> Create(T value) {

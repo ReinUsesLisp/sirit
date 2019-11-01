@@ -14,15 +14,16 @@
 
 namespace Sirit {
 
-class Op : public Operand {
+class Op final : public Operand {
 public:
     explicit Op(spv::Op opcode, std::optional<u32> id = {}, Id result_type = nullptr);
     ~Op() override;
 
     void Fetch(Stream& stream) const override;
-    u16 GetWordCount() const override;
 
-    bool operator==(const Operand& other) const override;
+    u16 GetWordCount() const noexcept override;
+
+    bool operator==(const Operand& other) const noexcept override;
 
     void Write(Stream& stream) const;
 

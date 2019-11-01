@@ -12,18 +12,19 @@
 
 namespace Sirit {
 
-class LiteralString : public Operand {
+class LiteralString final : public Operand {
 public:
     LiteralString(std::string string);
     ~LiteralString() override;
 
     void Fetch(Stream& stream) const override;
-    u16 GetWordCount() const override;
 
-    bool operator==(const Operand& other) const override;
+    u16 GetWordCount() const noexcept override;
+
+    bool operator==(const Operand& other) const noexcept override;
 
 private:
-    const std::string string;
+    std::string string;
 };
 
 } // namespace Sirit

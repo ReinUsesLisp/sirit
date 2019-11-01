@@ -17,16 +17,22 @@ public:
     explicit Operand(OperandType operand_type);
     virtual ~Operand();
 
-    virtual void Fetch(Stream& stream) const;
-    virtual u16 GetWordCount() const;
+    virtual void Fetch(Stream& stream) const = 0;
 
-    virtual bool operator==(const Operand& other) const;
-    bool operator!=(const Operand& other) const;
+    virtual u16 GetWordCount() const noexcept = 0;
 
-    OperandType GetType() const;
+    virtual bool operator==(const Operand& other) const noexcept = 0;
+
+    bool operator!=(const Operand& other) const noexcept {
+        return !operator==(other);
+    }
+
+    bool EqualType(const Operand& other) const noexcept {
+        return operand_type == other.operand_type;
+    }
 
 private:
-    OperandType operand_type{};
+    OperandType operand_type;
 };
 
 } // namespace Sirit

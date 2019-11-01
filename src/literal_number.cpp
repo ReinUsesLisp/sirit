@@ -22,16 +22,16 @@ void LiteralNumber::Fetch(Stream& stream) const {
     }
 }
 
-u16 LiteralNumber::GetWordCount() const {
+u16 LiteralNumber::GetWordCount() const noexcept {
     return is_32 ? 1 : 2;
 }
 
-bool LiteralNumber::operator==(const Operand& other) const {
-    if (GetType() == other.GetType()) {
-        const auto& o{static_cast<const LiteralNumber&>(other)};
-        return o.raw == raw && o.is_32 == is_32;
+bool LiteralNumber::operator==(const Operand& other) const noexcept {
+    if (!EqualType(other)) {
+        return false;
     }
-    return false;
+    const auto& o{static_cast<const LiteralNumber&>(other)};
+    return o.raw == raw && o.is_32 == is_32;
 }
 
 } // namespace Sirit
