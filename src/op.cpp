@@ -62,20 +62,13 @@ void Op::Write(Stream& stream) const {
     }
 }
 
-void Op::Sink(Operand* operand) {
-    assert(operand);
-    Add(static_cast<const Operand*>(operand));
-    operand_store.push_back(std::unique_ptr<Operand>(operand));
-}
-
-void Op::Sink(const std::vector<Operand*>& operands_) {
-    for (auto* operand : operands_) {
-        Sink(operand);
-    }
+void Op::Sink(std::unique_ptr<Operand> operand) {
+    Add(static_cast<const Operand*>(operand.get()));
+    operand_store.push_back(std::move(operand));
 }
 
 void Op::Add(const Literal& literal) {
-    Operand* operand = [&]() {
+    Sink([&] {
         switch (literal.index()) {
         case 0:
             return LiteralNumber::Create(std::get<0>(literal));
@@ -93,8 +86,7 @@ void Op::Add(const Literal& literal) {
             assert(!"Invalid literal type");
             abort();
         }
-    }();
-    Sink(operand);
+    }());
 }
 
 void Op::Add(const std::vector<Literal>& literals) {
@@ -113,7 +105,7 @@ void Op::Add(u32 integer) {
 }
 
 void Op::Add(std::string string) {
-    Sink(new LiteralString(std::move(string)));
+    Sink(std::make_unique<LiteralString>(std::move(string)));
 }
 
 void Op::Add(const std::vector<Id>& ids) {

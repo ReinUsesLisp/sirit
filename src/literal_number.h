@@ -7,6 +7,7 @@
 #pragma once
 
 #include <cstring>
+#include <memory>
 #include <typeindex>
 #include "operand.h"
 #include "stream.h"
@@ -24,10 +25,10 @@ public:
     bool operator==(const Operand& other) const override;
 
     template <typename T>
-    static LiteralNumber* Create(T value) {
+    static std::unique_ptr<LiteralNumber> Create(T value) {
         static_assert(sizeof(T) == 4 || sizeof(T) == 8);
 
-        LiteralNumber* number = new LiteralNumber(std::type_index(typeid(T)));
+        auto number = std::make_unique<LiteralNumber>(std::type_index(typeid(T)));
         number->is_32 = sizeof(T) == 4;
         std::memcpy(&number->raw, &value, sizeof(T));
         return number;

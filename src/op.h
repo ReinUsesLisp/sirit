@@ -26,9 +26,7 @@ public:
 
     void Write(Stream& stream) const;
 
-    void Sink(Operand* operand);
-
-    void Sink(const std::vector<Operand*>& operands_);
+    void Sink(std::unique_ptr<Operand> operand);
 
     void Add(const Literal& literal);
 
