@@ -29,7 +29,7 @@ u16 LiteralNumber::GetWordCount() const {
 
 bool LiteralNumber::operator==(const Operand& other) const {
     if (operand_type == other.GetType()) {
-        const auto& o{dynamic_cast<const LiteralNumber&>(other)};
+        const auto& o{static_cast<const LiteralNumber&>(other)};
         return o.type == type && o.raw == raw;
     }
     return false;
