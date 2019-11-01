@@ -8,7 +8,6 @@
 
 #include <cstring>
 #include <memory>
-#include <typeindex>
 #include "operand.h"
 #include "stream.h"
 
@@ -16,7 +15,7 @@ namespace Sirit {
 
 class LiteralNumber : public Operand {
 public:
-    LiteralNumber(std::type_index type);
+    explicit LiteralNumber(u64 raw, bool is_32);
     ~LiteralNumber() override;
 
     void Fetch(Stream& stream) const override;
@@ -28,16 +27,14 @@ public:
     static std::unique_ptr<LiteralNumber> Create(T value) {
         static_assert(sizeof(T) == 4 || sizeof(T) == 8);
 
-        auto number = std::make_unique<LiteralNumber>(std::type_index(typeid(T)));
-        number->is_32 = sizeof(T) == 4;
-        std::memcpy(&number->raw, &value, sizeof(T));
-        return number;
+        u64 raw{};
+        std::memcpy(&raw, &value, sizeof(T));
+        return std::make_unique<LiteralNumber>(raw, sizeof(T) == 4);
     }
 
 private:
-    std::type_index type;
-    bool is_32{};
     u64 raw{};
+    bool is_32{};
 };
 
 } // namespace Sirit

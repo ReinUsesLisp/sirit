@@ -9,7 +9,7 @@
 
 namespace Sirit {
 
-LiteralNumber::LiteralNumber(std::type_index type) : type(type) {
+LiteralNumber::LiteralNumber(u64 raw, bool is_32) : raw{raw}, is_32{is_32} {
     operand_type = OperandType::Number;
 }
 
@@ -30,7 +30,7 @@ u16 LiteralNumber::GetWordCount() const {
 bool LiteralNumber::operator==(const Operand& other) const {
     if (operand_type == other.GetType()) {
         const auto& o{static_cast<const LiteralNumber&>(other)};
-        return o.type == type && o.raw == raw;
+        return o.raw == raw && o.is_32 == is_32;
     }
     return false;
 }
