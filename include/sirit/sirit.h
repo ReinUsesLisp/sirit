@@ -939,6 +939,12 @@ public:
     /// Query the number of samples available per texel fetch in a multisample image.
     Id OpImageQuerySamples(Id result_type, Id image);
 
+    // Group
+
+    /// Return the value of the invocation identified by the current invocation's id within the
+    /// group xor'ed with mask.
+    Id OpGroupNonUniformShuffleXor(Id result_type, spv::Scope scope, Id value, Id mask);
+
 private:
     Id AddCode(std::unique_ptr<Op> op);
 

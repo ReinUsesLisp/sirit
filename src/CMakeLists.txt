@@ -26,6 +26,7 @@ add_library(sirit
     instructions/arithmetic.cpp
     instructions/extension.cpp
     instructions/image.cpp
+    instructions/group.cpp
 )
 
 target_compile_options(sirit PRIVATE ${SIRIT_CXX_FLAGS})

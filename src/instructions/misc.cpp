@@ -4,7 +4,6 @@
  * 3-Clause BSD License
  */
 
-#include <cassert>
 #include "op.h"
 #include "sirit/sirit.h"
 
