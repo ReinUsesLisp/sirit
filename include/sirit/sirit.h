@@ -941,6 +941,11 @@ public:
 
     // Group
 
+    /// Return the value from the invocation in the subgroup with an invocation ID equal to index.
+    /// The index must be the same for all active invocations in the subgroup, otherwise the results
+    /// are undefined.
+    Id OpSubgroupReadInvocationKHR(Id result_type, Id value, Id index);
+
     /// Return the value of the invocation identified by the current invocation's id within the
     /// group xor'ed with mask.
     Id OpGroupNonUniformShuffleXor(Id result_type, spv::Scope scope, Id value, Id mask);
