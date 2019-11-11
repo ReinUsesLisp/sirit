@@ -9,10 +9,34 @@
 
 namespace Sirit {
 
+Id Module::OpSubgroupBallotKHR(Id result_type, Id predicate) {
+    auto op = std::make_unique<Op>(spv::Op::OpSubgroupBallotKHR, bound++, result_type);
+    op->Add(predicate);
+    return AddCode(std::move(op));
+}
+
 Id Module::OpSubgroupReadInvocationKHR(Id result_type, Id value, Id index) {
     auto op = std::make_unique<Op>(spv::Op::OpSubgroupReadInvocationKHR, bound++, result_type);
     op->Add(value);
     op->Add(index);
+    return AddCode(std::move(op));
+}
+
+Id Module::OpSubgroupAllKHR(Id result_type, Id predicate) {
+    auto op = std::make_unique<Op>(spv::Op::OpSubgroupAllKHR, bound++, result_type);
+    op->Add(predicate);
+    return AddCode(std::move(op));
+}
+
+Id Module::OpSubgroupAnyKHR(Id result_type, Id predicate) {
+    auto op = std::make_unique<Op>(spv::Op::OpSubgroupAnyKHR, bound++, result_type);
+    op->Add(predicate);
+    return AddCode(std::move(op));
+}
+
+Id Module::OpSubgroupAllEqualKHR(Id result_type, Id predicate) {
+    auto op = std::make_unique<Op>(spv::Op::OpSubgroupAllEqualKHR, bound++, result_type);
+    op->Add(predicate);
     return AddCode(std::move(op));
 }
 

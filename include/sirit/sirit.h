@@ -941,10 +941,23 @@ public:
 
     // Group
 
+    /// Computes a bitfield value combining the Predicate value from all invocations in the current
+    /// Subgroup that execute the same dynamic instance of this instruction.
+    Id OpSubgroupBallotKHR(Id result_type, Id predicate);
+
     /// Return the value from the invocation in the subgroup with an invocation ID equal to index.
     /// The index must be the same for all active invocations in the subgroup, otherwise the results
     /// are undefined.
     Id OpSubgroupReadInvocationKHR(Id result_type, Id value, Id index);
+
+    /// TBD
+    Id OpSubgroupAllKHR(Id result_type, Id predicate);
+
+    /// TBD
+    Id OpSubgroupAnyKHR(Id result_type, Id predicate);
+
+    /// TBD
+    Id OpSubgroupAllEqualKHR(Id result_type, Id predicate);
 
     /// Return the value of the invocation identified by the current invocation's id within the
     /// group xor'ed with mask.
