@@ -6,7 +6,10 @@
 
 #pragma once
 
+#include <cstddef>
 #include <optional>
+#include <vector>
+
 #include "common_types.h"
 #include "operand.h"
 #include "sirit/sirit.h"
@@ -21,7 +24,7 @@ public:
 
     void Fetch(Stream& stream) const override;
 
-    u16 GetWordCount() const noexcept override;
+    std::size_t GetWordCount() const noexcept override;
 
     bool operator==(const Operand& other) const noexcept override;
 
@@ -37,12 +40,14 @@ public:
 
     void Add(u32 integer);
 
+    void Add(s32 integer);
+
     void Add(std::string string);
 
     void Add(const std::vector<Id>& ids);
 
 private:
-    u16 WordCount() const;
+    u16 CalculateTotalWords() const noexcept;
 
     spv::Op opcode;
 

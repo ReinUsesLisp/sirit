@@ -22,7 +22,7 @@ void LiteralNumber::Fetch(Stream& stream) const {
     }
 }
 
-u16 LiteralNumber::GetWordCount() const noexcept {
+std::size_t LiteralNumber::GetWordCount() const noexcept {
     return is_32 ? 1 : 2;
 }
 

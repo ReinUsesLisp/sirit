@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <cstddef>
+
 #include "stream.h"
 
 namespace Sirit {
@@ -19,7 +21,7 @@ public:
 
     virtual void Fetch(Stream& stream) const = 0;
 
-    virtual u16 GetWordCount() const noexcept = 0;
+    virtual std::size_t GetWordCount() const noexcept = 0;
 
     virtual bool operator==(const Operand& other) const noexcept = 0;
 

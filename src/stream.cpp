@@ -15,7 +15,9 @@ Stream::~Stream() = default;
 void Stream::Write(std::string_view string) {
     constexpr std::size_t word_size = 4;
     const auto size = string.size();
-    auto read = [string, size](std::size_t offset) { return offset < size ? string[offset] : 0; };
+    const auto read = [string, size](std::size_t offset) {
+        return offset < size ? static_cast<u8>(string[offset]) : u8(0);
+    };
 
     words.reserve(words.size() + size / word_size + 1);
     for (std::size_t i = 0; i < size; i += word_size) {

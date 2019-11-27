@@ -54,12 +54,8 @@ if (MSVC)
         /EHsc
         /Zc:throwingNew # Assumes new never returns null
         /Zc:inline # Omits inline functions from object-file output
-        /DNOMINMAX)
-
-    if (SIRIT_WARNINGS_AS_ERRORS)
-        list(APPEND SIRIT_CXX_FLAGS
-             /WX)
-    endif()
+        /DNOMINMAX
+        /WX)
 
     if (CMAKE_VS_PLATFORM_TOOLSET MATCHES "LLVM-vs[0-9]+")
         list(APPEND SIRIT_CXX_FLAGS
@@ -74,12 +70,10 @@ else()
         -pedantic
         -pedantic-errors
         -Wfatal-errors
-        -Wno-missing-braces)
-
-    if (SIRIT_WARNINGS_AS_ERRORS)
-        list(APPEND SIRIT_CXX_FLAGS
-             -Werror)
-    endif()
+        -Wno-missing-braces
+        -Wconversion
+        -Wsign-conversion
+        -Werror)
 endif()
 
 # Enable unit-testing.

@@ -19,8 +19,8 @@ void LiteralString::Fetch(Stream& stream) const {
     stream.Write(string);
 }
 
-u16 LiteralString::GetWordCount() const noexcept {
-    return static_cast<u16>(string.size() / 4 + 1);
+std::size_t LiteralString::GetWordCount() const noexcept {
+    return string.size() / 4 + 1;
 }
 
 bool LiteralString::operator==(const Operand& other) const noexcept {

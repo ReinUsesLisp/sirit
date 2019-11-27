@@ -6,8 +6,10 @@
 
 #pragma once
 
+#include <cstddef>
 #include <cstring>
 #include <memory>
+
 #include "operand.h"
 #include "stream.h"
 
@@ -20,7 +22,7 @@ public:
 
     void Fetch(Stream& stream) const override;
 
-    u16 GetWordCount() const noexcept override;
+    std::size_t GetWordCount() const noexcept override;
 
     bool operator==(const Operand& other) const noexcept override;
 

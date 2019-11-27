@@ -6,6 +6,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <limits>
 
 #include "common_types.h"
 #include "literal_number.h"
@@ -25,7 +26,7 @@ void Op::Fetch(Stream& stream) const {
     stream.Write(id.value());
 }
 
-u16 Op::GetWordCount() const noexcept {
+std::size_t Op::GetWordCount() const noexcept {
     return 1;
 }
 
@@ -47,7 +48,7 @@ bool Op::operator==(const Operand& other) const noexcept {
 }
 
 void Op::Write(Stream& stream) const {
-    stream.Write(static_cast<u16>(opcode), WordCount());
+    stream.Write(static_cast<u16>(opcode), CalculateTotalWords());
 
     if (result_type) {
         result_type->Fetch(stream);
@@ -99,7 +100,11 @@ void Op::Add(const Operand* operand) {
 }
 
 void Op::Add(u32 integer) {
-    Sink(LiteralNumber::Create<u32>(integer));
+    Sink(LiteralNumber::Create(integer));
+}
+
+void Op::Add(s32 integer) {
+    Sink(LiteralNumber::Create(integer));
 }
 
 void Op::Add(std::string string) {
@@ -111,18 +116,19 @@ void Op::Add(const std::vector<Id>& ids) {
     operands.insert(operands.end(), ids.begin(), ids.end());
 }
 
-u16 Op::WordCount() const {
-    u16 count = 1;
+u16 Op::CalculateTotalWords() const noexcept {
+    std::size_t count = 1;
     if (result_type) {
-        count++;
+        ++count;
     }
     if (id.has_value()) {
-        count++;
+        ++count;
     }
     for (const Operand* operand : operands) {
         count += operand->GetWordCount();
     }
-    return count;
+    assert(count < std::numeric_limits<u16>::max());
+    return static_cast<u16>(count);
 }
 
 } // namespace Sirit
