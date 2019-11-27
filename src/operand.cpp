@@ -9,7 +9,7 @@
 
 namespace Sirit {
 
-Operand::Operand(OperandType operand_type) : operand_type{operand_type} {}
+Operand::Operand(OperandType operand_type_) : operand_type{operand_type_} {}
 
 Operand::~Operand() = default;
 

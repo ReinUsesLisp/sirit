@@ -9,8 +9,8 @@
 
 namespace Sirit {
 
-LiteralNumber::LiteralNumber(u64 raw, bool is_32)
-    : Operand{OperandType::Number}, raw{raw}, is_32{is_32} {}
+LiteralNumber::LiteralNumber(u64 raw_, bool is_32_)
+    : Operand{OperandType::Number}, raw{raw_}, is_32{is_32_} {}
 
 LiteralNumber::~LiteralNumber() = default;
 

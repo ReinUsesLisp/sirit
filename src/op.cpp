@@ -16,8 +16,8 @@
 
 namespace Sirit {
 
-Op::Op(spv::Op opcode, std::optional<u32> id, Id result_type)
-    : Operand{OperandType::Op}, opcode(opcode), result_type(result_type), id(id) {}
+Op::Op(spv::Op opcode_, std::optional<u32> id_, Id result_type_)
+    : Operand{OperandType::Op}, opcode{opcode_}, result_type{result_type_}, id{id_} {}
 
 Op::~Op() = default;
 

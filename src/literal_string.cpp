@@ -10,8 +10,8 @@
 
 namespace Sirit {
 
-LiteralString::LiteralString(std::string string)
-    : Operand{OperandType::String}, string{std::move(string)} {}
+LiteralString::LiteralString(std::string string_)
+    : Operand{OperandType::String}, string{std::move(string_)} {}
 
 LiteralString::~LiteralString() = default;
 

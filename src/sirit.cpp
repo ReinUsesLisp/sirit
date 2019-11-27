@@ -20,7 +20,7 @@ static void WriteSet(Stream& stream, const T& set) {
     }
 }
 
-Module::Module(u32 version) : version(version) {}
+Module::Module(u32 version_) : version{version_} {}
 
 Module::~Module() = default;
 

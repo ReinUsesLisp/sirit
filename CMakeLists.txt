@@ -73,6 +73,7 @@ else()
         -Wno-missing-braces
         -Wconversion
         -Wsign-conversion
+        -Wshadow
         -Werror)
 endif()
 

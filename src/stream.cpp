@@ -8,7 +8,7 @@
 
 namespace Sirit {
 
-Stream::Stream(std::vector<u32>& words) : words(words) {}
+Stream::Stream(std::vector<u32>& words_) : words{words_} {}
 
 Stream::~Stream() = default;
 
