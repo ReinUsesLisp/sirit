@@ -364,6 +364,11 @@ public:
     /// Finish the current primitive and start a new one. No vertex is emitted.
     Id OpEndPrimitive();
 
+    // Barrier
+
+    /// Control the order that memory accesses are observed.
+    Id OpMemoryBarrier(Id scope, Id semantics);
+
     // Logical
 
     /// Result is true if any component of Vector is true, otherwise result is false.

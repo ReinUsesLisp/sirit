@@ -27,6 +27,7 @@ add_library(sirit
     instructions/extension.cpp
     instructions/image.cpp
     instructions/group.cpp
+    instructions/barrier.cpp
 )
 
 target_compile_options(sirit PRIVATE ${SIRIT_CXX_FLAGS})
