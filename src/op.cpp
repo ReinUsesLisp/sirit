@@ -113,7 +113,7 @@ void Op::Add(std::string string) {
 }
 
 void Op::Add(const std::vector<Id>& ids) {
-    assert(std::all_of(ids.begin(), ids.end(), [](auto id) { return id; }));
+    assert(std::all_of(ids.begin(), ids.end(), [](auto id_) { return id_; }));
     operands.insert(operands.end(), ids.begin(), ids.end());
 }
 
