@@ -767,14 +767,14 @@ public:
 
     /// Sample an image using an explicit level of detail.
     Id OpImageSampleExplicitLod(Id result_type, Id sampled_image, Id coordinate,
-                                spv::ImageOperandsMask image_operands, Id lod,
+                                spv::ImageOperandsMask image_operands,
                                 const std::vector<Id>& operands = {});
 
     /// Sample an image using an explicit level of detail.
     template <typename... Ts>
     Id OpImageSampleExplicitLod(Id result_type, Id sampled_image, Id coordinate,
-                                spv::ImageOperandsMask image_operands, Id lod, Ts&&... operands) {
-        return OpImageSampleExplicitLod(result_type, sampled_image, coordinate, image_operands, lod,
+                                spv::ImageOperandsMask image_operands, Ts&&... operands) {
+        return OpImageSampleExplicitLod(result_type, sampled_image, coordinate, image_operands,
                                         {operands...});
     }
 
@@ -793,16 +793,15 @@ public:
 
     /// Sample an image doing depth-comparison using an explicit level of detail.
     Id OpImageSampleDrefExplicitLod(Id result_type, Id sampled_image, Id coordinate, Id dref,
-                                    spv::ImageOperandsMask image_operands, Id lod,
+                                    spv::ImageOperandsMask image_operands,
                                     const std::vector<Id>& operands = {});
 
     /// Sample an image doing depth-comparison using an explicit level of detail.
     template <typename... Ts>
     Id OpImageSampleDrefExplicitLod(Id result_type, Id sampled_image, Id coordinate, Id dref,
-                                    spv::ImageOperandsMask image_operands, Id lod,
-                                    Ts&&... operands) {
+                                    spv::ImageOperandsMask image_operands, Ts&&... operands) {
         return OpImageSampleDrefExplicitLod(result_type, sampled_image, coordinate, dref,
-                                            image_operands, lod, {operands...});
+                                            image_operands, {operands...});
     }
 
     /// Sample an image with with a project coordinate and an implicit level of detail.
@@ -820,16 +819,15 @@ public:
 
     /// Sample an image with a project coordinate using an explicit level of detail.
     Id OpImageSampleProjExplicitLod(Id result_type, Id sampled_image, Id coordinate,
-                                    spv::ImageOperandsMask image_operands, Id lod,
+                                    spv::ImageOperandsMask image_operands,
                                     const std::vector<Id>& operands = {});
 
     /// Sample an image with a project coordinate using an explicit level of detail.
     template <typename... Ts>
     Id OpImageSampleProjExplicitLod(Id result_type, Id sampled_image, Id coordinate,
-                                    spv::ImageOperandsMask image_operands, Id lod,
-                                    Ts&&... operands) {
+                                    spv::ImageOperandsMask image_operands, Ts&&... operands) {
         return OpImageSampleProjExplicitLod(result_type, sampled_image, coordinate, image_operands,
-                                            lod, {operands...});
+                                            {operands...});
     }
 
     /// Sample an image with a project coordinate, doing depth-comparison, with an implicit level of
@@ -850,17 +848,16 @@ public:
     /// Sample an image with a project coordinate, doing depth-comparison, using an explicit level
     /// of detail.
     Id OpImageSampleProjDrefExplicitLod(Id result_type, Id sampled_image, Id coordinate, Id dref,
-                                        spv::ImageOperandsMask image_operands, Id lod,
+                                        spv::ImageOperandsMask image_operands,
                                         const std::vector<Id>& operands = {});
 
     /// Sample an image with a project coordinate, doing depth-comparison, using an explicit level
     /// of detail.
     template <typename... Ts>
     Id OpImageSampleProjDrefExplicitLod(Id result_type, Id sampled_image, Id coordinate, Id dref,
-                                        spv::ImageOperandsMask image_operands, Id lod,
-                                        Ts&&... operands) {
+                                        spv::ImageOperandsMask image_operands, Ts&&... operands) {
         return OpImageSampleProjDrefExplicitLod(result_type, sampled_image, coordinate, dref,
-                                                image_operands, lod, {operands...});
+                                                image_operands, {operands...});
     }
 
     /// Fetch a single texel from an image whose Sampled operand is 1.

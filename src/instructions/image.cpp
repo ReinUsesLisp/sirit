@@ -31,13 +31,11 @@ static void AddImageOperands(Op* op, std::optional<spv::ImageOperandsMask> image
 
 #define DEFINE_IMAGE_EXP_OP(opcode)                                                                \
     Id Module::opcode(Id result_type, Id sampled_image, Id coordinate,                             \
-                      spv::ImageOperandsMask image_operands, Id lod,                               \
-                      const std::vector<Id>& operands) {                                           \
+                      spv::ImageOperandsMask image_operands, const std::vector<Id>& operands) {    \
         auto op{std::make_unique<Op>(spv::Op::opcode, bound++, result_type)};                      \
         op->Add(sampled_image);                                                                    \
         op->Add(coordinate);                                                                       \
         op->Add(static_cast<u32>(image_operands));                                                 \
-        op->Add(lod);                                                                              \
         op->Add(operands);                                                                         \
         return AddCode(std::move(op));                                                             \
     }
@@ -56,14 +54,12 @@ static void AddImageOperands(Op* op, std::optional<spv::ImageOperandsMask> image
 
 #define DEFINE_IMAGE_EXTRA_EXP_OP(opcode)                                                          \
     Id Module::opcode(Id result_type, Id sampled_image, Id coordinate, Id extra,                   \
-                      spv::ImageOperandsMask image_operands, Id lod,                               \
-                      const std::vector<Id>& operands) {                                           \
+                      spv::ImageOperandsMask image_operands, const std::vector<Id>& operands) {    \
         auto op{std::make_unique<Op>(spv::Op::opcode, bound++, result_type)};                      \
         op->Add(sampled_image);                                                                    \
         op->Add(coordinate);                                                                       \
         op->Add(extra);                                                                            \
         op->Add(static_cast<u32>(image_operands));                                                 \
-        op->Add(lod);                                                                              \
         op->Add(operands);                                                                         \
         return AddCode(std::move(op));                                                             \
     }
