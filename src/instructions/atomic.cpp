@@ -41,7 +41,7 @@ Id Module::OpAtomicCompareExchange(Id result_type, Id pointer, Id memory, Id equ
     auto op{std::make_unique<Op>(spv::Op::OpAtomicCompareExchange, bound++, result_type)};
     op->Add(pointer);
     op->Add(memory);
-    op->Add(equal));
+    op->Add(equal);
     op->Add(unequal);
     op->Add(value);
     op->Add(comparator);
