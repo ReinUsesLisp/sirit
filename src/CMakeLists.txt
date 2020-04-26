@@ -1,17 +1,10 @@
-add_library(sirit
-    ../include/sirit/sirit.h
+add_library(${PROJECT_NAME}
     sirit.cpp
     op.cpp
-    op.h
     stream.cpp
-    stream.h
     operand.cpp
-    operand.h
     literal_number.cpp
-    literal_number.h
     literal_string.cpp
-    literal_string.h
-    common_types.h
     instructions/type.cpp
     instructions/constant.cpp
     instructions/function.cpp
@@ -28,12 +21,24 @@ add_library(sirit
     instructions/image.cpp
     instructions/group.cpp
     instructions/barrier.cpp
-    instructions/atomic.cpp
-)
+    instructions/atomic.cpp)
 
+if(MSVC)
 target_compile_options(sirit PRIVATE ${SIRIT_CXX_FLAGS})
+endif(MSVC)
 
-target_include_directories(sirit
-                           PUBLIC ../include
-                           PRIVATE . ${SPIRV-Headers_SOURCE_DIR}/include
-                           INTERFACE ${SPIRV-Headers_SOURCE_DIR}/include)
+target_include_directories(
+    ${PROJECT_NAME}
+    PRIVATE
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src/include>
+    PUBLIC 
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+    INTERFACE 
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+    )
+
+target_link_libraries(
+    ${PROJECT_NAME}
+    SPIRV-Tools)
+
+

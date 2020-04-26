@@ -1,6 +1,4 @@
-add_executable(sirit_tests
+add_executable(${PROJECT_NAME}_tests
     main.cpp)
-target_link_libraries(sirit_tests PRIVATE sirit)
-target_include_directories(sirit_tests PRIVATE . ../include)
-
-add_test(sirit_tests sirit_tests)
+target_link_libraries(${PROJECT_NAME}_tests PRIVATE sirit)
+add_test(TESTS ${PROJECT_NAME}_tests)

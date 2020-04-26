@@ -1,14 +1,13 @@
 # This file has been adapted from dynarmic
 
 cmake_minimum_required(VERSION 3.8)
-project(sirit CXX)
-
-# Determine if we're built as a subproject (using add_subdirectory)
-# or if this is the master project.
-set(MASTER_PROJECT OFF)
-if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
-  set(MASTER_PROJECT ON)
-endif()
+project(sirit 
+        VERSION 
+            "0.0.1" 
+        DESCRIPTION 
+            "A runtime SPIR-V assembler"
+        LANGUAGES 
+            CXX)
 
 # Default to a Release build
 if (NOT CMAKE_BUILD_TYPE)
@@ -17,16 +16,18 @@ if (NOT CMAKE_BUILD_TYPE)
 endif()
 
 # Set hard requirements for C++
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Warn on CMake API deprecations
 set(CMAKE_WARN_DEPRECATED ON)
 
+
 # Disable in-source builds
 set(CMAKE_DISABLE_SOURCE_CHANGES ON)
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
+
 if ("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
     message(SEND_ERROR "In-source builds are not allowed.")
 endif()
@@ -63,28 +64,59 @@ if (MSVC)
              -Wno-missing-braces)
     endif()
 else()
-    set(SIRIT_CXX_FLAGS
-        -Wall
-        -Wextra
-        -Wcast-qual
-        -pedantic
-        -pedantic-errors
-        -Wfatal-errors
-        -Wno-missing-braces
-        -Wconversion
-        -Wsign-conversion
-        -Wshadow
-        -Werror)
+    include(GNUInstallDirs)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wcast-qual -pedantic -pedantic-errors -Wfatal-errors -Wno-missing-braces -Wconversion -Wsign-conversion -Wshadow -Werror")
 endif()
 
-# Enable unit-testing.
-enable_testing(true)
-
 # SPIR-V headers
-add_subdirectory(externals/SPIRV-Headers EXCLUDE_FROM_ALL)
+find_package(SPIRV-Tools QUIET)
+if(SPIRV-Tools_NOTFOUND)
+    MESSAGE(STATUS "SPIRV-Tools not found. Using bundled SPIRV-Tools")
+    add_subdirectory(externals/SPIRV-Headers EXCLUDE_FROM_ALL)
+endif(SPIRV-Tools_NOTFOUND)
 
 # Sirit project files
 add_subdirectory(src)
-if (SIRIT_TESTS)
+
+if(BUILD_TESTS)
+    # Enable unit-testing.
+
+    enable_testing(true)
     add_subdirectory(tests)
-endif()
+endif(BUILD_TESTS)
+
+if(NOT MSVC)
+    install(TARGETS ${PROJECT_NAME}
+        EXPORT ${PROJECT_NAME}_TARGETS
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+    include(CMakePackageConfigHelpers)
+    write_basic_package_version_file(
+        "${PROJECT_NAME}ConfigVersion.cmake"
+        VERSION 
+            ${PROJECT_VERSION}
+        COMPATIBILITY 
+            SameMajorVersion)
+    configure_package_config_file(
+        "${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in"
+        "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+        INSTALL_DESTINATION
+            ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/cmake)
+
+    install(EXPORT ${PROJECT_NAME}_TARGETS
+            FILE 
+                   ${PROJECT_NAME}Targets.cmake
+            NAMESPACE 
+                   ${PROJECT_NAME}::
+            DESTINATION 
+                   ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/cmake)
+    install(FILES "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+                  "${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+            DESTINATION
+                  ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/cmake)
+    install(DIRECTORY
+                ${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME}
+            DESTINATION
+                ${CMAKE_INSTALL_INCLUDEDIR})
+endif(NOT MSVC)
