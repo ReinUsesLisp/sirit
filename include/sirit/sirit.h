@@ -596,6 +596,9 @@ public:
     /// Floating-point reminder operation of Operand 1 modulo Operand 2.
     Id OpFRem(Id result_type, Id operand_1, Id operand_2);
 
+    /// Result is the unsigned integer addition of Operand 1 and Operand 2, including its carry.
+    Id OpIAddCarry(Id result_type, Id operand_1, Id operand_2);
+
     // Extensions
 
     /// Execute an instruction in an imported set of extended instructions.
