@@ -366,6 +366,9 @@ public:
 
     // Barrier
 
+    /// Wait for other invocations of this module to reach the current point of execution.
+    Id OpControlBarrier(Id execution, Id memory, Id semantics);
+
     /// Control the order that memory accesses are observed.
     Id OpMemoryBarrier(Id scope, Id semantics);
 

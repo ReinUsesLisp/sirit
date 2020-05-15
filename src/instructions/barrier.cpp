@@ -10,6 +10,14 @@
 
 namespace Sirit {
 
+Id Module::OpControlBarrier(Id execution, Id memory, Id semantics) {
+    auto op = std::make_unique<Op>(spv::Op::OpControlBarrier);
+    op->Add(execution);
+    op->Add(memory);
+    op->Add(semantics);
+    return AddCode(std::move(op));
+}
+
 Id Module::OpMemoryBarrier(Id scope, Id semantics) {
     auto op = std::make_unique<Op>(spv::Op::OpMemoryBarrier);
     op->Add(scope);
