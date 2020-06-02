@@ -19,6 +19,14 @@ Id Module::OpVariable(Id result_type, spv::StorageClass storage_class, Id initia
     return code_store.emplace_back(std::move(op)).get();
 }
 
+Id Module::OpImageTexelPointer(Id result_type, Id image, Id coordinate, Id sample) {
+    auto op{std::make_unique<Op>(spv::Op::OpImageTexelPointer, bound++, result_type)};
+    op->Add(image);
+    op->Add(coordinate);
+    op->Add(sample);
+    return AddCode(std::move(op));
+}
+
 Id Module::OpLoad(Id result_type, Id pointer, std::optional<spv::MemoryAccessMask> memory_access) {
     auto op{std::make_unique<Op>(spv::Op::OpLoad, bound++, result_type)};
     op->Add(pointer);

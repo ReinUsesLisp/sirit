@@ -284,6 +284,9 @@ public:
     /// Allocate an object in memory, resulting in a copy to it.
     Id OpVariable(Id result_type, spv::StorageClass storage_class, Id initializer = nullptr);
 
+    /// Form a pointer to a texel of an image. Use of such a pointer is limited to atomic operations.
+    Id OpImageTexelPointer(Id result_type, Id image, Id coordinate, Id sample);
+
     /// Load through a pointer.
     Id OpLoad(Id result_type, Id pointer, std::optional<spv::MemoryAccessMask> memory_access = {});
 
