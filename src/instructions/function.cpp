@@ -21,7 +21,7 @@ Id Module::OpFunctionEnd() {
     return AddCode(spv::Op::OpFunctionEnd);
 }
 
-Id Module::OpFunctionCall(Id result_type, Id function, const std::vector<Id>& arguments) {
+Id Module::OpFunctionCall(Id result_type, Id function, std::span<const Id> arguments) {
     auto op{std::make_unique<Op>(spv::Op::OpFunctionCall, bound++, result_type)};
     op->Add(function);
     op->Add(arguments);

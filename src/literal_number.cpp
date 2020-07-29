@@ -26,7 +26,7 @@ std::size_t LiteralNumber::GetWordCount() const noexcept {
     return is_32 ? 1 : 2;
 }
 
-bool LiteralNumber::operator==(const Operand& other) const noexcept {
+bool LiteralNumber::Equal(const Operand& other) const noexcept {
     if (!EqualType(other)) {
         return false;
     }

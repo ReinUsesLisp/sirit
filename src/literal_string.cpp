@@ -23,7 +23,7 @@ std::size_t LiteralString::GetWordCount() const noexcept {
     return string.size() / 4 + 1;
 }
 
-bool LiteralString::operator==(const Operand& other) const noexcept {
+bool LiteralString::Equal(const Operand& other) const noexcept {
     if (!EqualType(other)) {
         return false;
     }

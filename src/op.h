@@ -26,7 +26,7 @@ public:
 
     std::size_t GetWordCount() const noexcept override;
 
-    bool operator==(const Operand& other) const noexcept override;
+    bool Equal(const Operand& other) const noexcept override;
 
     void Write(Stream& stream) const;
 
@@ -34,7 +34,7 @@ public:
 
     void Add(const Literal& literal);
 
-    void Add(const std::vector<Literal>& literals);
+    void Add(std::span<const Literal> literals);
 
     void Add(const Operand* operand);
 
@@ -44,7 +44,7 @@ public:
 
     void Add(std::string string);
 
-    void Add(const std::vector<Id>& ids);
+    void Add(std::span<const Id> ids);
 
 private:
     u16 CalculateTotalWords() const noexcept;

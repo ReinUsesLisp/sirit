@@ -30,7 +30,7 @@ std::size_t Op::GetWordCount() const noexcept {
     return 1;
 }
 
-bool Op::operator==(const Operand& other) const noexcept {
+bool Op::Equal(const Operand& other) const noexcept {
     if (!EqualType(other)) {
         return false;
     }
@@ -38,7 +38,7 @@ bool Op::operator==(const Operand& other) const noexcept {
     if (op.opcode == opcode && result_type == op.result_type &&
         operands.size() == op.operands.size()) {
         for (std::size_t i = 0; i < operands.size(); i++) {
-            if (*operands[i] != *op.operands[i]) {
+            if (!operands[i]->Equal(*op.operands[i])) {
                 return false;
             }
         }
@@ -89,7 +89,7 @@ void Op::Add(const Literal& literal) {
     }());
 }
 
-void Op::Add(const std::vector<Literal>& literals) {
+void Op::Add(std::span<const Literal> literals) {
     for (const auto& literal : literals) {
         Add(literal);
     }
@@ -112,7 +112,7 @@ void Op::Add(std::string string) {
     Sink(std::make_unique<LiteralString>(std::move(string)));
 }
 
-void Op::Add(const std::vector<Id>& ids) {
+void Op::Add(std::span<const Id> ids) {
     assert(std::all_of(ids.begin(), ids.end(), [](auto id_) { return id_; }));
     operands.insert(operands.end(), ids.begin(), ids.end());
 }

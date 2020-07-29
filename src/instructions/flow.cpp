@@ -13,7 +13,7 @@
 namespace Sirit {
 
 Id Module::OpLoopMerge(Id merge_block, Id continue_target, spv::LoopControlMask loop_control,
-                       const std::vector<Id>& literals) {
+                       std::span<const Id> literals) {
     auto op{std::make_unique<Op>(spv::Op::OpLoopMerge)};
     op->Add(merge_block);
     op->Add(continue_target);
@@ -52,8 +52,8 @@ Id Module::OpBranchConditional(Id condition, Id true_label, Id false_label, u32 
     return AddCode(std::move(op));
 }
 
-Id Module::OpSwitch(Id selector, Id default_label, const std::vector<Literal>& literals,
-                    const std::vector<Id>& labels) {
+Id Module::OpSwitch(Id selector, Id default_label, std::span<const Literal> literals,
+                    std::span<const Id> labels) {
     const std::size_t size = literals.size();
     assert(literals.size() == labels.size());
     auto op{std::make_unique<Op>(spv::Op::OpSwitch)};

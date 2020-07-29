@@ -24,7 +24,7 @@ Id Module::Constant(Id result_type, const Literal& literal) {
     return AddDeclaration(std::move(op));
 }
 
-Id Module::ConstantComposite(Id result_type, const std::vector<Id>& constituents) {
+Id Module::ConstantComposite(Id result_type, std::span<const Id> constituents) {
     auto op{std::make_unique<Op>(spv::Op::OpConstantComposite, bound, result_type)};
     op->Add(constituents);
     return AddDeclaration(std::move(op));

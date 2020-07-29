@@ -46,7 +46,7 @@ Id Module::OpStore(Id pointer, Id object, std::optional<spv::MemoryAccessMask> m
     return AddCode(std::move(op));
 }
 
-Id Module::OpAccessChain(Id result_type, Id base, const std::vector<Id>& indexes) {
+Id Module::OpAccessChain(Id result_type, Id base, std::span<const Id> indexes) {
     assert(indexes.size() > 0);
     auto op{std::make_unique<Op>(spv::Op::OpAccessChain, bound++, result_type)};
     op->Add(base);
@@ -70,7 +70,7 @@ Id Module::OpVectorInsertDynamic(Id result_type, Id vector, Id component, Id ind
 }
 
 Id Module::OpCompositeInsert(Id result_type, Id object, Id composite,
-                             const std::vector<Literal>& indexes) {
+                             std::span<const Literal> indexes) {
     auto op{std::make_unique<Op>(spv::Op::OpCompositeInsert, bound++, result_type)};
     op->Add(object);
     op->Add(composite);
@@ -78,14 +78,14 @@ Id Module::OpCompositeInsert(Id result_type, Id object, Id composite,
     return AddCode(std::move(op));
 }
 
-Id Module::OpCompositeExtract(Id result_type, Id composite, const std::vector<Literal>& indexes) {
+Id Module::OpCompositeExtract(Id result_type, Id composite, std::span<const Literal> indexes) {
     auto op{std::make_unique<Op>(spv::Op::OpCompositeExtract, bound++, result_type)};
     op->Add(composite);
     op->Add(indexes);
     return AddCode(std::move(op));
 }
 
-Id Module::OpCompositeConstruct(Id result_type, const std::vector<Id>& ids) {
+Id Module::OpCompositeConstruct(Id result_type, std::span<const Id> ids) {
     assert(ids.size() >= 1);
     auto op{std::make_unique<Op>(spv::Op::OpCompositeConstruct, bound++, result_type)};
     op->Add(ids);

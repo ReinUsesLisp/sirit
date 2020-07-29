@@ -24,7 +24,7 @@ public:
 
     std::size_t GetWordCount() const noexcept override;
 
-    bool operator==(const Operand& other) const noexcept override;
+    bool Equal(const Operand& other) const noexcept override;
 
     template <typename T>
     static std::unique_ptr<LiteralNumber> Create(T value) {

@@ -12,7 +12,7 @@
 
 namespace Sirit {
 
-Id Module::OpExtInst(Id result_type, Id set, u32 instruction, const std::vector<Id>& operands) {
+Id Module::OpExtInst(Id result_type, Id set, u32 instruction, std::span<const Id> operands) {
     auto op{std::make_unique<Op>(spv::Op::OpExtInst, bound++, result_type)};
     op->Add(set);
     op->Add(instruction);

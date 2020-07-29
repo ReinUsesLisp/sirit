@@ -12,7 +12,7 @@
 
 namespace Sirit {
 
-Id Module::Decorate(Id target, spv::Decoration decoration, const std::vector<Literal>& literals) {
+Id Module::Decorate(Id target, spv::Decoration decoration, std::span<const Literal> literals) {
     auto op{std::make_unique<Op>(spv::Op::OpDecorate)};
     op->Add(target);
     op->Add(static_cast<u32>(decoration));
@@ -22,7 +22,7 @@ Id Module::Decorate(Id target, spv::Decoration decoration, const std::vector<Lit
 }
 
 Id Module::MemberDecorate(Id structure_type, Literal member, spv::Decoration decoration,
-                          const std::vector<Literal>& literals) {
+                          std::span<const Literal> literals) {
     auto op{std::make_unique<Op>(spv::Op::OpMemberDecorate)};
     op->Add(structure_type);
     op->Add(member);

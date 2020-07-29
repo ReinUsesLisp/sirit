@@ -23,11 +23,7 @@ public:
 
     virtual std::size_t GetWordCount() const noexcept = 0;
 
-    virtual bool operator==(const Operand& other) const noexcept = 0;
-
-    bool operator!=(const Operand& other) const noexcept {
-        return !operator==(other);
-    }
+    virtual bool Equal(const Operand& other) const noexcept = 0;
 
     bool EqualType(const Operand& other) const noexcept {
         return operand_type == other.operand_type;

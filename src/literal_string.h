@@ -21,7 +21,7 @@ public:
 
     std::size_t GetWordCount() const noexcept override;
 
-    bool operator==(const Operand& other) const noexcept override;
+    bool Equal(const Operand& other) const noexcept override;
 
 private:
     std::string string;

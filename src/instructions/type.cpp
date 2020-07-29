@@ -90,7 +90,7 @@ Id Module::TypeRuntimeArray(Id element_type) {
     return AddDeclaration(std::move(op));
 }
 
-Id Module::TypeStruct(const std::vector<Id>& members) {
+Id Module::TypeStruct(std::span<const Id> members) {
     auto op{std::make_unique<Op>(spv::Op::OpTypeStruct, bound)};
     op->Add(members);
     return AddDeclaration(std::move(op));
@@ -109,7 +109,7 @@ Id Module::TypePointer(spv::StorageClass storage_class, Id type) {
     return AddDeclaration(std::move(op));
 }
 
-Id Module::TypeFunction(Id return_type, const std::vector<Id>& arguments) {
+Id Module::TypeFunction(Id return_type, std::span<const Id> arguments) {
     auto op{std::make_unique<Op>(spv::Op::OpTypeFunction, bound)};
     op->Add(return_type);
     op->Add(arguments);
