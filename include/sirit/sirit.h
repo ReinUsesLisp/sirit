@@ -12,6 +12,7 @@
 #include <optional>
 #include <span>
 #include <string>
+#include <string_view>
 #include <unordered_set>
 #include <variant>
 #include <vector>
@@ -22,12 +23,16 @@ namespace Sirit {
 
 constexpr std::uint32_t GENERATOR_MAGIC_NUMBER = 0;
 
-class Op;
+class Declarations;
 class Operand;
+class Stream;
 
 using Literal =
     std::variant<std::uint32_t, std::uint64_t, std::int32_t, std::int64_t, float, double>;
-using Id = const Op*;
+
+struct Id {
+    std::uint32_t value;
+};
 
 class Module {
 public:
@@ -52,12 +57,12 @@ public:
     void SetMemoryModel(spv::AddressingModel addressing_model_, spv::MemoryModel memory_model_);
 
     /// Adds an entry point.
-    void AddEntryPoint(spv::ExecutionModel execution_model, Id entry_point, std::string name,
+    void AddEntryPoint(spv::ExecutionModel execution_model, Id entry_point, std::string_view name,
                        std::span<const Id> interfaces = {});
 
     /// Adds an entry point.
     template <typename... Ts>
-    void AddEntryPoint(spv::ExecutionModel execution_model, Id entry_point, std::string name,
+    void AddEntryPoint(spv::ExecutionModel execution_model, Id entry_point, std::string_view name,
                        Ts&&... interfaces) {
         AddEntryPoint(execution_model, std::move(entry_point), name,
                       std::span<const Id>{std::array{interfaces...}});
@@ -89,19 +94,13 @@ public:
         return AddLabel(OpLabel());
     }
 
-    /**
-     * Adds a local variable to the code
-     * @param variable Variable to insert into code.
-     * @return Returns variable.
-     */
-    Id AddLocalVariable(Id label);
+    /// Adds a local variable to the code
+    Id AddLocalVariable(Id result_type, spv::StorageClass storage_class,
+                        std::optional<Id> initializer = {});
 
-    /**
-     * Adds a global variable
-     * @param variable Global variable to add.
-     * @return Returns variable.
-     */
-    Id AddGlobalVariable(Id variable);
+    /// Adds a global variable
+    Id AddGlobalVariable(Id result_type, spv::StorageClass storage_class,
+                         std::optional<Id> initializer = {});
 
     // Types
 
@@ -150,7 +149,7 @@ public:
     }
 
     /// Returns type opaque.
-    Id TypeOpaque(std::string name);
+    Id TypeOpaque(std::string_view name);
 
     /// Returns type pointer.
     Id TypePointer(spv::StorageClass storage_class, Id type);
@@ -212,7 +211,7 @@ public:
     Id OpFunction(Id result_type, spv::FunctionControlMask function_control, Id function_type);
 
     /// Ends a function.
-    Id OpFunctionEnd();
+    void OpFunctionEnd();
 
     /// Call a function.
     Id OpFunctionCall(Id result_type, Id function, std::span<const Id> arguments = {});
@@ -244,7 +243,7 @@ public:
     Id OpLabel();
 
     /// The block label instruction: Any reference to a block is through this ref.
-    Id OpLabel(std::string label_name) {
+    Id OpLabel(std::string_view label_name) {
         return Name(OpLabel(), std::move(label_name));
     }
 
@@ -273,22 +272,19 @@ public:
 
     /// Assign a name string to a reference.
     /// @return target
-    Id Name(Id target, std::string name);
+    Id Name(Id target, std::string_view name);
 
     /// Assign a name string to a member of a structure type.
     /// @return type
-    Id MemberName(Id type, std::uint32_t member, std::string name);
+    Id MemberName(Id type, std::uint32_t member, std::string_view name);
 
     /// Assign a Result <id> to a string for use by other debug instructions.
-    Id String(std::string string);
+    Id String(std::string_view string);
 
     /// Add source-level location information
     Id OpLine(Id file, Literal line, Literal column);
 
     // Memory
-
-    /// Allocate an object in memory, resulting in a copy to it.
-    Id OpVariable(Id result_type, spv::StorageClass storage_class, Id initializer = nullptr);
 
     /// Form a pointer to a texel of an image. Use of such a pointer is limited to atomic
     /// operations.
@@ -1097,38 +1093,27 @@ public:
     Id OpAtomicXor(Id result_type, Id pointer, Id memory, Id semantics, Id value);
 
 private:
-    Id AddCode(std::unique_ptr<Op> op);
-
-    Id AddCode(spv::Op opcode, std::optional<std::uint32_t> id = {});
-
-    Id AddDeclaration(std::unique_ptr<Op> op);
-
-    void AddAnnotation(std::unique_ptr<Op> op);
-
     Id GetGLSLstd450();
 
     std::uint32_t version{};
-    std::uint32_t bound{1};
+    std::uint32_t bound{};
 
     std::unordered_set<std::string> extensions;
     std::unordered_set<spv::Capability> capabilities;
-    std::unordered_set<std::unique_ptr<Op>> ext_inst_import;
-    std::unique_ptr<Op> glsl_std_450;
+    std::optional<Id> glsl_std_450;
 
     spv::AddressingModel addressing_model{spv::AddressingModel::Logical};
     spv::MemoryModel memory_model{spv::MemoryModel::GLSL450};
 
-    std::vector<std::unique_ptr<Op>> entry_points;
-    std::vector<std::unique_ptr<Op>> execution_modes;
-    std::vector<std::unique_ptr<Op>> debug;
-    std::vector<std::unique_ptr<Op>> annotations;
-    std::vector<std::unique_ptr<Op>> declarations;
-
-    std::vector<Id> global_variables;
-
-    std::vector<Id> code;
-
-    std::vector<std::unique_ptr<Op>> code_store;
+    std::unique_ptr<Stream> ext_inst_imports;
+    std::unique_ptr<Stream> entry_points;
+    std::unique_ptr<Stream> execution_modes;
+    std::unique_ptr<Stream> debug;
+    std::unique_ptr<Stream> annotations;
+    std::unique_ptr<Declarations> declarations;
+    std::unique_ptr<Stream> global_variables;
+    std::unique_ptr<Stream> code;
+    
 };
 
 } // namespace Sirit
