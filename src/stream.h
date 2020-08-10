@@ -15,6 +15,10 @@
 #include <variant>
 #include <vector>
 
+#ifndef __cpp_lib_bit_cast
+#include <cstring>
+#endif
+
 #include <spirv/unified1/spirv.hpp>
 
 #include "common_types.h"
@@ -24,8 +28,8 @@ namespace Sirit {
 class Declarations;
 
 struct OpId {
-    spv::Op opcode;
-    Id result_type;
+    spv::Op opcode{};
+    Id result_type{};
 };
 
 struct EndOp {};
@@ -38,7 +42,7 @@ inline void InsertStringView(std::vector<u32>& words, size_t& insert_index,
                              std::string_view string) {
     const size_t size = string.size();
     const auto read = [string, size](size_t offset) {
-        return offset < size ? static_cast<u8>(string[offset]) : u8(0);
+        return offset < size ? static_cast<u32>(string[offset]) : 0u;
     };
 
     for (size_t i = 0; i < size; i += sizeof(u32)) {
@@ -106,11 +110,25 @@ public:
     }
 
     Stream& operator<<(float value) {
+#ifdef __cpp_lib_bit_cast
         return *this << std::bit_cast<u32>(value);
+#else
+        static_assert(sizeof(float) == sizeof(u32));
+        u32 int_value;
+        std::memcpy(&int_value, &value, sizeof(int_value));
+        return *this << int_value;
+#endif
     }
 
     Stream& operator<<(double value) {
+#ifdef __cpp_lib_bit_cast
         return *this << std::bit_cast<u64>(value);
+#else
+        static_assert(sizeof(double) == sizeof(u64));
+        u64 int_value;
+        std::memcpy(&int_value, &value, sizeof(int_value));
+        return *this << int_value;
+#endif
     }
 
     Stream& operator<<(bool value) {
@@ -129,6 +147,10 @@ public:
     Stream& operator<<(std::string_view string) {
         InsertStringView(words, insert_index, string);
         return *this;
+    }
+
+    Stream& operator<<(const char* string) {
+        return *this << std::string_view{string};
     }
 
     template <typename T>
@@ -188,7 +210,7 @@ public:
     }
 
     Id operator<<(EndOp) {
-        const auto begin = stream.words.begin();
+        const auto begin = stream.words.data();
         std::vector<u32> declarations(begin + stream.op_index, begin + stream.insert_index);
 
         // Normalize result id for lookups
