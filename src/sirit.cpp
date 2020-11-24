@@ -42,8 +42,10 @@ std::vector<u32> Module::Assemble() const {
     }
 
     for (const std::string_view extension_name : extensions) {
+        size_t count = WordsInString(extension_name);
+        words.push_back(MakeWord0(spv::Op::OpExtension, count + 1));
         size_t insert_index = words.size();
-        words.resize(words.size() + WordsInString(extension_name));
+        words.resize(words.size() + count);
         InsertStringView(words, insert_index, extension_name);
     }
 
