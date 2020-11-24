@@ -35,7 +35,7 @@ struct OpId {
 struct EndOp {};
 
 constexpr size_t WordsInString(std::string_view string) {
-    return string.size() / sizeof(u32);
+    return string.size() / sizeof(u32) + 1;
 }
 
 inline void InsertStringView(std::vector<u32>& words, size_t& insert_index,
