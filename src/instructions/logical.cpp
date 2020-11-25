@@ -24,7 +24,7 @@ namespace Sirit {
 
 #define DEFINE_TRINARY(opcode)                                                                     \
     Id Module::opcode(Id result_type, Id operand_1, Id operand_2, Id operand_3) {                  \
-        code->Reserve(5);                                                                          \
+        code->Reserve(6);                                                                          \
         return *code << OpId{spv::Op::opcode, result_type} << operand_1 << operand_2 << operand_3  \
                      << EndOp{};                                                                   \
     }
