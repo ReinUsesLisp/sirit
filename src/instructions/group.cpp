@@ -36,10 +36,30 @@ Id Module::OpSubgroupAllEqualKHR(Id result_type, Id predicate) {
     return *code << OpId{spv::Op::OpSubgroupAllEqualKHR, result_type} << predicate << EndOp{};
 }
 
-Id Module::OpGroupNonUniformShuffleXor(Id result_type, spv::Scope scope, Id value, Id mask) {
+Id Module::OpGroupNonUniformShuffleXor(Id result_type, Id scope, Id value, Id mask) {
     code->Reserve(6);
     return *code << OpId{spv::Op::OpGroupNonUniformShuffleXor, result_type} << scope << value
                  << mask << EndOp{};
+}
+
+Id Module::OpGroupNonUniformAll(Id result_type, Id scope, Id predicate) {
+   code->Reserve(5);
+   return *code << OpId{spv::Op::OpGroupNonUniformAll, result_type} << scope << predicate << EndOp{};
+}
+
+Id Module::OpGroupNonUniformAny(Id result_type, Id scope, Id predicate) {
+   code->Reserve(5);
+   return *code << OpId{spv::Op::OpGroupNonUniformAny, result_type} << scope << predicate << EndOp{};
+}
+
+Id Module::OpGroupNonUniformAllEqual(Id result_type, Id scope, Id value) {
+   code->Reserve(5);
+   return *code << OpId{spv::Op::OpGroupNonUniformAllEqual, result_type} << scope << value << EndOp{};
+}
+
+Id Module::OpGroupNonUniformBallot(Id result_type, Id scope, Id predicate) {
+   code->Reserve(5);
+   return *code << OpId{spv::Op::OpGroupNonUniformBallot, result_type} << scope << predicate << EndOp{};
 }
 
 } // namespace Sirit
