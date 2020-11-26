@@ -1017,7 +1017,29 @@ public:
 
     /// Return the value of the invocation identified by the current invocation's id within the
     /// group xor'ed with mask.
-    Id OpGroupNonUniformShuffleXor(Id result_type, spv::Scope scope, Id value, Id mask);
+    Id OpGroupNonUniformShuffleXor(Id result_type, Id scope, Id value, Id mask);
+
+    /// Evaluates a predicate for all active invocations in the group, resulting in
+    /// true if predicate evaluates to true for all active invocations in the
+    /// group, otherwise the result is false.
+    Id OpGroupNonUniformAll(Id result_type, Id scope, Id predicate);
+
+    /// Evaluates a predicate for all active invocations in the group,
+    /// resulting in true if predicate evaluates to true for any active
+    /// invocation in the group, otherwise the result is false.
+    Id OpGroupNonUniformAny(Id result_type, Id scope, Id predicate);
+
+    /// Evaluates a value for all active invocations in the group. The result
+    /// is true if Value is equal for all active invocations in the group.
+    /// Otherwise, the result is false.
+    Id OpGroupNonUniformAllEqual(Id result_type, Id scope, Id value);
+
+    /// Result is a bitfield value combining the Predicate value from all
+    /// invocations in the group that execute the same dynamic instance of this
+    /// instruction. The bit is set to one if the corresponding invocation is
+    /// active and the Predicate for that invocation evaluated to true;
+    /// otherwise, it is set to zero.
+    Id OpGroupNonUniformBallot(Id result_type, Id scope, Id predicate);
 
     // Atomic
 
