@@ -368,6 +368,13 @@ public:
         return Decorate(target, decoration, std::span<const Literal>{stack_literals});
     }
 
+    /// Add a decoration to target.
+    template <typename T>
+    requires std::is_enum_v<T>
+    Id Decorate(Id target, spv::Decoration decoration, T literal) {
+        return Decorate(target, decoration, static_cast<std::uint32_t>(literal));
+    }
+
     Id MemberDecorate(Id structure_type, Literal member, spv::Decoration decoration,
                       std::span<const Literal> literals = {});
 
