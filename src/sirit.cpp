@@ -111,9 +111,9 @@ Id Module::AddLocalVariable(Id result_type, spv::StorageClass storage_class,
 
 Id Module::AddGlobalVariable(Id result_type, spv::StorageClass storage_class,
                              std::optional<Id> initializer) {
-    code->Reserve(5);
-    return *code << OpId{spv::Op::OpVariable, result_type} << storage_class << initializer
-                 << EndOp{};
+    global_variables->Reserve(5);
+    return *global_variables << OpId{spv::Op::OpVariable, result_type} << storage_class
+                             << initializer << EndOp{};
 }
 
 Id Module::GetGLSLstd450() {
