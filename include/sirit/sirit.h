@@ -232,6 +232,12 @@ public:
 
     // Flow
 
+    /**
+     * The SSA phi function.
+     * @param operands An immutable span of variable, parent block pairs
+     */
+    Id OpPhi(Id result_type, std::span<const Id> operands);
+
     /// Declare a structured loop.
     Id OpLoopMerge(Id merge_block, Id continue_target, spv::LoopControlMask loop_control,
                    std::span<const Id> literals = {});

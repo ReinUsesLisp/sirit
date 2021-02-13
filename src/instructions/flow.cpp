@@ -12,6 +12,12 @@
 
 namespace Sirit {
 
+Id Module::OpPhi(Id result_type, std::span<const Id> operands) {
+    assert(operands.size() % 2 == 0);
+    code->Reserve(3 + operands.size());
+    return *code << OpId{spv::Op::OpPhi, result_type} << operands << EndOp{};
+}
+
 Id Module::OpLoopMerge(Id merge_block, Id continue_target, spv::LoopControlMask loop_control,
                        std::span<const Id> literals) {
     code->Reserve(4 + literals.size());
