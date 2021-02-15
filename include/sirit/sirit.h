@@ -35,6 +35,10 @@ struct Id {
     std::uint32_t value;
 };
 
+[[nodiscard]] inline bool ValidId(Id id) noexcept {
+    return id.value != 0;
+}
+
 class Module {
 public:
     explicit Module(std::uint32_t version = spv::Version);
@@ -82,6 +86,12 @@ public:
     void AddExecutionMode(Id entry_point, spv::ExecutionMode mode, Ts&&... literals) {
         AddExecutionMode(entry_point, mode, std::span<const Literal>({literals...}));
     }
+
+    /// Generate a new id for forward declarations
+    [[nodiscard]] Id ForwardDeclarationId();
+
+    /// Assign a new id and return the old one, useful for defining forward declarations
+    Id ExchangeCurrentId(Id new_current_id);
 
     /**
      * Adds an existing label to the code

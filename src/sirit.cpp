@@ -95,6 +95,15 @@ void Module::AddExecutionMode(Id entry_point, spv::ExecutionMode mode,
     *execution_modes << spv::Op::OpExecutionMode << entry_point << mode << literals << EndOp{};
 }
 
+Id Module::ForwardDeclarationId() {
+    return Id{++bound};
+}
+
+Id Module::ExchangeCurrentId(Id new_current_id) {
+    const std::uint32_t old_id = std::exchange(bound, new_current_id.value - 1);
+    return Id{old_id + 1};
+}
+
 Id Module::AddLabel(Id label) {
     assert(label.value != 0);
     code->Reserve(2);
