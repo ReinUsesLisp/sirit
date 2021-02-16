@@ -7,6 +7,7 @@
 #pragma once
 
 #include <bit>
+#include <cassert>
 #include <concepts>
 #include <cstddef>
 #include <functional>
@@ -136,6 +137,7 @@ public:
     }
 
     Stream& operator<<(Id value) {
+        assert(value.value != 0);
         return *this << value.value;
     }
 
