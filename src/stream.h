@@ -29,6 +29,11 @@ namespace Sirit {
 class Declarations;
 
 struct OpId {
+    OpId(spv::Op opcode_) : opcode{opcode_} {}
+    OpId(spv::Op opcode_, Id result_type_) : opcode{opcode_}, result_type{result_type_} {
+        assert(result_type.value != 0);
+    }
+
     spv::Op opcode{};
     Id result_type{};
 };
