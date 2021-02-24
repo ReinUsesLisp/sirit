@@ -90,6 +90,9 @@ public:
     /// Generate a new id for forward declarations
     [[nodiscard]] Id ForwardDeclarationId();
 
+    /// Returns the current generator id, useful for self-referencing phi nodes
+    [[nodiscard]] Id CurrentId() const noexcept;
+
     /// Assign a new id and return the old one, useful for defining forward declarations
     Id ExchangeCurrentId(Id new_current_id);
 

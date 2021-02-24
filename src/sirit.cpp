@@ -99,6 +99,10 @@ Id Module::ForwardDeclarationId() {
     return Id{++bound};
 }
 
+Id Module::CurrentId() const noexcept {
+    return Id{bound + 1};
+}
+
 Id Module::ExchangeCurrentId(Id new_current_id) {
     const std::uint32_t old_id = std::exchange(bound, new_current_id.value - 1);
     return Id{old_id + 1};
