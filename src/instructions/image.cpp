@@ -10,6 +10,8 @@
 
 #include "stream.h"
 
+#pragma optimize("", off)
+
 namespace Sirit {
 
 #define DEFINE_IMAGE_OP(opcode)                                                                    \
@@ -24,8 +26,8 @@ namespace Sirit {
 #define DEFINE_IMAGE_EXP_OP(opcode)                                                                \
     Id Module::opcode(Id result_type, Id sampled_image, Id coordinate,                             \
                       spv::ImageOperandsMask image_operands, std::span<const Id> operands) {       \
-        code->Reserve(7 + operands.size());                                                        \
-        return *code << OpId{spv::Op::OpDecorate, result_type} << sampled_image << coordinate      \
+        code->Reserve(6 + operands.size());                                                        \
+        return *code << OpId{spv::Op::opcode, result_type} << sampled_image << coordinate          \
                      << image_operands << operands << EndOp{};                                     \
     }
 
@@ -55,7 +57,7 @@ namespace Sirit {
 #define DEFINE_IMAGE_QUERY_BIN_OP(opcode)                                                          \
     Id Module::opcode(Id result_type, Id image, Id extra) {                                        \
         code->Reserve(5);                                                                          \
-        return *code << OpId{spv::Op::OpDecorate, result_type} << image << extra << EndOp{};       \
+        return *code << OpId{spv::Op::opcode, result_type} << image << extra << EndOp{};           \
     }
 
 DEFINE_IMAGE_OP(OpImageSampleImplicitLod)
@@ -93,6 +95,77 @@ Id Module::OpImageWrite(Id image, Id coordinate, Id texel,
 Id Module::OpImage(Id result_type, Id sampled_image) {
     code->Reserve(4);
     return *code << OpId{spv::Op::OpImage, result_type} << sampled_image << EndOp{};
+}
+
+Id Module::OpImageSparseSampleImplicitLod(Id result_type, Id sampled_image, Id coordinate,
+                                          std::optional<spv::ImageOperandsMask> image_operands,
+                                          std::span<const Id> operands) {
+    code->Reserve(5 + (image_operands.has_value() ? 1 : 0) + operands.size());
+    return *code << OpId{spv::Op::OpImageSparseSampleImplicitLod, result_type} << sampled_image
+                 << coordinate << image_operands << operands << EndOp{};
+}
+
+Id Module::OpImageSparseSampleExplicitLod(Id result_type, Id sampled_image, Id coordinate,
+                                          spv::ImageOperandsMask image_operands,
+                                          std::span<const Id> operands) {
+    code->Reserve(6 + operands.size());
+    return *code << OpId{spv::Op::OpImageSparseSampleExplicitLod, result_type} << sampled_image
+                 << coordinate << image_operands << operands << EndOp{};
+}
+
+Id Module::OpImageSparseSampleDrefImplicitLod(Id result_type, Id sampled_image, Id coordinate,
+                                              Id dref,
+                                              std::optional<spv::ImageOperandsMask> image_operands,
+                                              std::span<const Id> operands) {
+    code->Reserve(6 + (image_operands.has_value() ? 1 : 0) + operands.size());
+    return *code << OpId{spv::Op::OpImageSparseSampleDrefImplicitLod, result_type} << sampled_image
+                 << coordinate << dref << image_operands << operands << EndOp{};
+}
+
+Id Module::OpImageSparseSampleDrefExplicitLod(Id result_type, Id sampled_image, Id coordinate,
+                                              Id dref, spv::ImageOperandsMask image_operands,
+                                              std::span<const Id> operands) {
+    code->Reserve(7 + operands.size());
+    return *code << OpId{spv::Op::OpImageSparseSampleDrefExplicitLod, result_type} << sampled_image
+                 << coordinate << dref << image_operands << operands << EndOp{};
+}
+
+Id Module::OpImageSparseFetch(Id result_type, Id image, Id coordinate,
+                              std::optional<spv::ImageOperandsMask> image_operands,
+                              std::span<const Id> operands) {
+    code->Reserve(5 + (image_operands.has_value() ? 1 : 0) + operands.size());
+    return *code << OpId{spv::Op::OpImageSparseFetch, result_type} << image << coordinate
+                 << image_operands << operands << EndOp{};
+}
+
+Id Module::OpImageSparseGather(Id result_type, Id sampled_image, Id coordinate, Id component,
+                               std::optional<spv::ImageOperandsMask> image_operands,
+                               std::span<const Id> operands) {
+    code->Reserve(6 + operands.size());
+    return *code << OpId{spv::Op::OpImageSparseGather, result_type} << sampled_image << coordinate
+                 << component << image_operands << operands << EndOp{};
+}
+
+Id Module::OpImageSparseDrefGather(Id result_type, Id sampled_image, Id coordinate, Id dref,
+                                   std::optional<spv::ImageOperandsMask> image_operands,
+                                   std::span<const Id> operands) {
+    code->Reserve(6 + operands.size());
+    return *code << OpId{spv::Op::OpImageSparseDrefGather, result_type} << sampled_image
+                 << coordinate << dref << image_operands << operands << EndOp{};
+}
+
+Id Module::OpImageSparseTexelsResident(Id result_type, Id resident_code) {
+    code->Reserve(4);
+    return *code << OpId{spv::Op::OpImageSparseTexelsResident, result_type} << resident_code
+                 << EndOp{};
+}
+
+Id Module::OpImageSparseRead(Id result_type, Id image, Id coordinate,
+                             std::optional<spv::ImageOperandsMask> image_operands,
+                             std::span<const Id> operands) {
+    code->Reserve(5 + (image_operands.has_value() ? 1 : 0) + operands.size());
+    return *code << OpId{spv::Op::OpImageSparseTexelsResident, result_type} << image << coordinate
+                 << image_operands << operands << EndOp{};
 }
 
 } // namespace Sirit

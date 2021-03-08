@@ -69,9 +69,9 @@ public:
     // TODO: Change std::is_convertible_v to std::convertible_to when compilers
     // support it; same elsewhere.
     template <typename... Ts>
-    requires (... && std::is_convertible_v<Ts, Id>)
-    void AddEntryPoint(spv::ExecutionModel execution_model, Id entry_point, std::string_view name,
-                       Ts&&... interfaces) {
+    requires(...&& std::is_convertible_v<Ts, Id>) void AddEntryPoint(
+        spv::ExecutionModel execution_model, Id entry_point, std::string_view name,
+        Ts&&... interfaces) {
         AddEntryPoint(execution_model, std::move(entry_point), name,
                       std::span<const Id>({interfaces...}));
     }
@@ -82,8 +82,8 @@ public:
 
     /// Declare an execution mode for an entry point.
     template <typename... Ts>
-    requires (... && std::is_convertible_v<Ts, Literal>)
-    void AddExecutionMode(Id entry_point, spv::ExecutionMode mode, Ts&&... literals) {
+    requires(...&& std::is_convertible_v<Ts, Literal>) void AddExecutionMode(
+        Id entry_point, spv::ExecutionMode mode, Ts&&... literals) {
         AddExecutionMode(entry_point, mode, std::span<const Literal>({literals...}));
     }
 
@@ -161,8 +161,7 @@ public:
 
     /// Returns type struct.
     template <typename... Ts>
-    requires (... && std::is_convertible_v<Ts, Id>)
-    Id TypeStruct(Ts&&... members) {
+    requires(...&& std::is_convertible_v<Ts, Id>) Id TypeStruct(Ts&&... members) {
         return TypeStruct(std::span<const Id>({members...}));
     }
 
@@ -177,8 +176,8 @@ public:
 
     /// Returns type function.
     template <typename... Ts>
-    requires (... && std::is_convertible_v<Ts, Id>)
-    Id TypeFunction(Id return_type, Ts&&... arguments) {
+    requires(...&& std::is_convertible_v<Ts, Id>) Id
+        TypeFunction(Id return_type, Ts&&... arguments) {
         return TypeFunction(return_type, std::span<const Id>({arguments...}));
     }
 
@@ -213,8 +212,8 @@ public:
 
     /// Returns a numeric scalar constant.
     template <typename... Ts>
-    requires (... && std::is_convertible_v<Ts, Id>)
-    Id ConstantComposite(Id result_type, Ts&&... constituents) {
+    requires(...&& std::is_convertible_v<Ts, Id>) Id
+        ConstantComposite(Id result_type, Ts&&... constituents) {
         return ConstantComposite(result_type, std::span<const Id>({constituents...}));
     }
 
@@ -238,8 +237,8 @@ public:
 
     /// Call a function.
     template <typename... Ts>
-    requires (... && std::is_convertible_v<Ts, Id>)
-    Id OpFunctionCall(Id result_type, Id function, Ts&&... arguments) {
+    requires(...&& std::is_convertible_v<Ts, Id>) Id
+        OpFunctionCall(Id result_type, Id function, Ts&&... arguments) {
         return OpFunctionCall(result_type, function, std::span<const Id>({arguments...}));
     }
 
@@ -257,9 +256,9 @@ public:
 
     /// Declare a structured loop.
     template <typename... Ts>
-    requires (... && std::is_convertible_v<Ts, Id>)
-    Id OpLoopMerge(Id merge_block, Id continue_target, spv::LoopControlMask loop_control,
-                   Ts&&... literals) {
+    requires(...&& std::is_convertible_v<Ts, Id>) Id
+        OpLoopMerge(Id merge_block, Id continue_target, spv::LoopControlMask loop_control,
+                    Ts&&... literals) {
         return OpLoopMerge(merge_block, continue_target, loop_control,
                            std::span<const Id>({literals...}));
     }
@@ -329,8 +328,8 @@ public:
 
     /// Create a pointer into a composite object that can be used with OpLoad and OpStore.
     template <typename... Ts>
-    requires (... && std::is_convertible_v<Ts, Id>)
-    Id OpAccessChain(Id result_type, Id base, Ts&&... indexes) {
+    requires(...&& std::is_convertible_v<Ts, Id>) Id
+        OpAccessChain(Id result_type, Id base, Ts&&... indexes) {
         return OpAccessChain(result_type, base, std::span<const Id>({indexes...}));
     }
 
@@ -346,8 +345,8 @@ public:
 
     /// Make a copy of a composite object, while modifying one part of it.
     template <typename... Ts>
-    requires (... && std::is_convertible_v<Ts, Literal>)
-    Id OpCompositeInsert(Id result_type, Id object, Id composite, Ts&&... indexes) {
+    requires(...&& std::is_convertible_v<Ts, Literal>) Id
+        OpCompositeInsert(Id result_type, Id object, Id composite, Ts&&... indexes) {
         const Literal stack_indexes[] = {std::forward<Ts>(indexes)...};
         return OpCompositeInsert(result_type, object, composite,
                                  std::span<const Literal>{stack_indexes});
@@ -358,8 +357,8 @@ public:
 
     /// Extract a part of a composite object.
     template <typename... Ts>
-    requires (... && std::is_convertible_v<Ts, Literal>)
-    Id OpCompositeExtract(Id result_type, Id composite, Ts&&... indexes) {
+    requires(...&& std::is_convertible_v<Ts, Literal>) Id
+        OpCompositeExtract(Id result_type, Id composite, Ts&&... indexes) {
         const Literal stack_indexes[] = {std::forward<Ts>(indexes)...};
         return OpCompositeExtract(result_type, composite, std::span<const Literal>{stack_indexes});
     }
@@ -369,8 +368,8 @@ public:
 
     /// Construct a new composite object from a set of constituent objects that will fully form it.
     template <typename... Ts>
-    requires (... && std::is_convertible_v<Ts, Id>)
-    Id OpCompositeConstruct(Id result_type, Ts&&... ids) {
+    requires(...&& std::is_convertible_v<Ts, Id>) Id
+        OpCompositeConstruct(Id result_type, Ts&&... ids) {
         return OpCompositeConstruct(result_type, std::span<const Id>({ids...}));
     }
 
@@ -381,16 +380,15 @@ public:
 
     /// Add a decoration to target.
     template <typename... Ts>
-    requires (... && std::is_convertible_v<Ts, Literal>)
-    Id Decorate(Id target, spv::Decoration decoration, Ts&&... literals) {
+    requires(...&& std::is_convertible_v<Ts, Literal>) Id
+        Decorate(Id target, spv::Decoration decoration, Ts&&... literals) {
         const Literal stack_literals[] = {std::forward<Ts>(literals)...};
         return Decorate(target, decoration, std::span<const Literal>{stack_literals});
     }
 
     /// Add a decoration to target.
     template <typename T>
-    requires std::is_enum_v<T>
-    Id Decorate(Id target, spv::Decoration decoration, T literal) {
+    requires std::is_enum_v<T> Id Decorate(Id target, spv::Decoration decoration, T literal) {
         return Decorate(target, decoration, static_cast<std::uint32_t>(literal));
     }
 
@@ -398,9 +396,9 @@ public:
                       std::span<const Literal> literals = {});
 
     template <typename... Ts>
-    requires (... && std::is_convertible_v<Ts, Literal>)
-    Id MemberDecorate(Id structure_type, Literal member, spv::Decoration decoration,
-                      Ts&&... literals) {
+    requires(...&& std::is_convertible_v<Ts, Literal>) Id
+        MemberDecorate(Id structure_type, Literal member, spv::Decoration decoration,
+                       Ts&&... literals) {
         const Literal stack_literals[] = {std::forward<Ts>(literals)...};
         return MemberDecorate(structure_type, member, decoration,
                               std::span<const Literal>{stack_literals});
@@ -662,10 +660,9 @@ public:
 
     /// Execute an instruction in an imported set of extended instructions.
     template <typename... Ts>
-    requires (... && std::is_convertible_v<Ts, Id>)
-    Id OpExtInst(Id result_type, Id set, std::uint32_t instruction, Ts&&... operands) {
-        return OpExtInst(result_type, set, instruction,
-                         std::span<const Id>({operands...}));
+    requires(...&& std::is_convertible_v<Ts, Id>) Id
+        OpExtInst(Id result_type, Id set, std::uint32_t instruction, Ts&&... operands) {
+        return OpExtInst(result_type, set, instruction, std::span<const Id>({operands...}));
     }
 
     /// Result is x if x >= 0; otherwise result is -x.
@@ -819,9 +816,9 @@ public:
 
     /// Sample an image with an implicit level of detail.
     template <typename... Ts>
-    requires (... && std::is_convertible_v<Ts, Id>)
-    Id OpImageSampleImplicitLod(Id result_type, Id sampled_image, Id coordinate,
-                                spv::ImageOperandsMask image_operands, Ts&&... operands) {
+    requires(...&& std::is_convertible_v<Ts, Id>) Id
+        OpImageSampleImplicitLod(Id result_type, Id sampled_image, Id coordinate,
+                                 spv::ImageOperandsMask image_operands, Ts&&... operands) {
         return OpImageSampleImplicitLod(result_type, sampled_image, coordinate, image_operands,
                                         std::span<const Id>({operands...}));
     }
@@ -833,9 +830,9 @@ public:
 
     /// Sample an image using an explicit level of detail.
     template <typename... Ts>
-    requires (... && std::is_convertible_v<Ts, Id>)
-    Id OpImageSampleExplicitLod(Id result_type, Id sampled_image, Id coordinate,
-                                spv::ImageOperandsMask image_operands, Ts&&... operands) {
+    requires(...&& std::is_convertible_v<Ts, Id>) Id
+        OpImageSampleExplicitLod(Id result_type, Id sampled_image, Id coordinate,
+                                 spv::ImageOperandsMask image_operands, Ts&&... operands) {
         return OpImageSampleExplicitLod(result_type, sampled_image, coordinate, image_operands,
                                         std::span<const Id>({operands...}));
     }
@@ -847,12 +844,11 @@ public:
 
     /// Sample an image doing depth-comparison with an implicit level of detail.
     template <typename... Ts>
-    requires (... && std::is_convertible_v<Ts, Id>)
-    Id OpImageSampleDrefImplicitLod(Id result_type, Id sampled_image, Id coordinate, Id dref,
-                                    spv::ImageOperandsMask image_operands, Ts&&... operands) {
+    requires(...&& std::is_convertible_v<Ts, Id>) Id
+        OpImageSampleDrefImplicitLod(Id result_type, Id sampled_image, Id coordinate, Id dref,
+                                     spv::ImageOperandsMask image_operands, Ts&&... operands) {
         return OpImageSampleDrefImplicitLod(result_type, sampled_image, coordinate, dref,
-                                            image_operands,
-                                            std::span<const Id>({operands...}));
+                                            image_operands, std::span<const Id>({operands...}));
     }
 
     /// Sample an image doing depth-comparison using an explicit level of detail.
@@ -862,12 +858,11 @@ public:
 
     /// Sample an image doing depth-comparison using an explicit level of detail.
     template <typename... Ts>
-    requires (... && std::is_convertible_v<Ts, Id>)
-    Id OpImageSampleDrefExplicitLod(Id result_type, Id sampled_image, Id coordinate, Id dref,
-                                    spv::ImageOperandsMask image_operands, Ts&&... operands) {
+    requires(...&& std::is_convertible_v<Ts, Id>) Id
+        OpImageSampleDrefExplicitLod(Id result_type, Id sampled_image, Id coordinate, Id dref,
+                                     spv::ImageOperandsMask image_operands, Ts&&... operands) {
         return OpImageSampleDrefExplicitLod(result_type, sampled_image, coordinate, dref,
-                                            image_operands,
-                                            std::span<const Id>({operands...}));
+                                            image_operands, std::span<const Id>({operands...}));
     }
 
     /// Sample an image with with a project coordinate and an implicit level of detail.
@@ -877,9 +872,9 @@ public:
 
     /// Sample an image with with a project coordinate and an implicit level of detail.
     template <typename... Ts>
-    requires (... && std::is_convertible_v<Ts, Id>)
-    Id OpImageSampleProjImplicitLod(Id result_type, Id sampled_image, Id coordinate,
-                                    spv::ImageOperandsMask image_operands, Ts&&... operands) {
+    requires(...&& std::is_convertible_v<Ts, Id>) Id
+        OpImageSampleProjImplicitLod(Id result_type, Id sampled_image, Id coordinate,
+                                     spv::ImageOperandsMask image_operands, Ts&&... operands) {
         return OpImageSampleProjImplicitLod(result_type, sampled_image, coordinate, image_operands,
                                             std::span<const Id>({operands...}));
     }
@@ -891,9 +886,9 @@ public:
 
     /// Sample an image with a project coordinate using an explicit level of detail.
     template <typename... Ts>
-    requires (... && std::is_convertible_v<Ts, Id>)
-    Id OpImageSampleProjExplicitLod(Id result_type, Id sampled_image, Id coordinate,
-                                    spv::ImageOperandsMask image_operands, Ts&&... operands) {
+    requires(...&& std::is_convertible_v<Ts, Id>) Id
+        OpImageSampleProjExplicitLod(Id result_type, Id sampled_image, Id coordinate,
+                                     spv::ImageOperandsMask image_operands, Ts&&... operands) {
         return OpImageSampleProjExplicitLod(result_type, sampled_image, coordinate, image_operands,
                                             std::span<const Id>({operands...}));
     }
@@ -907,12 +902,11 @@ public:
     /// Sample an image with a project coordinate, doing depth-comparison, with an implicit level of
     /// detail.
     template <typename... Ts>
-    requires (... && std::is_convertible_v<Ts, Id>)
-    Id OpImageSampleProjDrefImplicitLod(Id result_type, Id sampled_image, Id coordinate, Id dref,
-                                        spv::ImageOperandsMask image_operands, Ts&&... operands) {
+    requires(...&& std::is_convertible_v<Ts, Id>) Id
+        OpImageSampleProjDrefImplicitLod(Id result_type, Id sampled_image, Id coordinate, Id dref,
+                                         spv::ImageOperandsMask image_operands, Ts&&... operands) {
         return OpImageSampleProjDrefImplicitLod(result_type, sampled_image, coordinate, dref,
-                                                image_operands,
-                                                std::span<const Id>({operands...}));
+                                                image_operands, std::span<const Id>({operands...}));
     }
 
     /// Sample an image with a project coordinate, doing depth-comparison, using an explicit level
@@ -924,12 +918,11 @@ public:
     /// Sample an image with a project coordinate, doing depth-comparison, using an explicit level
     /// of detail.
     template <typename... Ts>
-    requires (... && std::is_convertible_v<Ts, Id>)
-    Id OpImageSampleProjDrefExplicitLod(Id result_type, Id sampled_image, Id coordinate, Id dref,
-                                        spv::ImageOperandsMask image_operands, Ts&&... operands) {
+    requires(...&& std::is_convertible_v<Ts, Id>) Id
+        OpImageSampleProjDrefExplicitLod(Id result_type, Id sampled_image, Id coordinate, Id dref,
+                                         spv::ImageOperandsMask image_operands, Ts&&... operands) {
         return OpImageSampleProjDrefExplicitLod(result_type, sampled_image, coordinate, dref,
-                                                image_operands,
-                                                std::span<const Id>({operands...}));
+                                                image_operands, std::span<const Id>({operands...}));
     }
 
     /// Fetch a single texel from an image whose Sampled operand is 1.
@@ -939,9 +932,9 @@ public:
 
     /// Fetch a single texel from an image whose Sampled operand is 1.
     template <typename... Ts>
-    requires (... && std::is_convertible_v<Ts, Id>)
-    Id OpImageFetch(Id result_type, Id sampled_image, Id coordinate,
-                    spv::ImageOperandsMask image_operands, Ts&&... operands) {
+    requires(...&& std::is_convertible_v<Ts, Id>) Id
+        OpImageFetch(Id result_type, Id sampled_image, Id coordinate,
+                     spv::ImageOperandsMask image_operands, Ts&&... operands) {
         return OpImageFetch(result_type, sampled_image, coordinate, image_operands,
                             std::span<const Id>({operands...}));
     }
@@ -953,9 +946,9 @@ public:
 
     /// Gathers the requested component from four texels.
     template <typename... Ts>
-    requires (... && std::is_convertible_v<Ts, Id>)
-    Id OpImageGather(Id result_type, Id sampled_image, Id coordinate, Id component,
-                     spv::ImageOperandsMask image_operands, Ts&&... operands) {
+    requires(...&& std::is_convertible_v<Ts, Id>) Id
+        OpImageGather(Id result_type, Id sampled_image, Id coordinate, Id component,
+                      spv::ImageOperandsMask image_operands, Ts&&... operands) {
         return OpImageGather(result_type, sampled_image, coordinate, component, image_operands,
                              std::span<const Id>({operands...}));
     }
@@ -967,9 +960,9 @@ public:
 
     /// Gathers the requested depth-comparison from four texels.
     template <typename... Ts>
-    requires (... && std::is_convertible_v<Ts, Id>)
-    Id OpImageDrefGather(Id result_type, Id sampled_image, Id coordinate, Id dref,
-                         spv::ImageOperandsMask image_operands, Ts&&... operands) {
+    requires(...&& std::is_convertible_v<Ts, Id>) Id
+        OpImageDrefGather(Id result_type, Id sampled_image, Id coordinate, Id dref,
+                          spv::ImageOperandsMask image_operands, Ts&&... operands) {
         return OpImageDrefGather(result_type, sampled_image, coordinate, dref, image_operands,
                                  std::span<const Id>({operands...}));
     }
@@ -981,9 +974,9 @@ public:
 
     /// Read a texel from an image without a sampler.
     template <typename... Ts>
-    requires (... && std::is_convertible_v<Ts, Id>)
-    Id OpImageRead(Id result_type, Id sampled_image, Id coordinate,
-                   spv::ImageOperandsMask image_operands, Ts&&... operands) {
+    requires(...&& std::is_convertible_v<Ts, Id>) Id
+        OpImageRead(Id result_type, Id sampled_image, Id coordinate,
+                    spv::ImageOperandsMask image_operands, Ts&&... operands) {
         return OpImageRead(result_type, sampled_image, coordinate, image_operands,
                            std::span<const Id>({operands...}));
     }
@@ -995,9 +988,9 @@ public:
 
     /// Write a texel to an image without a sampler.
     template <typename... Ts>
-    requires (... && std::is_convertible_v<Ts, Id>)
-    Id OpImageWrite(Id image, Id coordinate, Id texel, spv::ImageOperandsMask image_operands,
-                    Ts&&... operands) {
+    requires(...&& std::is_convertible_v<Ts, Id>) Id
+        OpImageWrite(Id image, Id coordinate, Id texel, spv::ImageOperandsMask image_operands,
+                     Ts&&... operands) {
         return OpImageWrite(image, coordinate, texel, image_operands,
                             std::span<const Id>({operands...}));
     }
@@ -1020,6 +1013,50 @@ public:
 
     /// Query the number of samples available per texel fetch in a multisample image.
     Id OpImageQuerySamples(Id result_type, Id image);
+
+    /// Sample a sparse image with an implicit level of detail.
+    Id OpImageSparseSampleImplicitLod(Id result_type, Id sampled_image, Id coordinate,
+                                      std::optional<spv::ImageOperandsMask> image_operands,
+                                      std::span<const Id> operands);
+
+    /// Sample a sparse image using an explicit level of detail.
+    Id OpImageSparseSampleExplicitLod(Id result_type, Id sampled_image, Id coordinate,
+                                      spv::ImageOperandsMask image_operands,
+                                      std::span<const Id> operands);
+
+    /// Sample a sparse image doing depth-comparison with an implicit level of detail.
+    Id OpImageSparseSampleDrefImplicitLod(Id result_type, Id sampled_image, Id coordinate, Id dref,
+                                          std::optional<spv::ImageOperandsMask> image_operands,
+                                          std::span<const Id> operands);
+
+    /// Sample a sparse image doing depth-comparison using an explicit level of detail.
+    Id OpImageSparseSampleDrefExplicitLod(Id result_type, Id sampled_image, Id coordinate, Id dref,
+                                          spv::ImageOperandsMask image_operands,
+                                          std::span<const Id> operands);
+
+    /// Fetch a single texel from a sampled sparse image.
+    Id OpImageSparseFetch(Id result_type, Id image, Id coordinate,
+                          std::optional<spv::ImageOperandsMask> image_operands,
+                          std::span<const Id> operands);
+
+    /// Gathers the requested component from four texels of a sparse image.
+    Id OpImageSparseGather(Id result_type, Id sampled_image, Id coordinate, Id component,
+                           std::optional<spv::ImageOperandsMask> image_operands,
+                           std::span<const Id> operands);
+
+    /// Gathers the requested depth-comparison from four texels of a sparse image.
+    Id OpImageSparseDrefGather(Id result_type, Id sampled_image, Id coordinate, Id dref,
+                               std::optional<spv::ImageOperandsMask> image_operands,
+                               std::span<const Id> operands);
+
+    /// Translates a Resident Code into a Boolean. Result is false if any of the texels were in
+    /// uncommitted texture memory, and true otherwise.
+    Id OpImageSparseTexelsResident(Id result_type, Id resident_code);
+
+    /// Read a texel from a sparse image without a sampler.
+    Id OpImageSparseRead(Id result_type, Id image, Id coordinate,
+                         std::optional<spv::ImageOperandsMask> image_operands,
+                         std::span<const Id> operands);
 
     // Group
 
@@ -1190,7 +1227,6 @@ private:
     std::unique_ptr<Declarations> declarations;
     std::unique_ptr<Stream> global_variables;
     std::unique_ptr<Stream> code;
-    
 };
 
 } // namespace Sirit
