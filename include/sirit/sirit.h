@@ -287,13 +287,16 @@ public:
                 std::span<const Id> labels);
 
     /// Returns with no value from a function with void return type.
-    Id OpReturn();
+    void OpReturn();
 
     /// Return a value from a function.
     Id OpReturnValue(Id value);
 
     /// Fragment-shader discard.
-    Id OpKill();
+    void OpKill();
+
+    /// Demote fragment shader invocation to a helper invocation
+    void OpDemoteToHelperInvocationEXT();
 
     // Debug
 

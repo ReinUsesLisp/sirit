@@ -62,9 +62,9 @@ Id Module::OpSwitch(Id selector, Id default_label, std::span<const Literal> lite
     return *code << EndOp{};
 }
 
-Id Module::OpReturn() {
+void Module::OpReturn() {
     code->Reserve(1);
-    return *code << spv::Op::OpReturn << EndOp{};
+    *code << spv::Op::OpReturn << EndOp{};
 }
 
 Id Module::OpReturnValue(Id value) {
@@ -72,9 +72,14 @@ Id Module::OpReturnValue(Id value) {
     return *code << spv::Op::OpReturnValue << value << EndOp{};
 }
 
-Id Module::OpKill() {
+void Module::OpKill() {
     code->Reserve(1);
-    return *code << spv::Op::OpKill << EndOp{};
+    *code << spv::Op::OpKill << EndOp{};
+}
+
+void Module::OpDemoteToHelperInvocationEXT() {
+    code->Reserve(1);
+    *code << spv::Op::OpDemoteToHelperInvocationEXT << EndOp{};
 }
 
 } // namespace Sirit

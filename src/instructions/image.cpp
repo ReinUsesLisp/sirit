@@ -10,8 +10,6 @@
 
 #include "stream.h"
 
-#pragma optimize("", off)
-
 namespace Sirit {
 
 #define DEFINE_IMAGE_OP(opcode)                                                                    \
