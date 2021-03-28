@@ -242,6 +242,9 @@ public:
         return OpFunctionCall(result_type, function, std::span<const Id>({arguments...}));
     }
 
+    /// Declare a formal parameter of the current function.
+    Id OpFunctionParameter(Id result_type);
+
     // Flow
 
     /**

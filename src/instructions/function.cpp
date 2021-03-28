@@ -26,4 +26,9 @@ Id Module::OpFunctionCall(Id result_type, Id function, std::span<const Id> argum
     return *code << OpId{spv::Op::OpFunctionCall, result_type} << function << arguments << EndOp{};
 }
 
+Id Module::OpFunctionParameter(Id result_type) {
+    code->Reserve(3);
+    return *code << OpId{spv::Op::OpFunctionParameter, result_type} << EndOp{};
+}
+
 } // namespace Sirit
