@@ -292,6 +292,9 @@ public:
     /// Returns with no value from a function with void return type.
     void OpReturn();
 
+    /// Behavior is undefined if this instruction is executed.
+    void OpUnreachable();
+
     /// Return a value from a function.
     Id OpReturnValue(Id value);
 

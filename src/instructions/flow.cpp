@@ -67,6 +67,11 @@ void Module::OpReturn() {
     *code << spv::Op::OpReturn << EndOp{};
 }
 
+void Module::OpUnreachable() {
+    code->Reserve(1);
+    *code << spv::Op::OpUnreachable << EndOp{};
+}
+
 Id Module::OpReturnValue(Id value) {
     code->Reserve(2);
     return *code << spv::Op::OpReturnValue << value << EndOp{};
