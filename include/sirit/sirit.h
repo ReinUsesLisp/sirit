@@ -108,11 +108,11 @@ public:
 
     /// Adds a local variable to the code
     Id AddLocalVariable(Id result_type, spv::StorageClass storage_class,
-                        std::optional<Id> initializer = {});
+                        std::optional<Id> initializer = std::nullopt);
 
     /// Adds a global variable
     Id AddGlobalVariable(Id result_type, spv::StorageClass storage_class,
-                         std::optional<Id> initializer = {});
+                         std::optional<Id> initializer = std::nullopt);
 
     // Types
 
@@ -137,7 +137,7 @@ public:
     /// Returns type image.
     Id TypeImage(Id sampled_type, spv::Dim dim, int depth, bool arrayed, bool ms, int sampled,
                  spv::ImageFormat image_format,
-                 std::optional<spv::AccessQualifier> access_qualifier = {});
+                 std::optional<spv::AccessQualifier> access_qualifier = std::nullopt);
 
     /// Returns type sampler.
     Id TypeSampler();
@@ -328,10 +328,12 @@ public:
     Id OpImageTexelPointer(Id result_type, Id image, Id coordinate, Id sample);
 
     /// Load through a pointer.
-    Id OpLoad(Id result_type, Id pointer, std::optional<spv::MemoryAccessMask> memory_access = {});
+    Id OpLoad(Id result_type, Id pointer,
+              std::optional<spv::MemoryAccessMask> memory_access = std::nullopt);
 
     /// Store through a pointer.
-    Id OpStore(Id pointer, Id object, std::optional<spv::MemoryAccessMask> memory_access = {});
+    Id OpStore(Id pointer, Id object,
+               std::optional<spv::MemoryAccessMask> memory_access = std::nullopt);
 
     /// Create a pointer into a composite object that can be used with OpLoad and OpStore.
     Id OpAccessChain(Id result_type, Id base, std::span<const Id> indexes = {});
@@ -821,7 +823,7 @@ public:
 
     /// Sample an image with an implicit level of detail.
     Id OpImageSampleImplicitLod(Id result_type, Id sampled_image, Id coordinate,
-                                std::optional<spv::ImageOperandsMask> image_operands = {},
+                                std::optional<spv::ImageOperandsMask> image_operands = std::nullopt,
                                 std::span<const Id> operands = {});
 
     /// Sample an image with an implicit level of detail.
@@ -848,9 +850,10 @@ public:
     }
 
     /// Sample an image doing depth-comparison with an implicit level of detail.
-    Id OpImageSampleDrefImplicitLod(Id result_type, Id sampled_image, Id coordinate, Id dref,
-                                    std::optional<spv::ImageOperandsMask> image_operands = {},
-                                    std::span<const Id> operands = {});
+    Id OpImageSampleDrefImplicitLod(
+        Id result_type, Id sampled_image, Id coordinate, Id dref,
+        std::optional<spv::ImageOperandsMask> image_operands = std::nullopt,
+        std::span<const Id> operands = {});
 
     /// Sample an image doing depth-comparison with an implicit level of detail.
     template <typename... Ts>
@@ -876,9 +879,10 @@ public:
     }
 
     /// Sample an image with with a project coordinate and an implicit level of detail.
-    Id OpImageSampleProjImplicitLod(Id result_type, Id sampled_image, Id coordinate,
-                                    std::optional<spv::ImageOperandsMask> image_operands = {},
-                                    std::span<const Id> operands = {});
+    Id OpImageSampleProjImplicitLod(
+        Id result_type, Id sampled_image, Id coordinate,
+        std::optional<spv::ImageOperandsMask> image_operands = std::nullopt,
+        std::span<const Id> operands = {});
 
     /// Sample an image with with a project coordinate and an implicit level of detail.
     template <typename... Ts>
@@ -905,9 +909,10 @@ public:
 
     /// Sample an image with a project coordinate, doing depth-comparison, with an implicit level of
     /// detail.
-    Id OpImageSampleProjDrefImplicitLod(Id result_type, Id sampled_image, Id coordinate, Id dref,
-                                        std::optional<spv::ImageOperandsMask> image_operands = {},
-                                        std::span<const Id> operands = {});
+    Id OpImageSampleProjDrefImplicitLod(
+        Id result_type, Id sampled_image, Id coordinate, Id dref,
+        std::optional<spv::ImageOperandsMask> image_operands = std::nullopt,
+        std::span<const Id> operands = {});
 
     /// Sample an image with a project coordinate, doing depth-comparison, with an implicit level of
     /// detail.
@@ -937,7 +942,7 @@ public:
 
     /// Fetch a single texel from an image whose Sampled operand is 1.
     Id OpImageFetch(Id result_type, Id sampled_image, Id coordinate,
-                    std::optional<spv::ImageOperandsMask> image_operands = {},
+                    std::optional<spv::ImageOperandsMask> image_operands = std::nullopt,
                     std::span<const Id> operands = {});
 
     /// Fetch a single texel from an image whose Sampled operand is 1.
@@ -951,7 +956,7 @@ public:
 
     /// Gathers the requested component from four texels.
     Id OpImageGather(Id result_type, Id sampled_image, Id coordinate, Id component,
-                     std::optional<spv::ImageOperandsMask> image_operands = {},
+                     std::optional<spv::ImageOperandsMask> image_operands = std::nullopt,
                      std::span<const Id> operands = {});
 
     /// Gathers the requested component from four texels.
@@ -965,7 +970,7 @@ public:
 
     /// Gathers the requested depth-comparison from four texels.
     Id OpImageDrefGather(Id result_type, Id sampled_image, Id coordinate, Id dref,
-                         std::optional<spv::ImageOperandsMask> image_operands = {},
+                         std::optional<spv::ImageOperandsMask> image_operands = std::nullopt,
                          std::span<const Id> operands = {});
 
     /// Gathers the requested depth-comparison from four texels.
@@ -979,7 +984,7 @@ public:
 
     /// Read a texel from an image without a sampler.
     Id OpImageRead(Id result_type, Id sampled_image, Id coordinate,
-                   std::optional<spv::ImageOperandsMask> image_operands = {},
+                   std::optional<spv::ImageOperandsMask> image_operands = std::nullopt,
                    std::span<const Id> operands = {});
 
     /// Read a texel from an image without a sampler.
@@ -993,7 +998,7 @@ public:
 
     /// Write a texel to an image without a sampler.
     Id OpImageWrite(Id image, Id coordinate, Id texel,
-                    std::optional<spv::ImageOperandsMask> image_operands = {},
+                    std::optional<spv::ImageOperandsMask> image_operands = std::nullopt,
                     std::span<const Id> operands = {});
 
     /// Write a texel to an image without a sampler.
