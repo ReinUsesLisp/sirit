@@ -18,6 +18,16 @@ Id Module::OpPhi(Id result_type, std::span<const Id> operands) {
     return *code << OpId{spv::Op::OpPhi, result_type} << operands << EndOp{};
 }
 
+Id Module::DeferredOpPhi(Id result_type, std::span<const Id> blocks) {
+    deferred_phi_nodes.push_back(code->LocalAddress());
+    code->Reserve(3 + blocks.size() * 2);
+    *code << OpId{spv::Op::OpPhi, result_type};
+    for (const Id block : blocks) {
+        *code << u32{0} << block;
+    }
+    return *code << EndOp{};
+}
+
 Id Module::OpLoopMerge(Id merge_block, Id continue_target, spv::LoopControlMask loop_control,
                        std::span<const Id> literals) {
     code->Reserve(4 + literals.size());

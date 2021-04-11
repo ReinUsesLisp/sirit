@@ -12,6 +12,7 @@
 #include <optional>
 #include <span>
 #include <string>
+#include <functional>
 #include <string_view>
 #include <type_traits>
 #include <unordered_set>
@@ -52,6 +53,9 @@ public:
      */
     std::vector<std::uint32_t> Assemble() const;
 
+    /// Patches deferred phi nodes calling the passed function on each phi argument
+    void PatchDeferredPhi(const std::function<Id(std::size_t index)>& func);
+
     /// Adds a SPIR-V extension.
     void AddExtension(std::string extension_name);
 
@@ -86,15 +90,6 @@ public:
         Id entry_point, spv::ExecutionMode mode, Ts&&... literals) {
         AddExecutionMode(entry_point, mode, std::span<const Literal>({literals...}));
     }
-
-    /// Generate a new id for forward declarations
-    [[nodiscard]] Id ForwardDeclarationId();
-
-    /// Returns the current generator id, useful for self-referencing phi nodes
-    [[nodiscard]] Id CurrentId() const noexcept;
-
-    /// Assign a new id and return the old one, useful for defining forward declarations
-    Id ExchangeCurrentId(Id new_current_id);
 
     /**
      * Adds an existing label to the code
@@ -252,6 +247,12 @@ public:
      * @param operands An immutable span of variable, parent block pairs
      */
     Id OpPhi(Id result_type, std::span<const Id> operands);
+
+    /**
+     * The SSA phi function. This instruction will be revisited when patching phi nodes.
+     * @param operands An immutable span of block pairs
+     */
+    Id DeferredOpPhi(Id result_type, std::span<const Id> blocks);
 
     /// Declare a structured loop.
     Id OpLoopMerge(Id merge_block, Id continue_target, spv::LoopControlMask loop_control,
@@ -1236,6 +1237,7 @@ private:
     std::unique_ptr<Declarations> declarations;
     std::unique_ptr<Stream> global_variables;
     std::unique_ptr<Stream> code;
+    std::vector<std::uint32_t> deferred_phi_nodes;
 };
 
 } // namespace Sirit

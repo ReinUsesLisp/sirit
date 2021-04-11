@@ -40,7 +40,7 @@ struct OpId {
 
 struct EndOp {};
 
-constexpr size_t WordsInString(std::string_view string) {
+inline size_t WordsInString(std::string_view string) {
     return string.size() / sizeof(u32) + 1;
 }
 
@@ -74,6 +74,18 @@ public:
 
     std::span<const u32> Words() const noexcept {
         return std::span(words.data(), insert_index);
+    }
+
+    u32 LocalAddress() const noexcept {
+        return static_cast<u32>(words.size());
+    }
+
+    u32 Value(u32 index) const noexcept {
+        return words[index];
+    }
+
+    void SetValue(u32 index, u32 value) noexcept {
+        words[index] = value;
     }
 
     Stream& operator<<(spv::Op op) {

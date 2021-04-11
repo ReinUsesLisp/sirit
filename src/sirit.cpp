@@ -68,6 +68,20 @@ std::vector<u32> Module::Assemble() const {
     return words;
 }
 
+void Module::PatchDeferredPhi(const std::function<Id(std::size_t index)>& func) {
+    for (const u32 phi_index : deferred_phi_nodes) {
+        const u32 first_word = code->Value(phi_index);
+        [[maybe_unused]] const spv::Op op = static_cast<spv::Op>(first_word & 0xffff);
+        assert(op == spv::Op::OpPhi);
+        const u32 num_words = first_word >> 16;
+        const u32 num_args = (num_words - 3) / 2;
+        u32 cursor = phi_index + 3;
+        for (u32 arg = 0; arg < num_args; ++arg, cursor += 2) {
+            code->SetValue(cursor, func(arg).value);
+        }
+    }
+}
+
 void Module::AddExtension(std::string extension_name) {
     extensions.insert(std::move(extension_name));
 }
@@ -93,19 +107,6 @@ void Module::AddExecutionMode(Id entry_point, spv::ExecutionMode mode,
                               std::span<const Literal> literals) {
     execution_modes->Reserve(3 + literals.size());
     *execution_modes << spv::Op::OpExecutionMode << entry_point << mode << literals << EndOp{};
-}
-
-Id Module::ForwardDeclarationId() {
-    return Id{++bound};
-}
-
-Id Module::CurrentId() const noexcept {
-    return Id{bound + 1};
-}
-
-Id Module::ExchangeCurrentId(Id new_current_id) {
-    const std::uint32_t old_id = std::exchange(bound, new_current_id.value - 1);
-    return Id{old_id + 1};
 }
 
 Id Module::AddLabel(Id label) {
