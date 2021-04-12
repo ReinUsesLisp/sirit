@@ -279,7 +279,7 @@ public:
 
     /// The block label instruction: Any reference to a block is through this ref.
     Id OpLabel(std::string_view label_name) {
-        return Name(OpLabel(), std::move(label_name));
+        return Name(OpLabel(), label_name);
     }
 
     /// Unconditional jump to label.
