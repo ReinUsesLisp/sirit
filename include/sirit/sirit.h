@@ -640,7 +640,7 @@ public:
     /// Integer substraction of Operand 1 and Operand 2.
     Id OpISub(Id result_type, Id operand_1, Id operand_2);
 
-    /// Floating-point substraction of Operand 1 and Operand 2.
+    /// Floating-point subtraction of Operand 1 and Operand 2.
     Id OpFSub(Id result_type, Id operand_1, Id operand_2);
 
     /// Integer multiplication of Operand 1 and Operand 2.
