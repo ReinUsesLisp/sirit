@@ -244,13 +244,17 @@ public:
 
     /**
      * The SSA phi function.
-     * @param operands An immutable span of variable, parent block pairs
+     *
+     * @param result_type The result type.
+     * @param operands    An immutable span of variable, parent block pairs
      */
     Id OpPhi(Id result_type, std::span<const Id> operands);
 
     /**
      * The SSA phi function. This instruction will be revisited when patching phi nodes.
-     * @param operands An immutable span of block pairs
+     *
+     * @param result_type The result type.
+     * @param blocks      An immutable span of block pairs.
      */
     Id DeferredOpPhi(Id result_type, std::span<const Id> blocks);
 
