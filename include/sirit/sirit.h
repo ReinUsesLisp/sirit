@@ -8,11 +8,11 @@
 
 #include <array>
 #include <cstdint>
+#include <functional>
 #include <memory>
 #include <optional>
 #include <span>
 #include <string>
-#include <functional>
 #include <string_view>
 #include <type_traits>
 #include <unordered_set>
@@ -422,10 +422,17 @@ public:
     Id OpUndef(Id result_type);
 
     /// Emits the current values of all output variables to the current output primitive.
-    Id OpEmitVertex();
+    void OpEmitVertex();
 
     /// Finish the current primitive and start a new one. No vertex is emitted.
-    Id OpEndPrimitive();
+    void OpEndPrimitive();
+
+    /// Emits the current values of all output variables to the current output primitive. After
+    /// execution, the values of all output variables are undefined.
+    void OpEmitStreamVertex(Id stream);
+
+    /// Finish the current primitive and start a new one. No vertex is emitted.
+    void OpEndStreamPrimitive(Id stream);
 
     // Barrier
 
