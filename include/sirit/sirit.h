@@ -823,6 +823,52 @@ public:
     /// of the pixel specified by offset.
     Id OpInterpolateAtOffset(Id result_type, Id interpolant, Id offset);
 
+    // Derivatives
+
+    /// Same result as either OpDPdxFine or OpDPdxCoarse on the input.
+    /// Selection of which one is based on external factors.
+    Id OpDPdx(Id result_type, Id operand);
+
+    /// Same result as either OpDPdyFine or OpDPdyCoarse on the input.
+    /// Selection of which one is based on external factors.
+    Id OpDPdy(Id result_type, Id operand);
+
+    /// Result is the same as computing the sum of the absolute values of OpDPdx and OpDPdy
+    /// on the input.
+    Id OpFwidth(Id result_type, Id operand);
+
+    /// Result is the partial derivative of the input with respect to the window x coordinate.
+    /// Uses local differencing based on the value of the input for the current fragment and
+    /// its immediate neighbor(s).
+    Id OpDPdxFine(Id result_type, Id operand);
+
+    /// Result is the partial derivative of the input with respect to the window y coordinate.
+    /// Uses local differencing based on the value of the input for the current fragment and
+    /// its immediate neighbor(s).
+    Id OpDPdyFine(Id result_type, Id operand);
+
+    /// Result is the same as computing the sum of the absolute values of OpDPdxFine and OpDPdyFine
+    /// on the input.
+    Id OpFwidthFine(Id result_type, Id operand);
+
+    /// Result is the partial derivative of the input with respect to the window x coordinate.
+    /// Uses local differencing based on the value of the input for the current fragment's
+    /// neighbors, and possibly, but not necessarily, includes the value of the input for the
+    /// current fragment. That is, over a given area, the implementation can compute x derivatives
+    /// in fewer unique locations than would be allowed for OpDPdxFine.
+    Id OpDPdxCoarse(Id result_type, Id operand);
+
+    /// Result is the partial derivative of the input with respect to the window y coordinate.
+    /// Uses local differencing based on the value of the input for the current fragment's
+    /// neighbors, and possibly, but not necessarily, includes the value of the input for the
+    /// current fragment. That is, over a given area, the implementation can compute y derivatives
+    /// in fewer unique locations than would be allowed for OpDPdyFine.
+    Id OpDPdyCoarse(Id result_type, Id operand);
+
+    /// Result is the same as computing the sum of the absolute values of OpDPdxCoarse and
+    /// OpDPdyCoarse on the input.
+    Id OpFwidthCoarse(Id result_type, Id operand);
+
     // Image
 
     /// Create a sampled image, containing both a sampler and an image.

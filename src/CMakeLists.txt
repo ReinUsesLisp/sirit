@@ -8,6 +8,7 @@ add_library(sirit
     instructions/function.cpp
     instructions/flow.cpp
     instructions/debug.cpp
+    instructions/derivatives.cpp
     instructions/memory.cpp
     instructions/annotation.cpp
     instructions/misc.cpp
