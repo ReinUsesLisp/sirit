@@ -1,0 +1,10 @@
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+if (@SIRIT_USE_SYSTEM_SPIRV_HEADERS@)
+    find_dependency(SPIRV-Headers)
+endif()
+
+include("${CMAKE_CURRENT_LIST_DIR}/sirit-targets.cmake")
+
+check_required_components(sirit)

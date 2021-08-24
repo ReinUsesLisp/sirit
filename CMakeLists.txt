@@ -3,12 +3,18 @@
 cmake_minimum_required(VERSION 3.8)
 project(sirit CXX)
 
+include(GNUInstallDirs)
+
 # Determine if we're built as a subproject (using add_subdirectory)
 # or if this is the master project.
 set(MASTER_PROJECT OFF)
 if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
   set(MASTER_PROJECT ON)
 endif()
+
+# Sirit project options
+option(SIRIT_TESTS "Build tests" OFF)
+option(SIRIT_USE_SYSTEM_SPIRV_HEADERS "Use system SPIR-V headers" OFF)
 
 # Default to a Release build
 if (NOT CMAKE_BUILD_TYPE)
@@ -81,10 +87,40 @@ endif()
 enable_testing(true)
 
 # SPIR-V headers
-add_subdirectory(externals/SPIRV-Headers EXCLUDE_FROM_ALL)
+if (SIRIT_USE_SYSTEM_SPIRV_HEADERS)
+    find_package(SPIRV-Headers REQUIRED)
+    add_library(SPIRV-Headers ALIAS SPIRV-Headers::SPIRV-Headers)
+else()
+    add_subdirectory(externals/SPIRV-Headers EXCLUDE_FROM_ALL)
+endif()
 
 # Sirit project files
 add_subdirectory(src)
 if (SIRIT_TESTS)
     add_subdirectory(tests)
+endif()
+
+if (MASTER_PROJECT)
+    include(CMakePackageConfigHelpers)
+    set(SIRIT_CMAKE_DIR ${CMAKE_INSTALL_LIBDIR}/cmake/sirit)
+    configure_package_config_file(cmake/config.cmake.in
+        "${CMAKE_CURRENT_BINARY_DIR}/sirit-config.cmake"
+        INSTALL_DESTINATION ${SIRIT_CMAKE_DIR}
+    )
+    install(
+        FILES "${CMAKE_CURRENT_BINARY_DIR}/sirit-config.cmake"
+        DESTINATION ${SIRIT_CMAKE_DIR}
+    )
+    install(
+        TARGETS sirit
+        EXPORT sirit-targets
+        ARCHIVE
+        LIBRARY
+        RUNTIME
+    )
+    install(
+        EXPORT sirit-targets
+        DESTINATION ${SIRIT_CMAKE_DIR}
+        NAMESPACE sirit::
+    )
 endif()

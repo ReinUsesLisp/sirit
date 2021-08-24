@@ -26,6 +26,18 @@ add_library(sirit
 target_compile_options(sirit PRIVATE ${SIRIT_CXX_FLAGS})
 
 target_include_directories(sirit
-                           PUBLIC ../include
-                           PRIVATE . ${SPIRV-Headers_SOURCE_DIR}/include
-                           INTERFACE ${SPIRV-Headers_SOURCE_DIR}/include)
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/sirit>
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+target_link_libraries(sirit PUBLIC SPIRV-Headers)
+
+if (MASTER_PROJECT)
+    install(
+        DIRECTORY ../include/sirit
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    )
+endif()
