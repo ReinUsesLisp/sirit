@@ -36,6 +36,12 @@ Id Module::OpSubgroupAllEqualKHR(Id result_type, Id predicate) {
     return *code << OpId{spv::Op::OpSubgroupAllEqualKHR, result_type} << predicate << EndOp{};
 }
 
+Id Module::OpGroupNonUniformBroadcast(Id result_type, Id scope, Id value, Id id) {
+    code->Reserve(6);
+    return *code << OpId{spv::Op::OpGroupNonUniformBroadcast, result_type} << scope << value
+                 << id << EndOp{};
+}
+
 Id Module::OpGroupNonUniformShuffleXor(Id result_type, Id scope, Id value, Id mask) {
     code->Reserve(6);
     return *code << OpId{spv::Op::OpGroupNonUniformShuffleXor, result_type} << scope << value

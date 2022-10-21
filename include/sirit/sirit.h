@@ -1156,6 +1156,10 @@ public:
     /// TBD
     Id OpSubgroupAllEqualKHR(Id result_type, Id predicate);
 
+    // Result is the Value of the invocation identified by the id Id to all active invocations in
+    // the group.
+    Id OpGroupNonUniformBroadcast(Id result_type, Id scope, Id value, Id id);
+
     /// Return the value of the invocation identified by the current invocation's id within the
     /// group xor'ed with mask.
     Id OpGroupNonUniformShuffleXor(Id result_type, Id scope, Id value, Id mask);
