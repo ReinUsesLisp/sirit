@@ -7,6 +7,7 @@
 #pragma once
 
 #include <bit>
+#include <span>
 #include <cassert>
 #include <concepts>
 #include <cstddef>
