@@ -63,7 +63,7 @@ inline void InsertStringView(std::vector<u32>& words, size_t& insert_index,
 
 class Stream {
     friend Declarations;
-
+    static constexpr std::size_t GROW_STEP = 1024;
 public:
     explicit Stream(u32* bound_) : bound{bound_} {}
 
@@ -71,7 +71,7 @@ public:
         if (insert_index + num_words <= words.size()) {
             return;
         }
-        words.resize(insert_index + num_words);
+        words.resize(insert_index + GROW_STEP);
     }
 
     std::span<const u32> Words() const noexcept {
