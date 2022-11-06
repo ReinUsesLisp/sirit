@@ -40,5 +40,7 @@ DEFINE_BINARY(OpFMod, spv::Op::OpFMod)
 DEFINE_BINARY(OpSRem, spv::Op::OpSRem)
 DEFINE_BINARY(OpFRem, spv::Op::OpFRem)
 DEFINE_BINARY(OpIAddCarry, spv::Op::OpIAddCarry)
+DEFINE_BINARY(OpVectorTimesScalar, spv::Op::OpVectorTimesScalar)
+DEFINE_BINARY(OpDot, spv::Op::OpDot)
 
 } // namespace Sirit

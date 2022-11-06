@@ -72,5 +72,9 @@ DEFINE_UNARY(OpFindUMsb, GLSLstd450FindUMsb)
 DEFINE_UNARY(OpInterpolateAtCentroid, GLSLstd450InterpolateAtCentroid)
 DEFINE_BINARY(OpInterpolateAtSample, GLSLstd450InterpolateAtSample)
 DEFINE_BINARY(OpInterpolateAtOffset, GLSLstd450InterpolateAtOffset)
+DEFINE_UNARY(OpNormalize, GLSLstd450Normalize)
+DEFINE_BINARY(OpCross, GLSLstd450Cross)
+DEFINE_UNARY(OpLength, GLSLstd450Length);
+DEFINE_TRINARY(OpFMix, GLSLstd450FMix)
 
 } // namespace Sirit

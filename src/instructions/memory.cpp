@@ -46,6 +46,12 @@ Id Module::OpVectorInsertDynamic(Id result_type, Id vector, Id component, Id ind
                  << index << EndOp{};
 }
 
+Id Module::OpVectorShuffle(Id result_type, Id vector_1, Id vector_2, std::span<const Literal> components) {
+    code->Reserve(5 + components.size());
+    return *code << OpId{spv::Op::OpVectorShuffle, result_type} << vector_1 << vector_2
+                 << components << EndOp{};
+}
+
 Id Module::OpCompositeInsert(Id result_type, Id object, Id composite,
                              std::span<const Literal> indexes) {
     code->Reserve(5 + indexes.size());

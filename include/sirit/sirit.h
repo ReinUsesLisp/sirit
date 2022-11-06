@@ -361,6 +361,17 @@ public:
     /// Make a copy of a vector, with a single, variably selected, component modified.
     Id OpVectorInsertDynamic(Id result_type, Id vector, Id component, Id index);
 
+    /// Select arbitrary components from two vectors to make a new vector.
+    Id OpVectorShuffle(Id result_type, Id vector_1, Id vector_2, std::span<const Literal> components);
+
+    /// Select arbitrary components from two vectors to make a new vector.
+    template <typename... Ts>
+    requires(...&& std::is_convertible_v<Ts, Literal>) Id
+        OpVectorShuffle(Id result_type, Id vector_1, Id vector_2, Ts&&... components) {
+        const Literal stack_literals[] = {std::forward<Ts>(components)...};
+        return OpVectorShuffle(result_type, vector_1, vector_2, std::span<const Literal>{stack_literals});
+    }
+
     /// Make a copy of a composite object, while modifying one part of it.
     Id OpCompositeInsert(Id result_type, Id object, Id composite,
                          std::span<const Literal> indexes = {});
@@ -682,6 +693,12 @@ public:
     /// Result is the unsigned integer addition of Operand 1 and Operand 2, including its carry.
     Id OpIAddCarry(Id result_type, Id operand_1, Id operand_2);
 
+    /// Multiplication of floating-point vector Operand 1 with scalar Operand 2.
+    Id OpVectorTimesScalar(Id result_type, Id operand_1, Id operand_2);
+
+    /// Dot product of floating-point vector Operand 1 and vector Operand 2.
+    Id OpDot(Id result_type, Id operand_1, Id operand_2);
+
     // Extensions
 
     /// Execute an instruction in an imported set of extended instructions.
@@ -832,6 +849,18 @@ public:
     /// Result is the value of the input interpolant variable sampled at an offset from the center
     /// of the pixel specified by offset.
     Id OpInterpolateAtOffset(Id result_type, Id interpolant, Id offset);
+
+    /// Result is the vector in the same direction as x but with a length of 1.
+    Id OpNormalize(Id result_type, Id x);
+
+    /// Result is the cross product of x and y.
+    Id OpCross(Id result_type, Id x, Id y);
+
+    /// Result is the length of vector x.
+    Id OpLength(Id result_type, Id x);
+
+    /// Result is the linear blend of x and y i.e x * (1 - a) + y * a
+    Id OpFMix(Id result_type, Id x, Id y, Id a);
 
     // Derivatives
 
