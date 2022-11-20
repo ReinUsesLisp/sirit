@@ -256,6 +256,12 @@ public:
      */
     Id OpPhi(Id result_type, std::span<const Id> operands);
 
+    template <typename... Ts>
+    requires(...&& std::is_convertible_v<Ts, Id>) Id
+        OpPhi(Id result_type, Ts&&... operands) {
+        return OpPhi(result_type, std::span<const Id>({operands...}));
+    }
+    
     /**
      * The SSA phi function. This instruction will be revisited when patching phi nodes.
      *
