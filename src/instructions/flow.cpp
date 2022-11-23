@@ -92,9 +92,18 @@ void Module::OpKill() {
     *code << spv::Op::OpKill << EndOp{};
 }
 
-void Module::OpDemoteToHelperInvocationEXT() {
+void Module::OpDemoteToHelperInvocation() {
     code->Reserve(1);
-    *code << spv::Op::OpDemoteToHelperInvocationEXT << EndOp{};
+    *code << spv::Op::OpDemoteToHelperInvocation << EndOp{};
+}
+
+void Module::OpDemoteToHelperInvocationEXT() {
+    OpDemoteToHelperInvocation();
+}
+
+void Module::OpTerminateInvocation() {
+    code->Reserve(1);
+    *code << spv::Op::OpTerminateInvocation << EndOp{};
 }
 
 } // namespace Sirit
