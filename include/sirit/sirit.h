@@ -309,11 +309,15 @@ public:
     /// Return a value from a function.
     Id OpReturnValue(Id value);
 
-    /// Fragment-shader discard.
+    /// Deprecated fragment-shader discard.
     void OpKill();
 
     /// Demote fragment shader invocation to a helper invocation
+    void OpDemoteToHelperInvocation();
     void OpDemoteToHelperInvocationEXT();
+
+    /// Fragment-shader discard.
+    void OpTerminateInvocation();
 
     // Debug
 
