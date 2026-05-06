@@ -12,29 +12,11 @@
 
 #include <sirit/sirit.h>
 
+#include "test_helpers.h"
+
+using namespace sirit_tests;
+
 namespace {
-
-int g_total = 0;
-int g_failures = 0;
-const char* g_current_test = "";
-
-#define CHECK(cond)                                                                                \
-    do {                                                                                           \
-        ++g_total;                                                                                 \
-        if (!(cond)) {                                                                             \
-            ++g_failures;                                                                          \
-            std::fprintf(stderr, "  FAIL [%s] %s:%d: %s\n", g_current_test, __FILE__, __LINE__,    \
-                         #cond);                                                                   \
-        }                                                                                          \
-    } while (0)
-
-#define RUN_TEST(fn)                                                                               \
-    do {                                                                                           \
-        g_current_test = #fn;                                                                      \
-        const int before = g_failures;                                                             \
-        fn();                                                                                      \
-        std::fprintf(stderr, "%-32s %s\n", #fn, g_failures == before ? "ok" : "FAILED");           \
-    } while (0)
 
 struct Instruction {
     spv::Op opcode;
@@ -325,7 +307,15 @@ void test_compute_shader_execution_mode() {
     CHECK(found_entry_point);
 }
 
-} // namespace
+}  // namespace
+
+namespace sirit_tests {
+void RegisterCooperativeMatrixTests();
+void RegisterRayTracingTests();
+void RegisterVertexShaderReplicationTests();
+void RegisterFragmentShaderReplicationTests();
+void RegisterComputeShaderReplicationTests();
+}  // namespace sirit_tests
 
 int main() {
     RUN_TEST(test_vertex_shader_golden);
@@ -337,6 +327,13 @@ int main() {
     RUN_TEST(test_constant_kinds);
     RUN_TEST(test_compute_shader_execution_mode);
 
-    std::fprintf(stderr, "\n%d/%d checks passed\n", g_total - g_failures, g_total);
-    return g_failures == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
+    sirit_tests::RegisterCooperativeMatrixTests();
+    sirit_tests::RegisterRayTracingTests();
+    sirit_tests::RegisterVertexShaderReplicationTests();
+    sirit_tests::RegisterFragmentShaderReplicationTests();
+    sirit_tests::RegisterComputeShaderReplicationTests();
+
+    std::fprintf(stderr, "\n%d/%d checks passed\n",
+                 sirit_tests::g_total - sirit_tests::g_failures, sirit_tests::g_total);
+    return sirit_tests::g_failures == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
 }

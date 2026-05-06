@@ -2,6 +2,11 @@
  * Copyright (c) 2019 sirit
  * This software may be used and distributed according to the terms of the
  * 3-Clause BSD License
+ *
+ * Hand-written debug instructions whose convention is to return the input id
+ * (target / type) rather than the result of `<< EndOp{}`. The simple
+ * generator template can't express that. OpString and OpLine live in
+ * _generated.cpp.
  */
 
 #include "sirit/sirit.h"
@@ -21,16 +26,6 @@ Id Module::MemberName(Id type, u32 member, std::string_view name) {
     debug->Reserve(4 + WordsInString(name));
     *debug << spv::Op::OpMemberName << type << member << name << EndOp{};
     return type;
-}
-
-Id Module::String(std::string_view string) {
-    debug->Reserve(3 + WordsInString(string));
-    return *debug << OpId{spv::Op::OpString} << string << EndOp{};
-}
-
-Id Module::OpLine(Id file, Literal line, Literal column) {
-    debug->Reserve(4);
-    return *debug << spv::Op::OpLine << file << line << column << EndOp{};
 }
 
 } // namespace Sirit

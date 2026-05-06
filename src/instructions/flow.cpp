@@ -2,6 +2,11 @@
  * Copyright (c) 2019 sirit
  * This software may be used and distributed according to the terms of the
  * 3-Clause BSD License
+ *
+ * Hand-written control-flow instructions whose emit shape can't be expressed
+ * by the simple `*stream << HEAD << op... << EndOp{}` template that
+ * tools/generate_instructions.py uses. Everything else in `Flow` lives in
+ * _generated.cpp.
  */
 
 #include <cassert>
@@ -11,12 +16,6 @@
 #include "stream.h"
 
 namespace Sirit {
-
-Id Module::OpPhi(Id result_type, std::span<const Id> operands) {
-    assert(operands.size() % 2 == 0);
-    code->Reserve(3 + operands.size());
-    return *code << OpId{spv::Op::OpPhi, result_type} << operands << EndOp{};
-}
 
 Id Module::DeferredOpPhi(Id result_type, std::span<const Id> blocks) {
     deferred_phi_nodes.push_back(code->LocalAddress());
@@ -28,25 +27,8 @@ Id Module::DeferredOpPhi(Id result_type, std::span<const Id> blocks) {
     return *code << EndOp{};
 }
 
-Id Module::OpLoopMerge(Id merge_block, Id continue_target, spv::LoopControlMask loop_control,
-                       std::span<const Id> literals) {
-    code->Reserve(4 + literals.size());
-    return *code << spv::Op::OpLoopMerge << merge_block << continue_target << loop_control
-                 << literals << EndOp{};
-}
-
-Id Module::OpSelectionMerge(Id merge_block, spv::SelectionControlMask selection_control) {
-    code->Reserve(3);
-    return *code << spv::Op::OpSelectionMerge << merge_block << selection_control << EndOp{};
-}
-
 Id Module::OpLabel() {
     return Id{++bound};
-}
-
-Id Module::OpBranch(Id target_label) {
-    code->Reserve(2);
-    return *code << spv::Op::OpBranch << target_label << EndOp{};
 }
 
 Id Module::OpBranchConditional(Id condition, Id true_label, Id false_label, u32 true_weight,
@@ -72,38 +54,8 @@ Id Module::OpSwitch(Id selector, Id default_label, std::span<const Literal> lite
     return *code << EndOp{};
 }
 
-void Module::OpReturn() {
-    code->Reserve(1);
-    *code << spv::Op::OpReturn << EndOp{};
-}
-
-void Module::OpUnreachable() {
-    code->Reserve(1);
-    *code << spv::Op::OpUnreachable << EndOp{};
-}
-
-Id Module::OpReturnValue(Id value) {
-    code->Reserve(2);
-    return *code << spv::Op::OpReturnValue << value << EndOp{};
-}
-
-void Module::OpKill() {
-    code->Reserve(1);
-    *code << spv::Op::OpKill << EndOp{};
-}
-
-void Module::OpDemoteToHelperInvocation() {
-    code->Reserve(1);
-    *code << spv::Op::OpDemoteToHelperInvocation << EndOp{};
-}
-
 void Module::OpDemoteToHelperInvocationEXT() {
     OpDemoteToHelperInvocation();
-}
-
-void Module::OpTerminateInvocation() {
-    code->Reserve(1);
-    *code << spv::Op::OpTerminateInvocation << EndOp{};
 }
 
 } // namespace Sirit

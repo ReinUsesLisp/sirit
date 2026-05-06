@@ -365,6 +365,19 @@ public:
     /// Make a copy of a vector, with a single, variably selected, component modified.
     Id OpVectorInsertDynamic(Id result_type, Id vector, Id component, Id index);
 
+    /// Select arbitrary components from two vectors to make a new vector.
+    Id OpVectorShuffle(Id result_type, Id vector_1, Id vector_2,
+                       std::span<const Literal> components);
+
+    /// Select arbitrary components from two vectors to make a new vector.
+    template <typename... Ts>
+    requires(...&& std::is_convertible_v<Ts, Literal>) Id
+        OpVectorShuffle(Id result_type, Id vector_1, Id vector_2, Ts&&... components) {
+        const Literal stack_components[] = {std::forward<Ts>(components)...};
+        return OpVectorShuffle(result_type, vector_1, vector_2,
+                               std::span<const Literal>{stack_components});
+    }
+
     /// Make a copy of a composite object, while modifying one part of it.
     Id OpCompositeInsert(Id result_type, Id object, Id composite,
                          std::span<const Literal> indexes = {});
@@ -576,6 +589,12 @@ public:
     /// Convert (value preserving) from unsigned integer to floating point.
     Id OpConvertUToF(Id result_type, Id operand);
 
+    /// Convert (value preserving) from unsigned integer to physical pointer.
+    Id OpConvertUToPtr(Id result_type, Id operand);
+
+    /// Convert (value preserving) from physical pointer to unsigned integer.
+    Id OpConvertPtrToU(Id result_type, Id operand);
+
     /// Convert (value preserving) unsigned width. This is either a truncate or a zero extend.
     Id OpUConvert(Id result_type, Id operand);
 
@@ -656,6 +675,14 @@ public:
     /// Integer multiplication of Operand 1 and Operand 2.
     Id OpIMul(Id result_type, Id operand_1, Id operand_2);
 
+    /// Result is the unsigned-integer multiplication of Operand 1 and Operand 2 producing a
+    /// two-component struct with the low- and high-order halves of the product.
+    Id OpUMulExtended(Id result_type, Id operand_1, Id operand_2);
+
+    /// Result is the signed-integer multiplication of Operand 1 and Operand 2 producing a
+    /// two-component struct with the low- and high-order halves of the product.
+    Id OpSMulExtended(Id result_type, Id operand_1, Id operand_2);
+
     /// Floating-point multiplication of Operand 1 and Operand 2.
     Id OpFMul(Id result_type, Id operand_1, Id operand_2);
 
@@ -685,6 +712,12 @@ public:
 
     /// Result is the unsigned integer addition of Operand 1 and Operand 2, including its carry.
     Id OpIAddCarry(Id result_type, Id operand_1, Id operand_2);
+
+    /// Scale a floating-point vector by a floating-point scalar.
+    Id OpVectorTimesScalar(Id result_type, Id vector, Id scalar);
+
+    /// Dot product of two floating-point vectors.
+    Id OpDot(Id result_type, Id vector_1, Id vector_2);
 
     // Extensions
 
@@ -768,6 +801,10 @@ public:
     /// Result is the reciprocal of sqrt x. Result is undefined if x <= 0.
     Id OpInverseSqrt(Id result_type, Id x);
 
+    /// Builds a floating-point number from x and the corresponding integral exponent of two in
+    /// exp.
+    Id OpLdexp(Id result_type, Id x, Id exp);
+
     /// Result is y if y < x; otherwise result is x. Which operand is the result is undefined if one
     /// of the operands is a NaN.
     Id OpFMin(Id result_type, Id x, Id y);
@@ -780,6 +817,10 @@ public:
     /// integers.
     Id OpSMin(Id result_type, Id x, Id y);
 
+    /// IEEE-754 minNum-style minimum: NaN-aware, returns the non-NaN operand if exactly one
+    /// is a NaN.
+    Id OpNMin(Id result_type, Id x, Id y);
+
     /// Result is y if x < y; otherwise result is x. Which operand is the result is undefined if one
     /// of the operands is a NaN.
     Id OpFMax(Id result_type, Id x, Id y);
@@ -791,6 +832,10 @@ public:
     /// Result is y if x < y; otherwise result is x, where x and y are interpreted as signed
     /// integers.
     Id OpSMax(Id result_type, Id x, Id y);
+
+    /// IEEE-754 maxNum-style maximum: NaN-aware, returns the non-NaN operand if exactly one
+    /// is a NaN.
+    Id OpNMax(Id result_type, Id x, Id y);
 
     /// Result is min(max(x, minVal), maxVal). Result is undefined if minVal > maxVal.The semantics
     /// used by min() and max() are those of FMin and FMax.
@@ -807,6 +852,10 @@ public:
     /// Computes a * b + c.
     Id OpFma(Id result_type, Id a, Id b, Id c);
 
+    /// Splits x into a normalized fraction in [0.5, 1) and an integral power of 2, returned as
+    /// a two-component struct {float significand, int exponent}.
+    Id OpFrexpStruct(Id result_type, Id x);
+
     /// Result is the unsigned integer obtained by converting the components of a two-component
     /// floating-point vector to the 16-bit OpTypeFloat, and then packing these two 16-bit integers
     /// into a 32-bit unsigned integer.
@@ -815,6 +864,30 @@ public:
     /// Result is the two-component floating-point vector with components obtained by unpacking a
     /// 32-bit unsigned integer into a pair of 16-bit values.
     Id OpUnpackHalf2x16(Id result_type, Id v);
+
+    /// Pack two normalized [0,1] floats into a 32-bit unsigned integer.
+    Id OpPackUnorm2x16(Id result_type, Id v);
+
+    /// Unpack a 32-bit unsigned integer into two normalized [0,1] floats.
+    Id OpUnpackUnorm2x16(Id result_type, Id v);
+
+    /// Pack two normalized [-1,1] floats into a 32-bit unsigned integer.
+    Id OpPackSnorm2x16(Id result_type, Id v);
+
+    /// Unpack a 32-bit unsigned integer into two normalized [-1,1] floats.
+    Id OpUnpackSnorm2x16(Id result_type, Id v);
+
+    /// Pack four normalized [0,1] floats into a 32-bit unsigned integer.
+    Id OpPackUnorm4x8(Id result_type, Id v);
+
+    /// Unpack a 32-bit unsigned integer into four normalized [0,1] floats.
+    Id OpUnpackUnorm4x8(Id result_type, Id v);
+
+    /// Pack four normalized [-1,1] floats into a 32-bit unsigned integer.
+    Id OpPackSnorm4x8(Id result_type, Id v);
+
+    /// Unpack a 32-bit unsigned integer into four normalized [-1,1] floats.
+    Id OpUnpackSnorm4x8(Id result_type, Id v);
 
     /// Integer least-significant bit.
     Id OpFindILsb(Id result_type, Id value);
@@ -836,6 +909,55 @@ public:
     /// Result is the value of the input interpolant variable sampled at an offset from the center
     /// of the pixel specified by offset.
     Id OpInterpolateAtOffset(Id result_type, Id interpolant, Id offset);
+
+    /// Result is x normalized to a unit-length vector.
+    Id OpNormalize(Id result_type, Id x);
+
+    /// Result is the cross product of two 3-component vectors.
+    Id OpCross(Id result_type, Id x, Id y);
+
+    /// Result is the length of vector x.
+    Id OpLength(Id result_type, Id x);
+
+    /// Linear interpolation of x and y by a (= x*(1-a) + y*a, componentwise).
+    Id OpFMix(Id result_type, Id x, Id y, Id a);
+
+    // AMD extensions
+
+    /// Returns the cube map face coordinate from a 3D direction (SPV_AMD_gcn_shader).
+    Id OpCubeFaceCoordAMD(Id result_type, Id cube_coord);
+
+    /// Returns the cube map face index from a 3D direction (SPV_AMD_gcn_shader).
+    Id OpCubeFaceIndexAMD(Id result_type, Id cube_coord);
+
+    /// Returns the current GPU clock as a 64-bit value (SPV_AMD_gcn_shader).
+    Id OpTimeAMD(Id result_type);
+
+    /// Three-input minimum / maximum / median (SPV_AMD_shader_trinary_minmax).
+    Id OpFMin3AMD(Id result_type, Id x, Id y, Id z);
+    Id OpUMin3AMD(Id result_type, Id x, Id y, Id z);
+    Id OpSMin3AMD(Id result_type, Id x, Id y, Id z);
+    Id OpFMax3AMD(Id result_type, Id x, Id y, Id z);
+    Id OpUMax3AMD(Id result_type, Id x, Id y, Id z);
+    Id OpSMax3AMD(Id result_type, Id x, Id y, Id z);
+    Id OpFMid3AMD(Id result_type, Id x, Id y, Id z);
+    Id OpUMid3AMD(Id result_type, Id x, Id y, Id z);
+    Id OpSMid3AMD(Id result_type, Id x, Id y, Id z);
+
+    /// Sample interpolant at a specific provoking vertex
+    /// (SPV_AMD_shader_explicit_vertex_parameter).
+    Id OpInterpolateAtVertexAMD(Id result_type, Id interpolant, Id vertex_idx);
+
+    // Non-semantic extensions
+
+    /// Print formatted text from a shader (NonSemantic.DebugPrintf).
+    Id OpDebugPrintf(Id format, std::span<const Id> fmt_args);
+
+    /// Print formatted text from a shader (NonSemantic.DebugPrintf).
+    template <typename... Ts>
+    requires(...&& std::is_convertible_v<Ts, Id>) Id OpDebugPrintf(Id format, Ts&&... fmt_args) {
+        return OpDebugPrintf(format, std::span<const Id>({fmt_args...}));
+    }
 
     // Derivatives
 
@@ -1193,6 +1315,27 @@ public:
     /// otherwise, it is set to zero.
     Id OpGroupNonUniformBallot(Id result_type, Id scope, Id predicate);
 
+    /// Result is the value of the active invocation with the lowest id in the group.
+    Id OpGroupNonUniformBroadcastFirst(Id result_type, Id scope, Id value);
+
+    /// Returns true only in the active invocation with the lowest id in the group, false in
+    /// other active invocations.
+    Id OpGroupNonUniformElect(Id result_type, Id scope);
+
+    /// Returns true if the bit in Value corresponding to the executing invocation is set.
+    Id OpGroupNonUniformInverseBallot(Id result_type, Id scope, Id value);
+
+    /// Counts the number of bits set in Value (per the GroupOperation: Reduce / InclusiveScan
+    /// / ExclusiveScan).
+    Id OpGroupNonUniformBallotBitCount(Id result_type, Id scope, spv::GroupOperation group_op,
+                                       Id value);
+
+    /// Returns the smallest invocation id (LSB) set in Value.
+    Id OpGroupNonUniformBallotFindLSB(Id result_type, Id scope, Id value);
+
+    /// Broadcast a value from one invocation in the quad to all active invocations in the quad.
+    Id OpGroupNonUniformQuadBroadcast(Id result_type, Id scope, Id value, Id index);
+
     // Atomic
 
     /// Atomically load through Pointer using the given Semantics. All subparts of the value that is
@@ -1274,6 +1417,12 @@ public:
     /// 3) store the New Value back through Pointer.
     Id OpAtomicUMax(Id result_type, Id pointer, Id memory, Id semantics, Id value);
 
+    /// Atomic floating-point maximum (SPV_EXT_shader_atomic_float_min_max).
+    Id OpAtomicFMax(Id result_type, Id pointer, Id memory, Id semantics, Id value);
+
+    /// Atomic floating-point minimum (SPV_EXT_shader_atomic_float_min_max).
+    Id OpAtomicFMin(Id result_type, Id pointer, Id memory, Id semantics, Id value);
+
     /// Perform the following steps atomically with respect to any other atomic accesses within
     /// Scope to the same location:
     /// 1) load through Pointer to get an Original Value,
@@ -1295,8 +1444,942 @@ public:
     /// 3) store the New Value back through Pointer.
     Id OpAtomicXor(Id result_type, Id pointer, Id memory, Id semantics, Id value);
 
+    // === Auto-scaffolded extras (tools/scaffold_missing_methods.py) ===
+    //
+    // Declarations below were auto-generated from spirv.core.grammar.json
+    // for opcodes that previously had no public API. Operand names are
+    // snake_cased from the grammar; types follow the standard kind->C++
+    // mapping. Reorganize into per-class sections at your leisure.
+
+    // === Annotation ===
+    /// OpDecorationGroup
+    Id DecorationGroup();
+
+    /// OpGroupDecorate
+    Id GroupDecorate(Id decoration_group, std::span<const Id> targets);
+
+
+    // === Arithmetic ===
+    /// OpMatrixTimesScalar
+    Id OpMatrixTimesScalar(Id result_type, Id matrix, Id scalar);
+
+    /// OpVectorTimesMatrix
+    Id OpVectorTimesMatrix(Id result_type, Id vector, Id matrix);
+
+    /// OpMatrixTimesVector
+    Id OpMatrixTimesVector(Id result_type, Id matrix, Id vector);
+
+    /// OpMatrixTimesMatrix
+    Id OpMatrixTimesMatrix(Id result_type, Id left_matrix, Id right_matrix);
+
+    /// OpOuterProduct
+    Id OpOuterProduct(Id result_type, Id vector_1, Id vector_2);
+
+    /// OpISubBorrow
+    Id OpISubBorrow(Id result_type, Id operand_1, Id operand_2);
+
+    /// OpFmaKHR
+    Id OpFmaKHR(Id result_type, Id operand_1, Id operand_2, Id operand_3);
+
+    /// OpSDot
+    Id OpSDot(Id result_type, Id vector_1, Id vector_2, std::optional<spv::PackedVectorFormat> packed_vector_format);
+
+    /// OpUDot
+    Id OpUDot(Id result_type, Id vector_1, Id vector_2, std::optional<spv::PackedVectorFormat> packed_vector_format);
+
+    /// OpSUDot
+    Id OpSUDot(Id result_type, Id vector_1, Id vector_2, std::optional<spv::PackedVectorFormat> packed_vector_format);
+
+    /// OpSDotAccSat
+    Id OpSDotAccSat(Id result_type, Id vector_1, Id vector_2, Id accumulator, std::optional<spv::PackedVectorFormat> packed_vector_format);
+
+    /// OpUDotAccSat
+    Id OpUDotAccSat(Id result_type, Id vector_1, Id vector_2, Id accumulator, std::optional<spv::PackedVectorFormat> packed_vector_format);
+
+    /// OpSUDotAccSat
+    Id OpSUDotAccSat(Id result_type, Id vector_1, Id vector_2, Id accumulator, std::optional<spv::PackedVectorFormat> packed_vector_format);
+
+
+    // === Atomic ===
+    /// OpAtomicCompareExchangeWeak
+    Id OpAtomicCompareExchangeWeak(Id result_type, Id pointer, Id memory, Id equal, Id unequal, Id value, Id comparator);
+
+    /// OpAtomicFAddEXT
+    Id OpAtomicFAddEXT(Id result_type, Id pointer, Id memory, Id semantics, Id value);
+
+
+    // === Barrier ===
+    /// OpNamedBarrierInitialize
+    Id OpNamedBarrierInitialize(Id result_type, Id subgroup_count);
+
+    /// OpMemoryNamedBarrier
+    void OpMemoryNamedBarrier(Id named_barrier, Id memory, Id semantics);
+
+
+    // === Composite ===
+    /// OpCopyObject
+    Id OpCopyObject(Id result_type, Id operand);
+
+    /// OpTranspose
+    Id OpTranspose(Id result_type, Id matrix);
+
+    /// OpCopyLogical
+    Id OpCopyLogical(Id result_type, Id operand);
+
+
+    // === Constant-Creation ===
+    /// OpSpecConstantTrue
+    Id SpecConstantTrue(Id result_type);
+
+    /// OpSpecConstantFalse
+    Id SpecConstantFalse(Id result_type);
+
+    /// OpSpecConstant
+    Id SpecConstant(Id result_type, Literal value);
+
+    /// OpSpecConstantComposite
+    Id SpecConstantComposite(Id result_type, std::span<const Id> constituents);
+
+
+    // === Control-Flow ===
+    /// OpLifetimeStart
+    void OpLifetimeStart(Id pointer, std::uint32_t size);
+
+    /// OpLifetimeStop
+    void OpLifetimeStop(Id pointer, std::uint32_t size);
+
+
+    // === Debug ===
+    /// OpSourceContinued
+    void SourceContinued(std::string_view continued_source);
+
+    /// OpSource
+    void Source(spv::SourceLanguage source_language, std::uint32_t source_version, std::optional<Id> file, std::optional<std::string_view> source);
+
+    /// OpSourceExtension
+    void SourceExtension(std::string_view extension);
+
+    /// OpNoLine
+    void NoLine();
+
+    /// OpModuleProcessed
+    void ModuleProcessed(std::string_view process);
+
+
+    // === Group ===
+    /// OpGroupAsyncCopy
+    Id OpGroupAsyncCopy(Id result_type, Id execution, Id destination, Id source, Id num_elements, Id stride, Id event);
+
+    /// OpGroupWaitEvents
+    void OpGroupWaitEvents(Id execution, Id num_events, Id events_list);
+
+    /// OpGroupAll
+    Id OpGroupAll(Id result_type, Id execution, Id predicate);
+
+    /// OpGroupAny
+    Id OpGroupAny(Id result_type, Id execution, Id predicate);
+
+    /// OpGroupBroadcast
+    Id OpGroupBroadcast(Id result_type, Id execution, Id value, Id local_id);
+
+    /// OpGroupIAdd
+    Id OpGroupIAdd(Id result_type, Id execution, spv::GroupOperation operation, Id x);
+
+    /// OpGroupFAdd
+    Id OpGroupFAdd(Id result_type, Id execution, spv::GroupOperation operation, Id x);
+
+    /// OpGroupFMin
+    Id OpGroupFMin(Id result_type, Id execution, spv::GroupOperation operation, Id x);
+
+    /// OpGroupUMin
+    Id OpGroupUMin(Id result_type, Id execution, spv::GroupOperation operation, Id x);
+
+    /// OpGroupSMin
+    Id OpGroupSMin(Id result_type, Id execution, spv::GroupOperation operation, Id x);
+
+    /// OpGroupFMax
+    Id OpGroupFMax(Id result_type, Id execution, spv::GroupOperation operation, Id x);
+
+    /// OpGroupUMax
+    Id OpGroupUMax(Id result_type, Id execution, spv::GroupOperation operation, Id x);
+
+    /// OpGroupSMax
+    Id OpGroupSMax(Id result_type, Id execution, spv::GroupOperation operation, Id x);
+
+    /// OpSubgroupFirstInvocationKHR
+    Id OpSubgroupFirstInvocationKHR(Id result_type, Id value);
+
+    /// OpGroupNonUniformRotateKHR
+    Id OpGroupNonUniformRotateKHR(Id result_type, Id execution, Id value, Id delta, std::optional<Id> cluster_size);
+
+    /// OpUntypedGroupAsyncCopyKHR
+    Id OpUntypedGroupAsyncCopyKHR(Id result_type, Id execution, Id destination, Id source, Id element_num_bytes, Id num_elements, Id stride, Id event, std::optional<spv::MemoryAccessMask> destination_memory_operands, std::optional<spv::MemoryAccessMask> source_memory_operands);
+
+    /// OpGroupIMulKHR
+    Id OpGroupIMulKHR(Id result_type, Id execution, spv::GroupOperation operation, Id x);
+
+    /// OpGroupFMulKHR
+    Id OpGroupFMulKHR(Id result_type, Id execution, spv::GroupOperation operation, Id x);
+
+    /// OpGroupBitwiseAndKHR
+    Id OpGroupBitwiseAndKHR(Id result_type, Id execution, spv::GroupOperation operation, Id x);
+
+    /// OpGroupBitwiseOrKHR
+    Id OpGroupBitwiseOrKHR(Id result_type, Id execution, spv::GroupOperation operation, Id x);
+
+    /// OpGroupBitwiseXorKHR
+    Id OpGroupBitwiseXorKHR(Id result_type, Id execution, spv::GroupOperation operation, Id x);
+
+    /// OpGroupLogicalAndKHR
+    Id OpGroupLogicalAndKHR(Id result_type, Id execution, spv::GroupOperation operation, Id x);
+
+    /// OpGroupLogicalOrKHR
+    Id OpGroupLogicalOrKHR(Id result_type, Id execution, spv::GroupOperation operation, Id x);
+
+    /// OpGroupLogicalXorKHR
+    Id OpGroupLogicalXorKHR(Id result_type, Id execution, spv::GroupOperation operation, Id x);
+
+
+    // === Image ===
+    /// OpImageQueryFormat
+    Id OpImageQueryFormat(Id result_type, Id image);
+
+    /// OpImageQueryOrder
+    Id OpImageQueryOrder(Id result_type, Id image);
+
+    /// OpImageSparseSampleProjImplicitLod
+    Id OpImageSparseSampleProjImplicitLod(Id result_type, Id sampled_image, Id coordinate, std::optional<spv::ImageOperandsMask> image_operands);
+
+    /// OpImageSparseSampleProjExplicitLod
+    Id OpImageSparseSampleProjExplicitLod(Id result_type, Id sampled_image, Id coordinate, spv::ImageOperandsMask image_operands);
+
+    /// OpImageSparseSampleProjDrefImplicitLod
+    Id OpImageSparseSampleProjDrefImplicitLod(Id result_type, Id sampled_image, Id coordinate, Id dref, std::optional<spv::ImageOperandsMask> image_operands);
+
+    /// OpImageSparseSampleProjDrefExplicitLod
+    Id OpImageSparseSampleProjDrefExplicitLod(Id result_type, Id sampled_image, Id coordinate, Id dref, spv::ImageOperandsMask image_operands);
+
+    /// OpColorAttachmentReadEXT
+    Id OpColorAttachmentReadEXT(Id result_type, Id attachment, std::optional<Id> sample);
+
+    /// OpDepthAttachmentReadEXT
+    Id OpDepthAttachmentReadEXT(Id result_type, std::optional<Id> sample);
+
+    /// OpStencilAttachmentReadEXT
+    Id OpStencilAttachmentReadEXT(Id result_type, std::optional<Id> sample);
+
+
+    // === Memory ===
+    /// OpCopyMemory
+    void OpCopyMemory(Id target, Id source, std::optional<spv::MemoryAccessMask> memory_access, std::optional<spv::MemoryAccessMask> memory_access_2);
+
+    /// OpCopyMemorySized
+    void OpCopyMemorySized(Id target, Id source, Id size, std::optional<spv::MemoryAccessMask> memory_access, std::optional<spv::MemoryAccessMask> memory_access_2);
+
+    /// OpInBoundsAccessChain
+    Id OpInBoundsAccessChain(Id result_type, Id base, std::span<const Id> indexes);
+
+    /// OpPtrAccessChain
+    Id OpPtrAccessChain(Id result_type, Id base, Id element, std::span<const Id> indexes);
+
+    /// OpArrayLength
+    Id OpArrayLength(Id result_type, Id structure, std::uint32_t array_member);
+
+    /// OpInBoundsPtrAccessChain
+    Id OpInBoundsPtrAccessChain(Id result_type, Id base, Id element, std::span<const Id> indexes);
+
+    /// OpPtrEqual
+    Id OpPtrEqual(Id result_type, Id operand_1, Id operand_2);
+
+    /// OpPtrNotEqual
+    Id OpPtrNotEqual(Id result_type, Id operand_1, Id operand_2);
+
+    /// OpPtrDiff
+    Id OpPtrDiff(Id result_type, Id operand_1, Id operand_2);
+
+
+    // === Miscellaneous ===
+    /// OpNop
+    void OpNop();
+
+    /// OpSizeOf
+    Id OpSizeOf(Id result_type, Id pointer);
+
+    /// OpPoisonKHR
+    Id OpPoisonKHR(Id result_type);
+
+    /// OpFreezeKHR
+    Id OpFreezeKHR(Id result_type, Id value);
+
+    /// OpAssumeTrueKHR
+    void OpAssumeTrueKHR(Id condition);
+
+    /// OpExpectKHR
+    Id OpExpectKHR(Id result_type, Id value, Id expected_value);
+
+    /// OpArithmeticFenceEXT
+    Id OpArithmeticFenceEXT(Id result_type, Id target);
+
+
+    // === Non-Uniform ===
+    /// OpGroupNonUniformBallotBitExtract
+    Id OpGroupNonUniformBallotBitExtract(Id result_type, Id execution, Id value, Id index);
+
+    /// OpGroupNonUniformBallotFindMSB
+    Id OpGroupNonUniformBallotFindMSB(Id result_type, Id execution, Id value);
+
+    /// OpGroupNonUniformShuffleUp
+    Id OpGroupNonUniformShuffleUp(Id result_type, Id execution, Id value, Id delta);
+
+    /// OpGroupNonUniformShuffleDown
+    Id OpGroupNonUniformShuffleDown(Id result_type, Id execution, Id value, Id delta);
+
+    /// OpGroupNonUniformIAdd
+    Id OpGroupNonUniformIAdd(Id result_type, Id execution, spv::GroupOperation operation, Id value, std::optional<Id> cluster_size);
+
+    /// OpGroupNonUniformFAdd
+    Id OpGroupNonUniformFAdd(Id result_type, Id execution, spv::GroupOperation operation, Id value, std::optional<Id> cluster_size);
+
+    /// OpGroupNonUniformIMul
+    Id OpGroupNonUniformIMul(Id result_type, Id execution, spv::GroupOperation operation, Id value, std::optional<Id> cluster_size);
+
+    /// OpGroupNonUniformFMul
+    Id OpGroupNonUniformFMul(Id result_type, Id execution, spv::GroupOperation operation, Id value, std::optional<Id> cluster_size);
+
+    /// OpGroupNonUniformSMin
+    Id OpGroupNonUniformSMin(Id result_type, Id execution, spv::GroupOperation operation, Id value, std::optional<Id> cluster_size);
+
+    /// OpGroupNonUniformUMin
+    Id OpGroupNonUniformUMin(Id result_type, Id execution, spv::GroupOperation operation, Id value, std::optional<Id> cluster_size);
+
+    /// OpGroupNonUniformFMin
+    Id OpGroupNonUniformFMin(Id result_type, Id execution, spv::GroupOperation operation, Id value, std::optional<Id> cluster_size);
+
+    /// OpGroupNonUniformSMax
+    Id OpGroupNonUniformSMax(Id result_type, Id execution, spv::GroupOperation operation, Id value, std::optional<Id> cluster_size);
+
+    /// OpGroupNonUniformUMax
+    Id OpGroupNonUniformUMax(Id result_type, Id execution, spv::GroupOperation operation, Id value, std::optional<Id> cluster_size);
+
+    /// OpGroupNonUniformFMax
+    Id OpGroupNonUniformFMax(Id result_type, Id execution, spv::GroupOperation operation, Id value, std::optional<Id> cluster_size);
+
+    /// OpGroupNonUniformBitwiseAnd
+    Id OpGroupNonUniformBitwiseAnd(Id result_type, Id execution, spv::GroupOperation operation, Id value, std::optional<Id> cluster_size);
+
+    /// OpGroupNonUniformBitwiseOr
+    Id OpGroupNonUniformBitwiseOr(Id result_type, Id execution, spv::GroupOperation operation, Id value, std::optional<Id> cluster_size);
+
+    /// OpGroupNonUniformBitwiseXor
+    Id OpGroupNonUniformBitwiseXor(Id result_type, Id execution, spv::GroupOperation operation, Id value, std::optional<Id> cluster_size);
+
+    /// OpGroupNonUniformLogicalAnd
+    Id OpGroupNonUniformLogicalAnd(Id result_type, Id execution, spv::GroupOperation operation, Id value, std::optional<Id> cluster_size);
+
+    /// OpGroupNonUniformLogicalOr
+    Id OpGroupNonUniformLogicalOr(Id result_type, Id execution, spv::GroupOperation operation, Id value, std::optional<Id> cluster_size);
+
+    /// OpGroupNonUniformLogicalXor
+    Id OpGroupNonUniformLogicalXor(Id result_type, Id execution, spv::GroupOperation operation, Id value, std::optional<Id> cluster_size);
+
+    /// OpGroupNonUniformQuadSwap
+    Id OpGroupNonUniformQuadSwap(Id result_type, Id execution, Id value, Id direction);
+
+    /// OpGroupNonUniformQuadAllKHR
+    Id OpGroupNonUniformQuadAllKHR(Id result_type, Id predicate);
+
+    /// OpGroupNonUniformQuadAnyKHR
+    Id OpGroupNonUniformQuadAnyKHR(Id result_type, Id predicate);
+
+    /// OpGroupNonUniformPartitionEXT
+    Id OpGroupNonUniformPartitionEXT(Id result_type, Id value);
+
+
+    // === Relational_and_Logical ===
+    /// OpIsFinite
+    Id OpIsFinite(Id result_type, Id x);
+
+    /// OpIsNormal
+    Id OpIsNormal(Id result_type, Id x);
+
+    /// OpSignBitSet
+    Id OpSignBitSet(Id result_type, Id x);
+
+    /// OpLessOrGreater
+    Id OpLessOrGreater(Id result_type, Id x, Id y);
+
+    /// OpOrdered
+    Id OpOrdered(Id result_type, Id x, Id y);
+
+    /// OpUnordered
+    Id OpUnordered(Id result_type, Id x, Id y);
+
+
+    // === Reserved ===
+    /// OpTraceRayKHR
+    void OpTraceRayKHR(Id accel, Id ray_flags, Id cull_mask, Id sbt_offset, Id sbt_stride, Id miss_index, Id ray_origin, Id ray_tmin, Id ray_direction, Id ray_tmax, Id payload);
+
+    /// OpExecuteCallableKHR
+    void OpExecuteCallableKHR(Id sbt_index, Id callable_data);
+
+    /// OpConvertUToAccelerationStructureKHR
+    Id OpConvertUToAccelerationStructureKHR(Id result_type, Id accel);
+
+    /// OpIgnoreIntersectionKHR
+    void OpIgnoreIntersectionKHR();
+
+    /// OpTerminateRayKHR
+    void OpTerminateRayKHR();
+
+    /// OpRayQueryInitializeKHR
+    void OpRayQueryInitializeKHR(Id ray_query, Id accel, Id ray_flags, Id cull_mask, Id ray_origin, Id ray_t_min, Id ray_direction, Id ray_t_max);
+
+    /// OpRayQueryTerminateKHR
+    void OpRayQueryTerminateKHR(Id ray_query);
+
+    /// OpRayQueryGenerateIntersectionKHR
+    void OpRayQueryGenerateIntersectionKHR(Id ray_query, Id hit_t);
+
+    /// OpRayQueryConfirmIntersectionKHR
+    void OpRayQueryConfirmIntersectionKHR(Id ray_query);
+
+    /// OpRayQueryProceedKHR
+    Id OpRayQueryProceedKHR(Id result_type, Id ray_query);
+
+    /// OpRayQueryGetIntersectionTypeKHR
+    Id OpRayQueryGetIntersectionTypeKHR(Id result_type, Id ray_query, Id intersection);
+
+    /// OpReadClockKHR
+    Id OpReadClockKHR(Id result_type, Id scope);
+
+    /// OpEmitMeshTasksEXT
+    void OpEmitMeshTasksEXT(Id group_count_x, Id group_count_y, Id group_count_z, std::optional<Id> payload);
+
+    /// OpSetMeshOutputsEXT
+    void OpSetMeshOutputsEXT(Id vertex_count, Id primitive_count);
+
+    /// OpReportIntersectionKHR
+    Id OpReportIntersectionKHR(Id result_type, Id hit, Id hit_kind);
+
+    /// OpRayQueryGetIntersectionTriangleVertexPositionsKHR
+    Id OpRayQueryGetIntersectionTriangleVertexPositionsKHR(Id result_type, Id ray_query, Id intersection);
+
+    /// OpBeginInvocationInterlockEXT
+    void OpBeginInvocationInterlockEXT();
+
+    /// OpEndInvocationInterlockEXT
+    void OpEndInvocationInterlockEXT();
+
+    /// OpIsHelperInvocationEXT
+    Id OpIsHelperInvocationEXT(Id result_type);
+
+    /// OpRayQueryGetRayTMinKHR
+    Id OpRayQueryGetRayTMinKHR(Id result_type, Id ray_query);
+
+    /// OpRayQueryGetRayFlagsKHR
+    Id OpRayQueryGetRayFlagsKHR(Id result_type, Id ray_query);
+
+    /// OpRayQueryGetIntersectionTKHR
+    Id OpRayQueryGetIntersectionTKHR(Id result_type, Id ray_query, Id intersection);
+
+    /// OpRayQueryGetIntersectionInstanceCustomIndexKHR
+    Id OpRayQueryGetIntersectionInstanceCustomIndexKHR(Id result_type, Id ray_query, Id intersection);
+
+    /// OpRayQueryGetIntersectionInstanceIdKHR
+    Id OpRayQueryGetIntersectionInstanceIdKHR(Id result_type, Id ray_query, Id intersection);
+
+    /// OpRayQueryGetIntersectionInstanceShaderBindingTableRecordOffsetKHR
+    Id OpRayQueryGetIntersectionInstanceShaderBindingTableRecordOffsetKHR(Id result_type, Id ray_query, Id intersection);
+
+    /// OpRayQueryGetIntersectionGeometryIndexKHR
+    Id OpRayQueryGetIntersectionGeometryIndexKHR(Id result_type, Id ray_query, Id intersection);
+
+    /// OpRayQueryGetIntersectionPrimitiveIndexKHR
+    Id OpRayQueryGetIntersectionPrimitiveIndexKHR(Id result_type, Id ray_query, Id intersection);
+
+    /// OpRayQueryGetIntersectionBarycentricsKHR
+    Id OpRayQueryGetIntersectionBarycentricsKHR(Id result_type, Id ray_query, Id intersection);
+
+    /// OpRayQueryGetIntersectionFrontFaceKHR
+    Id OpRayQueryGetIntersectionFrontFaceKHR(Id result_type, Id ray_query, Id intersection);
+
+    /// OpRayQueryGetIntersectionCandidateAABBOpaqueKHR
+    Id OpRayQueryGetIntersectionCandidateAABBOpaqueKHR(Id result_type, Id ray_query);
+
+    /// OpRayQueryGetIntersectionObjectRayDirectionKHR
+    Id OpRayQueryGetIntersectionObjectRayDirectionKHR(Id result_type, Id ray_query, Id intersection);
+
+    /// OpRayQueryGetIntersectionObjectRayOriginKHR
+    Id OpRayQueryGetIntersectionObjectRayOriginKHR(Id result_type, Id ray_query, Id intersection);
+
+    /// OpRayQueryGetWorldRayDirectionKHR
+    Id OpRayQueryGetWorldRayDirectionKHR(Id result_type, Id ray_query);
+
+    /// OpRayQueryGetWorldRayOriginKHR
+    Id OpRayQueryGetWorldRayOriginKHR(Id result_type, Id ray_query);
+
+    /// OpRayQueryGetIntersectionObjectToWorldKHR
+    Id OpRayQueryGetIntersectionObjectToWorldKHR(Id result_type, Id ray_query, Id intersection);
+
+    /// OpRayQueryGetIntersectionWorldToObjectKHR
+    Id OpRayQueryGetIntersectionWorldToObjectKHR(Id result_type, Id ray_query, Id intersection);
+
+
+    // === Type-Declaration ===
+    // OpTypeForwardPointer skipped: it is a void Type-Declaration whose
+    // emission needs an extension to the Declarations stream that allows
+    // un-deduped writes via the `spv::Op` overload (currently deleted).
+    // Keep hand-written if needed.
+
+    /// OpTypePipeStorage
+    Id TypePipeStorage();
+
+    /// OpTypeNamedBarrier
+    Id TypeNamedBarrier();
+
+    /// OpTypeRayQueryKHR
+    Id TypeRayQueryKHR();
+
+    /// OpTypeAccelerationStructureKHR
+    Id TypeAccelerationStructureKHR();
+
+
+
+
+    // === Auto-scaffolded NV / cooperative-matrix extras ===
+
+    // === Arithmetic ===
+    /// OpCooperativeMatrixMulAddKHR
+    Id OpCooperativeMatrixMulAddKHR(Id result_type, Id a, Id b, Id c, std::optional<spv::CooperativeMatrixOperandsMask> cooperative_matrix_operands);
+
+    /// OpCooperativeMatrixReduceNV
+    Id OpCooperativeMatrixReduceNV(Id result_type, Id matrix, spv::CooperativeMatrixReduceMask reduce, Id combine_func);
+
+
+    // === Conversion ===
+    /// OpCooperativeMatrixConvertNV
+    Id OpCooperativeMatrixConvertNV(Id result_type, Id matrix);
+
+    /// OpCooperativeMatrixTransposeNV
+    Id OpCooperativeMatrixTransposeNV(Id result_type, Id matrix);
+
+
+    // === Function ===
+    /// OpCooperativeMatrixPerElementOpNV
+    Id OpCooperativeMatrixPerElementOpNV(Id result_type, Id matrix, Id func, std::span<const Id> operands);
+
+
+    // === Image ===
+    /// OpImageSampleFootprintNV
+    Id OpImageSampleFootprintNV(Id result_type, Id sampled_image, Id coordinate, Id granularity, Id coarse, std::optional<spv::ImageOperandsMask> image_operands);
+
+
+    // === Memory ===
+    /// OpCooperativeMatrixLoadKHR
+    Id OpCooperativeMatrixLoadKHR(Id result_type, Id pointer, Id memory_layout, std::optional<Id> stride, std::optional<spv::MemoryAccessMask> memory_operand);
+
+    /// OpCooperativeMatrixStoreKHR
+    void OpCooperativeMatrixStoreKHR(Id pointer, Id object, Id memory_layout, std::optional<Id> stride, std::optional<spv::MemoryAccessMask> memory_operand);
+
+    /// OpCooperativeVectorLoadNV
+    Id OpCooperativeVectorLoadNV(Id result_type, Id pointer, Id offset, std::optional<spv::MemoryAccessMask> memory_access);
+
+    /// OpCooperativeVectorStoreNV
+    void OpCooperativeVectorStoreNV(Id pointer, Id offset, Id object, std::optional<spv::MemoryAccessMask> memory_access);
+
+    /// OpCooperativeMatrixLoadTensorNV
+    Id OpCooperativeMatrixLoadTensorNV(Id result_type, Id pointer, Id object, Id tensor_layout, spv::MemoryAccessMask memory_operand, spv::TensorAddressingOperandsMask tensor_addressing_operands);
+
+    /// OpCooperativeMatrixStoreTensorNV
+    void OpCooperativeMatrixStoreTensorNV(Id pointer, Id object, Id tensor_layout, spv::MemoryAccessMask memory_operand, spv::TensorAddressingOperandsMask tensor_addressing_operands);
+
+    /// OpRawAccessChainNV
+    Id OpRawAccessChainNV(Id result_type, Id base, Id byte_stride, Id element_index, Id byte_offset, std::optional<spv::RawAccessChainOperandsMask> raw_access_chain_operands);
+
+
+    // === Miscellaneous ===
+    /// OpCooperativeMatrixLengthKHR
+    Id OpCooperativeMatrixLengthKHR(Id result_type, Id type);
+
+
+    // === Reserved ===
+    /// OpHitObjectRecordHitMotionNV
+    void OpHitObjectRecordHitMotionNV(Id hit_object, Id acceleration_structure, Id instance_id, Id primitive_id, Id geometry_index, Id hit_kind, Id sbt_record_offset, Id sbt_record_stride, Id origin, Id t_min, Id direction, Id t_max, Id current_time, Id hit_object_attributes);
+
+    /// OpHitObjectRecordHitWithIndexMotionNV
+    void OpHitObjectRecordHitWithIndexMotionNV(Id hit_object, Id acceleration_structure, Id instance_id, Id primitive_id, Id geometry_index, Id hit_kind, Id sbt_record_index, Id origin, Id t_min, Id direction, Id t_max, Id current_time, Id hit_object_attributes);
+
+    /// OpHitObjectRecordMissMotionNV
+    void OpHitObjectRecordMissMotionNV(Id hit_object, Id sbt_index, Id origin, Id t_min, Id direction, Id t_max, Id current_time);
+
+    /// OpHitObjectGetWorldToObjectNV
+    Id OpHitObjectGetWorldToObjectNV(Id result_type, Id hit_object);
+
+    /// OpHitObjectGetObjectToWorldNV
+    Id OpHitObjectGetObjectToWorldNV(Id result_type, Id hit_object);
+
+    /// OpHitObjectGetObjectRayDirectionNV
+    Id OpHitObjectGetObjectRayDirectionNV(Id result_type, Id hit_object);
+
+    /// OpHitObjectGetObjectRayOriginNV
+    Id OpHitObjectGetObjectRayOriginNV(Id result_type, Id hit_object);
+
+    /// OpHitObjectTraceRayMotionNV
+    void OpHitObjectTraceRayMotionNV(Id hit_object, Id acceleration_structure, Id ray_flags, Id cullmask, Id sbt_record_offset, Id sbt_record_stride, Id miss_index, Id origin, Id t_min, Id direction, Id t_max, Id time, Id payload);
+
+    /// OpHitObjectGetShaderRecordBufferHandleNV
+    Id OpHitObjectGetShaderRecordBufferHandleNV(Id result_type, Id hit_object);
+
+    /// OpHitObjectGetShaderBindingTableRecordIndexNV
+    Id OpHitObjectGetShaderBindingTableRecordIndexNV(Id result_type, Id hit_object);
+
+    /// OpHitObjectRecordEmptyNV
+    void OpHitObjectRecordEmptyNV(Id hit_object);
+
+    /// OpHitObjectTraceRayNV
+    void OpHitObjectTraceRayNV(Id hit_object, Id acceleration_structure, Id ray_flags, Id cullmask, Id sbt_record_offset, Id sbt_record_stride, Id miss_index, Id origin, Id t_min, Id direction, Id t_max, Id payload);
+
+    /// OpHitObjectRecordHitNV
+    void OpHitObjectRecordHitNV(Id hit_object, Id acceleration_structure, Id instance_id, Id primitive_id, Id geometry_index, Id hit_kind, Id sbt_record_offset, Id sbt_record_stride, Id origin, Id t_min, Id direction, Id t_max, Id hit_object_attributes);
+
+    /// OpHitObjectRecordHitWithIndexNV
+    void OpHitObjectRecordHitWithIndexNV(Id hit_object, Id acceleration_structure, Id instance_id, Id primitive_id, Id geometry_index, Id hit_kind, Id sbt_record_index, Id origin, Id t_min, Id direction, Id t_max, Id hit_object_attributes);
+
+    /// OpHitObjectRecordMissNV
+    void OpHitObjectRecordMissNV(Id hit_object, Id sbt_index, Id origin, Id t_min, Id direction, Id t_max);
+
+    /// OpHitObjectExecuteShaderNV
+    void OpHitObjectExecuteShaderNV(Id hit_object, Id payload);
+
+    /// OpHitObjectGetCurrentTimeNV
+    Id OpHitObjectGetCurrentTimeNV(Id result_type, Id hit_object);
+
+    /// OpHitObjectGetAttributesNV
+    void OpHitObjectGetAttributesNV(Id hit_object, Id hit_object_attribute);
+
+    /// OpHitObjectGetHitKindNV
+    Id OpHitObjectGetHitKindNV(Id result_type, Id hit_object);
+
+    /// OpHitObjectGetPrimitiveIndexNV
+    Id OpHitObjectGetPrimitiveIndexNV(Id result_type, Id hit_object);
+
+    /// OpHitObjectGetGeometryIndexNV
+    Id OpHitObjectGetGeometryIndexNV(Id result_type, Id hit_object);
+
+    /// OpHitObjectGetInstanceIdNV
+    Id OpHitObjectGetInstanceIdNV(Id result_type, Id hit_object);
+
+    /// OpHitObjectGetInstanceCustomIndexNV
+    Id OpHitObjectGetInstanceCustomIndexNV(Id result_type, Id hit_object);
+
+    /// OpHitObjectGetWorldRayDirectionNV
+    Id OpHitObjectGetWorldRayDirectionNV(Id result_type, Id hit_object);
+
+    /// OpHitObjectGetWorldRayOriginNV
+    Id OpHitObjectGetWorldRayOriginNV(Id result_type, Id hit_object);
+
+    /// OpHitObjectGetRayTMaxNV
+    Id OpHitObjectGetRayTMaxNV(Id result_type, Id hit_object);
+
+    /// OpHitObjectGetRayTMinNV
+    Id OpHitObjectGetRayTMinNV(Id result_type, Id hit_object);
+
+    /// OpHitObjectIsEmptyNV
+    Id OpHitObjectIsEmptyNV(Id result_type, Id hit_object);
+
+    /// OpHitObjectIsHitNV
+    Id OpHitObjectIsHitNV(Id result_type, Id hit_object);
+
+    /// OpHitObjectIsMissNV
+    Id OpHitObjectIsMissNV(Id result_type, Id hit_object);
+
+    /// OpReorderThreadWithHitObjectNV
+    void OpReorderThreadWithHitObjectNV(Id hit_object, std::optional<Id> hint, std::optional<Id> bits);
+
+    /// OpReorderThreadWithHintNV
+    void OpReorderThreadWithHintNV(Id hint, Id bits);
+
+    /// OpCooperativeVectorMatrixMulNV
+    Id OpCooperativeVectorMatrixMulNV(Id result_type, Id input, Id input_interpretation, Id matrix, Id matrix_offset, Id matrix_interpretation, Id m, Id k, Id memory_layout, Id transpose, std::optional<Id> matrix_stride, std::optional<spv::CooperativeMatrixOperandsMask> cooperative_matrix_operands);
+
+    /// OpCooperativeVectorOuterProductAccumulateNV
+    void OpCooperativeVectorOuterProductAccumulateNV(Id pointer, Id offset, Id a, Id b, Id memory_layout, Id matrix_interpretation, std::optional<Id> matrix_stride);
+
+    /// OpCooperativeVectorReduceSumAccumulateNV
+    void OpCooperativeVectorReduceSumAccumulateNV(Id pointer, Id offset, Id v);
+
+    /// OpCooperativeVectorMatrixMulAddNV
+    Id OpCooperativeVectorMatrixMulAddNV(Id result_type, Id input, Id input_interpretation, Id matrix, Id matrix_offset, Id matrix_interpretation, Id bias, Id bias_offset, Id bias_interpretation, Id m, Id k, Id memory_layout, Id transpose, std::optional<Id> matrix_stride, std::optional<spv::CooperativeMatrixOperandsMask> cooperative_matrix_operands);
+
+    /// OpWritePackedPrimitiveIndices4x8NV
+    void OpWritePackedPrimitiveIndices4x8NV(Id index_offset, Id packed_indices);
+
+    /// OpFetchMicroTriangleVertexPositionNV
+    Id OpFetchMicroTriangleVertexPositionNV(Id result_type, Id accel, Id instance_id, Id geometry_index, Id primitive_index, Id barycentric);
+
+    /// OpFetchMicroTriangleVertexBarycentricNV
+    Id OpFetchMicroTriangleVertexBarycentricNV(Id result_type, Id accel, Id instance_id, Id geometry_index, Id primitive_index, Id barycentric);
+
+    /// OpHitObjectRecordFromQueryEXT
+    void OpHitObjectRecordFromQueryEXT(Id hit_object, Id ray_query, Id sbt_record_index, Id hit_object_attributes, std::optional<Id> hit_kind);
+
+    /// OpHitObjectRecordMissEXT
+    void OpHitObjectRecordMissEXT(Id hit_object, Id ray_flags, Id miss_index, Id ray_origin, Id ray_tmin, Id ray_direction, Id ray_tmax);
+
+    /// OpHitObjectRecordMissMotionEXT
+    void OpHitObjectRecordMissMotionEXT(Id hit_object, Id ray_flags, Id miss_index, Id ray_origin, Id ray_tmin, Id ray_direction, Id ray_tmax, Id current_time);
+
+    /// OpHitObjectGetIntersectionTriangleVertexPositionsEXT
+    Id OpHitObjectGetIntersectionTriangleVertexPositionsEXT(Id result_type, Id hit_object);
+
+    /// OpHitObjectGetRayFlagsEXT
+    Id OpHitObjectGetRayFlagsEXT(Id result_type, Id hit_object);
+
+    /// OpHitObjectSetShaderBindingTableRecordIndexEXT
+    void OpHitObjectSetShaderBindingTableRecordIndexEXT(Id hit_object, Id sbt_record_index);
+
+    /// OpHitObjectReorderExecuteShaderEXT
+    void OpHitObjectReorderExecuteShaderEXT(Id hit_object, Id payload, std::optional<Id> hint, std::optional<Id> bits);
+
+    /// OpHitObjectTraceReorderExecuteEXT
+    void OpHitObjectTraceReorderExecuteEXT(Id hit_object, Id acceleration_structure, Id ray_flags, Id cull_mask, Id sbt_offset, Id sbt_stride, Id miss_index, Id ray_origin, Id ray_tmin, Id ray_direction, Id ray_tmax, Id payload, std::optional<Id> hint, std::optional<Id> bits);
+
+    /// OpHitObjectTraceMotionReorderExecuteEXT
+    void OpHitObjectTraceMotionReorderExecuteEXT(Id hit_object, Id acceleration_structure, Id ray_flags, Id cull_mask, Id sbt_offset, Id sbt_stride, Id miss_index, Id ray_origin, Id ray_tmin, Id ray_direction, Id ray_tmax, Id current_time, Id payload, std::optional<Id> hint, std::optional<Id> bits);
+
+    /// OpReorderThreadWithHintEXT
+    void OpReorderThreadWithHintEXT(Id hint, Id bits);
+
+    /// OpReorderThreadWithHitObjectEXT
+    void OpReorderThreadWithHitObjectEXT(Id hit_object, std::optional<Id> hint, std::optional<Id> bits);
+
+    /// OpHitObjectTraceRayEXT
+    void OpHitObjectTraceRayEXT(Id hit_object, Id acceleration_structure, Id ray_flags, Id cull_mask, Id sbt_offset, Id sbt_stride, Id miss_index, Id ray_origin, Id ray_tmin, Id ray_direction, Id ray_tmax, Id payload);
+
+    /// OpHitObjectTraceRayMotionEXT
+    void OpHitObjectTraceRayMotionEXT(Id hit_object, Id acceleration_structure, Id ray_flags, Id cull_mask, Id sbt_offset, Id sbt_stride, Id miss_index, Id ray_origin, Id ray_tmin, Id ray_direction, Id ray_tmax, Id current_time, Id payload);
+
+    /// OpHitObjectRecordEmptyEXT
+    void OpHitObjectRecordEmptyEXT(Id hit_object);
+
+    /// OpHitObjectExecuteShaderEXT
+    void OpHitObjectExecuteShaderEXT(Id hit_object, Id payload);
+
+    /// OpHitObjectGetCurrentTimeEXT
+    Id OpHitObjectGetCurrentTimeEXT(Id result_type, Id hit_object);
+
+    /// OpHitObjectGetAttributesEXT
+    void OpHitObjectGetAttributesEXT(Id hit_object, Id hit_object_attribute);
+
+    /// OpHitObjectGetHitKindEXT
+    Id OpHitObjectGetHitKindEXT(Id result_type, Id hit_object);
+
+    /// OpHitObjectGetPrimitiveIndexEXT
+    Id OpHitObjectGetPrimitiveIndexEXT(Id result_type, Id hit_object);
+
+    /// OpHitObjectGetGeometryIndexEXT
+    Id OpHitObjectGetGeometryIndexEXT(Id result_type, Id hit_object);
+
+    /// OpHitObjectGetInstanceIdEXT
+    Id OpHitObjectGetInstanceIdEXT(Id result_type, Id hit_object);
+
+    /// OpHitObjectGetInstanceCustomIndexEXT
+    Id OpHitObjectGetInstanceCustomIndexEXT(Id result_type, Id hit_object);
+
+    /// OpHitObjectGetObjectRayOriginEXT
+    Id OpHitObjectGetObjectRayOriginEXT(Id result_type, Id hit_object);
+
+    /// OpHitObjectGetObjectRayDirectionEXT
+    Id OpHitObjectGetObjectRayDirectionEXT(Id result_type, Id hit_object);
+
+    /// OpHitObjectGetWorldRayDirectionEXT
+    Id OpHitObjectGetWorldRayDirectionEXT(Id result_type, Id hit_object);
+
+    /// OpHitObjectGetWorldRayOriginEXT
+    Id OpHitObjectGetWorldRayOriginEXT(Id result_type, Id hit_object);
+
+    /// OpHitObjectGetObjectToWorldEXT
+    Id OpHitObjectGetObjectToWorldEXT(Id result_type, Id hit_object);
+
+    /// OpHitObjectGetWorldToObjectEXT
+    Id OpHitObjectGetWorldToObjectEXT(Id result_type, Id hit_object);
+
+    /// OpHitObjectGetRayTMaxEXT
+    Id OpHitObjectGetRayTMaxEXT(Id result_type, Id hit_object);
+
+    /// OpIgnoreIntersectionNV
+    void OpIgnoreIntersectionNV();
+
+    /// OpTerminateRayNV
+    void OpTerminateRayNV();
+
+    /// OpTraceNV
+    void OpTraceNV(Id accel, Id ray_flags, Id cull_mask, Id sbt_offset, Id sbt_stride, Id miss_index, Id ray_origin, Id ray_tmin, Id ray_direction, Id ray_tmax, Id payload_id);
+
+    /// OpTraceMotionNV
+    void OpTraceMotionNV(Id accel, Id ray_flags, Id cull_mask, Id sbt_offset, Id sbt_stride, Id miss_index, Id ray_origin, Id ray_tmin, Id ray_direction, Id ray_tmax, Id time, Id payload_id);
+
+    /// OpTraceRayMotionNV
+    void OpTraceRayMotionNV(Id accel, Id ray_flags, Id cull_mask, Id sbt_offset, Id sbt_stride, Id miss_index, Id ray_origin, Id ray_tmin, Id ray_direction, Id ray_tmax, Id time, Id payload);
+
+    /// OpExecuteCallableNV
+    void OpExecuteCallableNV(Id sbt_index, Id callable_data_id);
+
+    /// OpRayQueryGetIntersectionClusterIdNV
+    Id OpRayQueryGetIntersectionClusterIdNV(Id result_type, Id ray_query, Id intersection);
+
+    /// OpHitObjectGetClusterIdNV
+    Id OpHitObjectGetClusterIdNV(Id result_type, Id hit_object);
+
+    /// OpHitObjectGetRayTMinEXT
+    Id OpHitObjectGetRayTMinEXT(Id result_type, Id hit_object);
+
+    /// OpHitObjectGetShaderBindingTableRecordIndexEXT
+    Id OpHitObjectGetShaderBindingTableRecordIndexEXT(Id result_type, Id hit_object);
+
+    /// OpHitObjectGetShaderRecordBufferHandleEXT
+    Id OpHitObjectGetShaderRecordBufferHandleEXT(Id result_type, Id hit_object);
+
+    /// OpHitObjectIsEmptyEXT
+    Id OpHitObjectIsEmptyEXT(Id result_type, Id hit_object);
+
+    /// OpHitObjectIsHitEXT
+    Id OpHitObjectIsHitEXT(Id result_type, Id hit_object);
+
+    /// OpHitObjectIsMissEXT
+    Id OpHitObjectIsMissEXT(Id result_type, Id hit_object);
+
+    /// OpCooperativeMatrixLoadNV
+    Id OpCooperativeMatrixLoadNV(Id result_type, Id pointer, Id stride, Id column_major, std::optional<spv::MemoryAccessMask> memory_access);
+
+    /// OpCooperativeMatrixStoreNV
+    void OpCooperativeMatrixStoreNV(Id pointer, Id object, Id stride, Id column_major, std::optional<spv::MemoryAccessMask> memory_access);
+
+    /// OpCooperativeMatrixMulAddNV
+    Id OpCooperativeMatrixMulAddNV(Id result_type, Id a, Id b, Id c);
+
+    /// OpCooperativeMatrixLengthNV
+    Id OpCooperativeMatrixLengthNV(Id result_type, Id type);
+
+    /// OpCreateTensorLayoutNV
+    Id OpCreateTensorLayoutNV(Id result_type);
+
+    /// OpTensorLayoutSetDimensionNV
+    Id OpTensorLayoutSetDimensionNV(Id result_type, Id tensor_layout, std::span<const Id> dim);
+
+    /// OpTensorLayoutSetStrideNV
+    Id OpTensorLayoutSetStrideNV(Id result_type, Id tensor_layout, std::span<const Id> stride);
+
+    /// OpTensorLayoutSliceNV
+    Id OpTensorLayoutSliceNV(Id result_type, Id tensor_layout, std::span<const Id> operands);
+
+    /// OpTensorLayoutSetClampValueNV
+    Id OpTensorLayoutSetClampValueNV(Id result_type, Id tensor_layout, Id value);
+
+    /// OpCreateTensorViewNV
+    Id OpCreateTensorViewNV(Id result_type);
+
+    /// OpTensorViewSetDimensionNV
+    Id OpTensorViewSetDimensionNV(Id result_type, Id tensor_view, std::span<const Id> dim);
+
+    /// OpTensorViewSetStrideNV
+    Id OpTensorViewSetStrideNV(Id result_type, Id tensor_view, std::span<const Id> stride);
+
+    /// OpTensorViewSetClipNV
+    Id OpTensorViewSetClipNV(Id result_type, Id tensor_view, Id clip_row_offset, Id clip_row_span, Id clip_col_offset, Id clip_col_span);
+
+    /// OpTensorLayoutSetBlockSizeNV
+    Id OpTensorLayoutSetBlockSizeNV(Id result_type, Id tensor_layout, std::span<const Id> block_size);
+
+    /// OpConvertUToImageNV
+    Id OpConvertUToImageNV(Id result_type, Id operand);
+
+    /// OpConvertUToSamplerNV
+    Id OpConvertUToSamplerNV(Id result_type, Id operand);
+
+    /// OpConvertImageToUNV
+    Id OpConvertImageToUNV(Id result_type, Id operand);
+
+    /// OpConvertSamplerToUNV
+    Id OpConvertSamplerToUNV(Id result_type, Id operand);
+
+    /// OpConvertUToSampledImageNV
+    Id OpConvertUToSampledImageNV(Id result_type, Id operand);
+
+    /// OpConvertSampledImageToUNV
+    Id OpConvertSampledImageToUNV(Id result_type, Id operand);
+
+    /// OpSamplerImageAddressingModeNV
+    void OpSamplerImageAddressingModeNV(std::uint32_t bit_width);
+
+    /// OpRayQueryGetIntersectionSpherePositionNV
+    Id OpRayQueryGetIntersectionSpherePositionNV(Id result_type, Id ray_query, Id intersection);
+
+    /// OpRayQueryGetIntersectionSphereRadiusNV
+    Id OpRayQueryGetIntersectionSphereRadiusNV(Id result_type, Id ray_query, Id intersection);
+
+    /// OpRayQueryGetIntersectionLSSPositionsNV
+    Id OpRayQueryGetIntersectionLSSPositionsNV(Id result_type, Id ray_query, Id intersection);
+
+    /// OpRayQueryGetIntersectionLSSRadiiNV
+    Id OpRayQueryGetIntersectionLSSRadiiNV(Id result_type, Id ray_query, Id intersection);
+
+    /// OpRayQueryGetIntersectionLSSHitValueNV
+    Id OpRayQueryGetIntersectionLSSHitValueNV(Id result_type, Id ray_query, Id intersection);
+
+    /// OpHitObjectGetSpherePositionNV
+    Id OpHitObjectGetSpherePositionNV(Id result_type, Id hit_object);
+
+    /// OpHitObjectGetSphereRadiusNV
+    Id OpHitObjectGetSphereRadiusNV(Id result_type, Id hit_object);
+
+    /// OpHitObjectGetLSSPositionsNV
+    Id OpHitObjectGetLSSPositionsNV(Id result_type, Id hit_object);
+
+    /// OpHitObjectGetLSSRadiiNV
+    Id OpHitObjectGetLSSRadiiNV(Id result_type, Id hit_object);
+
+    /// OpHitObjectIsSphereHitNV
+    Id OpHitObjectIsSphereHitNV(Id result_type, Id hit_object);
+
+    /// OpHitObjectIsLSSHitNV
+    Id OpHitObjectIsLSSHitNV(Id result_type, Id hit_object);
+
+    /// OpRayQueryIsSphereHitNV
+    Id OpRayQueryIsSphereHitNV(Id result_type, Id ray_query, Id intersection);
+
+    /// OpRayQueryIsLSSHitNV
+    Id OpRayQueryIsLSSHitNV(Id result_type, Id ray_query, Id intersection);
+
+
+    // === Type-Declaration ===
+    /// OpTypeCooperativeMatrixKHR
+    Id TypeCooperativeMatrixKHR(Id component_type, Id scope, Id rows, Id columns, Id use);
+
+    /// OpTypeHitObjectNV
+    Id TypeHitObjectNV();
+
+    /// OpTypeHitObjectEXT
+    Id TypeHitObjectEXT();
+
+    /// OpTypeCooperativeMatrixNV
+    Id TypeCooperativeMatrixNV(Id component_type, Id execution, Id rows, Id columns);
+
+    /// OpTypeTensorLayoutNV
+    Id TypeTensorLayoutNV(Id dim, Id clamp_mode);
+
+    /// OpTypeTensorViewNV
+    Id TypeTensorViewNV(Id dim, Id has_dimensions, std::span<const Id> p);
+
+
+
+
 private:
     Id GetGLSLstd450();
+    Id GetNonSemanticDebugPrintf();
+    Id GetAmdGcnShader();
+    Id GetAmdShaderTrinaryMinMax();
+    Id GetAmdExplicitVertexParameter();
 
     std::uint32_t version{};
     std::uint32_t bound{};
@@ -1304,6 +2387,10 @@ private:
     std::unordered_set<std::string> extensions;
     std::unordered_set<spv::Capability> capabilities;
     std::optional<Id> glsl_std_450;
+    std::optional<Id> non_semantic_debug_printf;
+    std::optional<Id> amd_gcn_shader;
+    std::optional<Id> amd_shader_trinary_minmax;
+    std::optional<Id> amd_explicit_vertex_parameter;
 
     spv::AddressingModel addressing_model{spv::AddressingModel::Logical};
     spv::MemoryModel memory_model{spv::MemoryModel::GLSL450};

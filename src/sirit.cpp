@@ -132,11 +132,50 @@ Id Module::AddGlobalVariable(Id result_type, spv::StorageClass storage_class,
 
 Id Module::GetGLSLstd450() {
     if (!glsl_std_450) {
-        ext_inst_imports->Reserve(3 + 4);
-        glsl_std_450 = *ext_inst_imports << OpId{spv::Op::OpExtInstImport} << "GLSL.std.450"
-                                         << EndOp{};
+        const std::string_view name = "GLSL.std.450";
+        ext_inst_imports->Reserve(3 + WordsInString(name));
+        glsl_std_450 = *ext_inst_imports << OpId{spv::Op::OpExtInstImport} << name << EndOp{};
     }
     return *glsl_std_450;
+}
+
+Id Module::GetNonSemanticDebugPrintf() {
+    if (!non_semantic_debug_printf) {
+        const std::string_view name = "NonSemantic.DebugPrintf";
+        ext_inst_imports->Reserve(3 + WordsInString(name));
+        non_semantic_debug_printf =
+            *ext_inst_imports << OpId{spv::Op::OpExtInstImport} << name << EndOp{};
+    }
+    return *non_semantic_debug_printf;
+}
+
+Id Module::GetAmdGcnShader() {
+    if (!amd_gcn_shader) {
+        const std::string_view name = "SPV_AMD_gcn_shader";
+        ext_inst_imports->Reserve(3 + WordsInString(name));
+        amd_gcn_shader = *ext_inst_imports << OpId{spv::Op::OpExtInstImport} << name << EndOp{};
+    }
+    return *amd_gcn_shader;
+}
+
+Id Module::GetAmdShaderTrinaryMinMax() {
+    if (!amd_shader_trinary_minmax) {
+        const std::string_view name = "SPV_AMD_shader_trinary_minmax";
+        ext_inst_imports->Reserve(3 + WordsInString(name));
+        amd_shader_trinary_minmax =
+            *ext_inst_imports << OpId{spv::Op::OpExtInstImport} << name << EndOp{};
+    }
+    return *amd_shader_trinary_minmax;
+}
+
+Id Module::GetAmdExplicitVertexParameter() {
+    if (!amd_explicit_vertex_parameter) {
+        const std::string_view name = "SPV_AMD_shader_explicit_vertex_parameter";
+        ext_inst_imports->Reserve(3 + WordsInString(name));
+        amd_explicit_vertex_parameter =
+            *ext_inst_imports << OpId{spv::Op::OpExtInstImport} << name << EndOp{};
+    }
+    return *amd_explicit_vertex_parameter;
 }
 
 } // namespace Sirit
